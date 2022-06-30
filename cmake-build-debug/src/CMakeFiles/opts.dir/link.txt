@@ -1,0 +1,2 @@
+/usr/bin/ar qc libopts.a  CMakeFiles/opts.dir/Optimizers/Optimizers.cpp.o
+/usr/bin/ranlib libopts.a

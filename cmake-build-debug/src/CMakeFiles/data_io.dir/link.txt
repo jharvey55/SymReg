@@ -1,0 +1,2 @@
+/usr/bin/ar qc libdata_io.a  CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o
+/usr/bin/ranlib libdata_io.a

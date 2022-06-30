@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.14)
+
+project(CPP_Testing_Sample VERSION 1.0)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+add_subdirectory(src)
+
+# Download GTEST
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/bb9216085fbbf193408653ced9e73c61e7766e80.zip
+)
+FetchContent_MakeAvailable(googletest)
+
+add_executable(SymReg main.cpp)
+target_link_libraries(SymReg PRIVATE structs)
+target_link_libraries(SymReg PRIVATE data_io)
+target_link_libraries(SymReg PRIVATE opts)
+
+# create compile commands for intelli sense
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+enable_testing()
+
+add_executable(unit_test unit_test.cpp)
+
+target_link_libraries(unit_test gtest_main)
+
+include(GoogleTest)
+
+gtest_discover_tests(unit_test)

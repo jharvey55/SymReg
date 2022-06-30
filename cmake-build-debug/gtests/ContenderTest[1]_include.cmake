@@ -1,0 +1,5 @@
+if(EXISTS "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/ContenderTest[1]_tests.cmake")
+  include("/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/ContenderTest[1]_tests.cmake")
+else()
+  add_test(ContenderTest_NOT_BUILT ContenderTest_NOT_BUILT)
+endif()

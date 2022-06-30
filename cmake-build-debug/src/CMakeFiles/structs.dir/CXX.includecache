@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/Structures/Contender.h
+Node.h
+-
+Point.h
+-
+functional
+-
+string
+-
+
+../src/Structures/Node.h
+random
+-
+
+../src/Structures/Point.h
+
+/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Structures/Contender.cpp
+Contender.h
+-
+Node.h
+-
+Point.h
+-
+cmath
+-
+functional
+-
+iostream
+-
+random
+-
+

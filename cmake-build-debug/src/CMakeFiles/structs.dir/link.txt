@@ -1,0 +1,2 @@
+/usr/bin/ar qc libstructs.a  CMakeFiles/structs.dir/Structures/Node.cpp.o CMakeFiles/structs.dir/Structures/Contender.cpp.o CMakeFiles/structs.dir/Structures/Point.cpp.o
+/usr/bin/ranlib libstructs.a

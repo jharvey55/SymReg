@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/SymReg.dir/main.cpp.o  -o SymReg  src/libstructs.a src/libdata_io.a src/libopts.a 
