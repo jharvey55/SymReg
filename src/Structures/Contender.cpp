@@ -15,6 +15,8 @@
 // Static member variable initialization (where feasible)
 // ################################################################################
 
+int Contender::evaluations_ = 0;
+
 std::random_device Contender::rand_dev_;
 std::mt19937 Contender::rng_(Contender::rand_dev_());
 std::uniform_int_distribution<int> Contender::coin_flip_(0, 1);
@@ -31,6 +33,7 @@ Contender::Contender() {
     size_ = 2;
     nodes_ = new Node[size_];
     randy(1);
+    fitness_ = 0;
 
     // TODO: Make eq string
     // TODO: Calc fitness
@@ -61,7 +64,7 @@ Contender::Contender(const int& size, const Node *nodes) {
 Contender::Contender(const Contender& that) {   
     this->size_ = that.size_;
     this->fitness_ = that.fitness_;
-
+    this->nodes_ = new Node[that.size_];
     // for(int i = 0; i < that.size_; i++)
     //     this->nodes_[i] = that.nodes_[i];
     std::copy(that.nodes_, that.nodes_ + that.size_, this->nodes_);
@@ -81,7 +84,10 @@ Contender::~Contender() {
     delete[] nodes_;
 }
 
-// Getters/Setters
+// ################################################################################
+// Getters and setters
+// ################################################################################
+
 int Contender::getSize() const {
     return size_;
 }
@@ -106,6 +112,16 @@ std::string Contender::getEqString() {
     std::string equation = buildEqString_(1);
 
     return equation;
+}
+
+double Contender::getFitness() const {
+    return fitness_;
+}
+
+std::string Contender::LogString() {
+    std::string log = "";
+
+    return log;
 }
 
 // ################################################################################
@@ -223,7 +239,7 @@ void Contender::randy(int index) {
 
             // CHeck if node has 2 children, continue if true
             if(nodes_[index].key != COS && nodes_[index].key != SIN) {
-                // TODO: Guard for dividing by zero
+                // Guard for dividing by zero
                 randy(l_child+1); // Recursively call for right child
             }
         }
@@ -244,7 +260,7 @@ void Contender::calcFitness(const Point * data, int num_points) {
     double sum = 0.0f;
     double diff;
     for(int i = 0; i < num_points; i++) {
-        diff = data[i].y - EqParser(data[i].x, 1);
+        diff = data[i].y - EqParser(1, data[i].x);
         sum += std::pow(diff, 2);
     }
 
@@ -333,13 +349,41 @@ std::string Contender::buildEqString_(int index) {
         case VAL :
             return std::to_string(nodes_[index].value);
         case ADD :
-            return "(" + buildEqString_(2 * index) + "+" + buildEqString_(2 * index + 1) + ")";
+            return buildEqString_(2 * index) + " + " + buildEqString_(2 * index + 1);
         case SUB :
-            return "(" + buildEqString_(2 * index) + "-" + buildEqString_(2 * index + 1) + ")";
-        case MLT :
-            return "(" + buildEqString_(2 * index) + "*" + buildEqString_(2 * index + 1) + ")";
-        case DIV :
-            return "(" + buildEqString_(2 * index) +  "/" + buildEqString_(2*index + 1) + ")";
+            return buildEqString_(2 * index) + " - " + buildEqString_(2 * index + 1);
+        case MLT : {
+            int left_node = 2 * index;
+            int right_node = 2*index+1;
+            std::string temp;
+
+            if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
+                temp += "(" + buildEqString_(left_node) + ")" ;
+            else
+                temp += buildEqString_(left_node);
+            temp += "∙";
+            if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
+                temp += "(" + buildEqString_(right_node) + ")" ;
+            else
+                temp += buildEqString_(right_node);
+            return temp;
+        }
+        case DIV : {
+            int left_node = 2 * index;
+            int right_node = 2*index+1;
+            std::string temp;
+
+            if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
+                temp += "(" + buildEqString_(left_node) + ")" ;
+            else
+                temp += buildEqString_(left_node);
+            temp += "/";
+            if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
+                temp += "(" + buildEqString_(right_node) + ")" ;
+            else
+                temp += buildEqString_(right_node);
+            return temp;
+        }
         case COS :
             return "cos(" + buildEqString_(2 * index) + ")";
         case SIN :
@@ -348,6 +392,7 @@ std::string Contender::buildEqString_(int index) {
             return "nan";
     }
 }
+
 
 
 

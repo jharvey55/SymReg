@@ -83,10 +83,22 @@ void stringTest() {
     std::cout << bigEq.getEqString() << std::endl;
 }
 
+void stringTest2()
+{
+    for(int i = 0; i<5; i++)
+    {
+        Contender temp = Contender();
+        std::cout << temp.getEqString() << std::endl;
+    }
+
+}
+
 int main()
 {
 //        sinTest();
         stringTest();
+        std::cout << "\n\n";
+        stringTest2();
 
 }
 

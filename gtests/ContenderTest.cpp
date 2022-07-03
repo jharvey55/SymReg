@@ -8,22 +8,12 @@
 #include <cmath>
 #include <iostream>
 
-
 class ContenderTest : public ::testing::Test
 {
 protected:
 
     void SetUp() override {
-
-        // x_vals = new double[7];
-        // x_vals[0] = -100.0f;
-        // x_vals[1] = -1.0f;
-        // x_vals[2] = -0.05f;
-        // x_vals[3] = 0.0f;
-        // x_vals[4] = 0.05f;
-        // x_vals[5] = 1.0f;
-        // x_vals[6] = 100.0f;
-
+        
         big_size = 32;
         Node* big_nodes = new Node[big_size];
         big_nodes[1] = Node(DIV);
@@ -33,6 +23,7 @@ protected:
         big_nodes[8] = Node(MLT);
         big_nodes[16] = Node(VAL, 2.0f);
         big_nodes[17] = Node(VAR);
+        big_nodes[9] = Node(VAL, 1.0f);
         big_nodes[6] = Node(ADD);
         big_nodes[12] = Node(VAR);
         big_nodes[13] = Node(VAL, M_PI);
@@ -118,6 +109,24 @@ protected:
 
 
     // Methods
+    double rms(const Point * data, int num_points, auto equation) {
+        double sum = 0.0f;
+        double diff;
+        for(int i = 0; i < num_points; i++) {
+            diff = data[i].y - equation(data[i].x);
+            sum += std::pow(diff, 2);
+        }
+
+        // Assign the rms to fitness
+        return std::sqrt(sum/num_points);
+    }
+
+    void fillData(Point * target, const double * x_series, int size, auto equation) {
+        for (int x  = 0; x < size; x++)
+            target[x] = Point(x_series[x], equation(x));
+    }
+
+
 };
 
 TEST_F(ContenderTest, ValidConstructorTest) {
@@ -131,23 +140,139 @@ TEST_F(ContenderTest, ValidConstructorTest) {
 }
 
 TEST_F(ContenderTest, EqParseTest) {
-    // FAIL();
-    EXPECT_EQ(0, 0);
     double x_vals[] = {-100.0f, -1*M_PI, -1.0f, -0.5f, 0.0f, 0.5f, 1.0f, M_PI, 100.0f};
 
     // TODO: Ensure all parent nodes work
     // TODO: Ensure all termini work
-    // TODO: 
-    EXPECT_EQ(cos_contender.EqParser(1, 0.0f), 1.0f) << "COS didn't work";
-    EXPECT_EQ(sin_contender.EqParser(1, 0.0f), 0.0f) << "SIN didn't work";
-    EXPECT_EQ(mlt_contender.EqParser(1, 5.0f), 5.0f) << "MLT didn't work";
-    EXPECT_EQ(div_contender.EqParser(1, 4.0f), 2.0f) << "DIV didn't work";
-    EXPECT_EQ(add_contender.EqParser(1, 0.0f), 1.0f) << "ADD didn't work";
-    EXPECT_EQ(sub_contender.EqParser(1, 0.0f), -1.0f)  << "SUB didn't work";
-    EXPECT_EQ(var_contender.EqParser(1, 1.0f), 1.0f)  << "VAR didn't work";
-    EXPECT_EQ(val_contender.EqParser(1, 7.0f), 7.0f) << "VAL didn't work";
+    // TODO:
+
+    auto cos_eq = [&](double x){return cos(x);};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(cos_contender.EqParser(1, x_val), cos_eq(x_val)) << "COS(" << x_val << ") didn't work";
+    }
+    auto sin_eq = [&](double x){return sin(x);};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(sin_contender.EqParser(1, x_val), sin_eq(x_val)) << "SIN(" << x_val << ") didn't work";
+    }
+    auto mlt_eq = [&](double x){return x*1.0f;};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(mlt_contender.EqParser(1, x_val), mlt_eq(x_val)) << "MLT: " << x_val << " didn't work";
+    }
+    auto div_eq = [&](double x){return x/2.0f;};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(div_contender.EqParser(1, x_val), div_eq(x_val)) << "DIV: " << x_val << " didn't work";
+    }
+    auto add_eq = [&](double x){return x+1.0f;};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(add_contender.EqParser(1, x_val), add_eq(x_val)) << "ADD: " << x_val << " didn't work";
+    }
+    auto sub_eq = [&](double x){return x-1.0f;};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(sub_contender.EqParser(1, x_val), sub_eq(x_val)) << "SUB: " << x_val << " didn't work";
+    }
+    auto var_eq = [&](double x){return x;};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(var_contender.EqParser(1, x_val), var_eq(x_val)) << "VAR: " << x_val << " didn't work";
+    }
+
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(val_contender.EqParser(1, x_val), 7.0f) << "VAL: " << x_val << " didn't work";
+    }
+    auto big_eq = [&](double x){return sin(2*x-1)/cos(x + M_PI);};
+    for(double & x_val : x_vals)
+    {
+        EXPECT_EQ(bigEq.EqParser(1, x_val), big_eq(x_val)) << "Full Stack: " << x_val << " didn't work";
+    }
+}
+
+TEST_F(ContenderTest, ErrorTest) {
+    int size = 9;
+    double x_vals[] = {-100.0f, -1*M_PI, -1.0f, -0.5f, 0.0f, 0.5f, 1.0f, M_PI, 100.0f};
+    auto data = new Point[size];
+    auto uEq = [&](double x){return -1.0f;};
+    auto uData = new Point[size];
+    fillData(uData, x_vals, size, uEq);
+
+    auto cos_eq = [&](double x){return cos(x);};
+    fillData(data, x_vals, size, cos_eq);
+    cos_contender.calcFitness(data, size);
+    EXPECT_EQ(cos_contender.getFitness(), rms(data, size, cos_eq));
+    cos_contender.calcFitness(uData, size);
+    EXPECT_EQ(cos_contender.getFitness(), rms(uData, size, cos_eq));
+//    EXPECT_EQ(cos_contender.getFitness(), 1.58928);
 
 
+    if (cos_contender.getFitness() > 1.58927 && cos_contender.getFitness() < 1.58928)
+            SUCCEED();
+    else
+        FAIL() << "VECNA got me";
+
+    auto sin_eq = [&](double x){return sin(x);};
+    fillData(data, x_vals, size, sin_eq);
+    sin_contender.calcFitness(data, size);
+    EXPECT_EQ(sin_contender.getFitness(), rms(data, size, sin_eq));
+    sin_contender.calcFitness(uData, size);
+    EXPECT_EQ(sin_contender.getFitness(), rms(uData, size, sin_eq));
+
+    auto mlt_eq = [&](double x){return x*1.0f;};
+    fillData(data, x_vals, size, mlt_eq);
+    mlt_contender.calcFitness(data, size);
+    EXPECT_EQ(mlt_contender.getFitness(), rms(data, size, mlt_eq));
+    mlt_contender.calcFitness(uData, size);
+    EXPECT_EQ(mlt_contender.getFitness(), rms(uData, size, mlt_eq));
+
+    auto div_eq = [&](double x){return x/2.0f;};
+    fillData(data, x_vals, size, div_eq);
+    div_contender.calcFitness(data, size);
+    EXPECT_EQ(div_contender.getFitness(), rms(data, size, div_eq));
+    div_contender.calcFitness(uData, size);
+    EXPECT_EQ(div_contender.getFitness(), rms(uData, size, div_eq));
+
+    auto add_eq = [&](double x){return x+1.0f;};
+    fillData(data, x_vals, size, add_eq);
+    add_contender.calcFitness(data, size);
+    EXPECT_EQ(add_contender.getFitness(), rms(data, size, add_eq));
+    add_contender.calcFitness(uData, size);
+    EXPECT_EQ(add_contender.getFitness(), rms(uData, size, add_eq));
+
+    auto sub_eq = [&](double x){return x-1.0f;};
+    fillData(data, x_vals, size, sub_eq);
+    sub_contender.calcFitness(data, size);
+    EXPECT_EQ(sub_contender.getFitness(), rms(data, size, sub_eq));
+    sub_contender.calcFitness(uData, size);
+    EXPECT_EQ(sub_contender.getFitness(), rms(uData, size, sub_eq));
+
+    auto var_eq = [&](double x){return x;};
+    fillData(data, x_vals, size, var_eq);
+    var_contender.calcFitness(data, size);
+    EXPECT_EQ(var_contender.getFitness(), rms(data, size, var_eq));
+    var_contender.calcFitness(uData, size);
+    EXPECT_EQ(var_contender.getFitness(), rms(uData, size, var_eq));
+
+    auto const_eq = [&](double x){return 7.0f;};
+    fillData(data, x_vals, size, const_eq);
+    val_contender.calcFitness(data, size);
+    EXPECT_EQ(val_contender.getFitness(), rms(data, size, const_eq));
+    val_contender.calcFitness(uData, size);
+    EXPECT_EQ(val_contender.getFitness(), rms(uData, size, const_eq));
+
+    auto big_eq = [&](double x){return sin(2*x-1)/cos(x + M_PI);};
+    fillData(data, x_vals, size, big_eq);
+    bigEq.calcFitness(data, size);
+    EXPECT_EQ(bigEq.getFitness(), rms(data, size, big_eq));
+    bigEq.calcFitness(uData, size);
+    EXPECT_EQ(bigEq.getFitness(), rms(uData, size, big_eq));
+
+    delete[] data;
+    delete[] uData;
 }
 
 TEST_F(ContenderTest, ToStringTest) {
