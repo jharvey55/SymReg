@@ -9,9 +9,12 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 class Contender {
 public:
+    static std::vector<Point> Points;
+
     // Constructors/Destructors
     Contender();
     Contender(const int& size, const Node *nodes);
@@ -29,6 +32,9 @@ public:
     std::string getEqString();
     double getFitness() const;
     std::string LogString();
+    static int getEvalCount();
+    static void ResetEvaluationCount();
+    void treePrint();
 
     // Member functions ------------------------------------------------------------------
     double EqParser(int index, const double& x);
@@ -36,13 +42,14 @@ public:
 
     void growHeap();
     void calcFitness(const Point * data, int num_points);
+    void calcFitness();
     void randy(int index);
 
 
 
 
     // Overloaded operators
-    bool operator<(const Contender& that);
+    bool operator<(const Contender& that) const;
     Contender& operator=(const Contender& that);
     Contender& operator=(Contender&& that) noexcept;
 
@@ -56,8 +63,9 @@ private:
 
     // Private Member Functions ----------------------------------------------------------
     std::string buildEqString_(int index);
+    std::string prettyString_(int index);
 
-    // Private Static Member Elements ----------------------------------------------------
+        // Private Static Member Elements ----------------------------------------------------
     static std::random_device rand_dev_;
     static std::mt19937 rng_;
     static std::uniform_int_distribution<> coin_flip_;

@@ -23,6 +23,7 @@ add_library(
         Optimizers/Optimizers.h
         Optimizers/Optimizers.cpp
 )
+
 target_include_directories(opts PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Optimizers")
 target_link_libraries(opts PRIVATE structs)
 target_link_libraries(opts PRIVATE data_io)

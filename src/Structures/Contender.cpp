@@ -7,7 +7,9 @@
 #include <Point.h>
 
 #include <cmath>
+#include <stdio.h>
 #include <functional>
+#include <vector>
 #include <iostream>
 #include <random>
 
@@ -16,6 +18,7 @@
 // ################################################################################
 
 int Contender::evaluations_ = 0;
+std::vector<Point> Contender::Points;
 
 std::random_device Contender::rand_dev_;
 std::mt19937 Contender::rng_(Contender::rand_dev_());
@@ -52,7 +55,7 @@ Contender::Contender(const int& size, const Node *nodes) {
     // for(int i = 0; i < size; i++)
     //     nodes_[i] = nodes[i];
     std::copy(nodes, nodes + size, this->nodes_);
-
+    fitness_ = 0.0f;
 }
 
 
@@ -118,17 +121,116 @@ double Contender::getFitness() const {
     return fitness_;
 }
 
+/**
+ * Creates log string for experiment tracking
+ * @return string representing relevant info for a contenter log entry
+ */
 std::string Contender::LogString() {
-    std::string log = "";
+    std::string log_string = std::to_string(evaluations_) + " | " + std::to_string(fitness_) + " | " + getEqString();
 
-    return log;
+    return log_string;
 }
+
+int Contender::getEvalCount() {
+    return evaluations_;
+}
+
+void Contender::ResetEvaluationCount() {
+    evaluations_ = 0;
+}
+
+void Contender::treePrint() {
+    std::cout << "Making tree!!!" << std::endl;
+    int n_layers = (int)std::log2(size_);
+    double n_gaps = n_layers - 1;
+    double max_depth = n_layers + n_gaps;
+
+    for(int depth = 0; depth < max_depth; depth++)
+    {
+        int layer = depth / 2;
+        // case for node depth
+        if(depth % 2 == 0) {
+            std::string l_string;
+
+            int lead = 3*(int)pow(2, n_layers-layer-1)-3;
+            int lag = lead + 1;
+            int n_size = 6+lead+lag;
+
+            int first_node = (int)pow(2, layer);
+            int last_node = 2*first_node;
+            for(int n = first_node; n < last_node; n++ )
+            {
+                char buffer[n_size];
+                std::sprintf(buffer, "%*s%*s", lead+5, nodes_[n].nodeString(n).c_str(), lag, " ");
+                l_string += buffer;
+            }
+            std::cout << l_string.substr(0, l_string.size() -1) << std::endl;
+        }
+        // case for gap depth
+        else {
+            std::string l_string;
+            int layer = depth / 2 + 1;
+            int lead = 3*(int)pow(2, n_layers-layer-1)-1;
+            int n_gap = (int)pow(2, layer-1);
+
+            for(int i = 0; i < n_gap; i++) {
+                int left_node = (int)pow(2, layer)+2*i;
+                bool ltest = nodes_[left_node].key != BLANK;
+                bool rtest = nodes_[left_node+1].key != BLANK;
+
+                l_string.append(lead, ' ');
+
+                if(ltest) {
+                    l_string.append("╔");
+                    for (int j = 0; j < lead; j++)
+                        l_string += "═";
+                }
+                else
+                    l_string.append(lead+1, ' ');
+
+                if(ltest && rtest)
+                    l_string.append("╩");
+                else if(ltest)
+                    l_string.append("╝");
+                else if(rtest)
+                    l_string.append("╚");
+                else
+                    l_string.append(" ");
+
+                if(rtest) {
+                    for (int j = 0; j < lead; j++)
+                        l_string += "═";
+                    l_string.append("╗");
+                }
+                else
+                    l_string.append(lead+1, ' ');
+
+                l_string.append(lead+1, ' ');
+            }
+
+            std::cout << l_string.substr(0, l_string.size() -1) << std::endl;
+
+        }
+    }
+
+    for(int i = 0; i < size_; i++) {
+        if(nodes_[i].key == VAL)
+            std::printf("c%2d: %f\n", i, nodes_[i].value);
+//        if(nodes_[i].key == BLANK)
+//            std::cout << "BLANK: " << i << std::endl;
+    }
+
+}
+
 
 // ################################################################################
 // Member functions
 // ################################################################################
 
 static double epsilon = 4.94065645841247e-324;
+static double max = std::numeric_limits<double>::max();
+static double min = std::numeric_limits<double>::lowest();
+
 
 
 /**
@@ -138,26 +240,44 @@ static double epsilon = 4.94065645841247e-324;
  * @return
  */
 double Contender::EqParser(int index, const double& x) {
+    int left_node = 2*index;
+    int right_node = 2*index+1;
     switch (nodes_[index].key) {
         case VAR :
             return x;
         case VAL :
             return nodes_[index].value;
-        case ADD :
-            return EqParser(2 * index, x) + EqParser(2 * index + 1, x);
-        case SUB :
-            return EqParser(2 * index, x) - EqParser(2 * index + 1, x);
-        case MLT :
-            return EqParser(2 * index, x) * EqParser(2 * index + 1, x);
+        case ADD : {
+            double val = EqParser(left_node, x) + EqParser(right_node, x);
+            if (std::isinf(val))
+                val = val > 0 ? max : min;
+            return val;
+        }
+        case SUB : {
+            double val = EqParser(left_node, x) - EqParser(right_node, x);
+            if (std::isinf(val))
+                val = val > 0 ? max : min;
+            return val;
+        }
+        case MLT : {
+            double val = EqParser(left_node, x) * EqParser(right_node, x);
+            if(std::isinf(val))
+                val = val > 0 ? max : min;
+            return val;
+        }
         case DIV : {
             // safe divide
-            double divisor = EqParser(2*index + 1, x);
-            return EqParser(2 * index, x) / (divisor ? divisor : epsilon);
+            double val = EqParser(left_node, x)/EqParser(right_node, x);
+            if(std::isinf(val))
+                val = val > 0 ? max : min;
+            if(std::isnan(val))
+                val = 1.0f;
+            return val;
         }
         case COS :
-            return cos(EqParser(2 * index, x));
+            return cos(EqParser(left_node, x));
         case SIN :
-            return sin(EqParser(2 * index, x));
+            return sin(EqParser(left_node, x));
         default :
             return nan("0.0");
     }
@@ -204,7 +324,8 @@ void Contender::growHeap() {
     std::copy(nodes_, nodes_ + size_, temp_nodes);
     // for(int i = 0; i < size_; i++)
     //     temp_nodes[i] = nodes_[i];
-
+    for(int i = size_; i < temp_size; i++ )
+        temp_nodes[i] = Node(BLANK);
     size_ = temp_size;
     delete[] nodes_;
     nodes_ = temp_nodes;
@@ -216,7 +337,7 @@ void Contender::growHeap() {
 void Contender::randy(int index) {
 
     // Guard rail to keep variable from growing too large
-    if (size_ >= 64 && index > 15)
+    if (size_ >= 64 && index > 31)
     {
         if(coin_flip_(rng_))
             nodes_[index] = Node(VAR);
@@ -261,11 +382,31 @@ void Contender::calcFitness(const Point * data, int num_points) {
     double diff;
     for(int i = 0; i < num_points; i++) {
         diff = data[i].y - EqParser(1, data[i].x);
+
         sum += std::pow(diff, 2);
     }
 
-    // Assign the rms to fitness
+    // Update rms_
     fitness_ = std::sqrt(sum/num_points);
+
+    evaluations_++;
+}
+
+void Contender::calcFitness() {
+    double sum = 0.0f;
+    double diff;
+    for(auto & Point : Points) {
+        diff = Point.y - EqParser(1, Point.x);
+        if(std::isnan(diff))
+            std::cout << Point.x << std::endl;
+        sum += std::pow(diff, 2);
+    }
+
+    // Update rms_
+    double num_points = (double)Points.size();
+    fitness_ = std::sqrt(sum/num_points);
+
+    evaluations_++;
 }
 
 // ################################################################################
@@ -277,7 +418,7 @@ void Contender::calcFitness(const Point * data, int num_points) {
  * @param that
  * @return
  */
-bool Contender::operator<(const Contender& that) {
+bool Contender::operator<(const Contender& that) const {
     return this->fitness_ < that.fitness_;
 }
 
@@ -349,40 +490,19 @@ std::string Contender::buildEqString_(int index) {
         case VAL :
             return std::to_string(nodes_[index].value);
         case ADD :
-            return buildEqString_(2 * index) + " + " + buildEqString_(2 * index + 1);
+            return "(" + buildEqString_(2 * index) + " + " + buildEqString_(2 * index + 1) + ")";
         case SUB :
-            return buildEqString_(2 * index) + " - " + buildEqString_(2 * index + 1);
+            return "(" + buildEqString_(2 * index) + " - " + buildEqString_(2 * index + 1) + ")";
         case MLT : {
             int left_node = 2 * index;
             int right_node = 2*index+1;
-            std::string temp;
+            return "(" + buildEqString_(left_node) + " ∙ " + buildEqString_(right_node) + ")";
 
-            if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
-                temp += "(" + buildEqString_(left_node) + ")" ;
-            else
-                temp += buildEqString_(left_node);
-            temp += "∙";
-            if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
-                temp += "(" + buildEqString_(right_node) + ")" ;
-            else
-                temp += buildEqString_(right_node);
-            return temp;
         }
         case DIV : {
             int left_node = 2 * index;
             int right_node = 2*index+1;
-            std::string temp;
-
-            if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
-                temp += "(" + buildEqString_(left_node) + ")" ;
-            else
-                temp += buildEqString_(left_node);
-            temp += "/";
-            if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
-                temp += "(" + buildEqString_(right_node) + ")" ;
-            else
-                temp += buildEqString_(right_node);
-            return temp;
+            return "(" + buildEqString_(left_node) + " / " + buildEqString_(right_node) + ")";
         }
         case COS :
             return "cos(" + buildEqString_(2 * index) + ")";
@@ -391,6 +511,59 @@ std::string Contender::buildEqString_(int index) {
         default :
             return "nan";
     }
+}
+
+std::string Contender::prettyString_(int index) {
+    switch (nodes_[index].key) {
+        case VAR :
+            return "x";
+        case VAL :
+            return std::to_string(nodes_[index].value);
+        case ADD :
+            return prettyString_(2 * index) + " + " + buildEqString_(2 * index + 1);
+        case SUB :
+            return prettyString_(2 * index) + " - " + buildEqString_(2 * index + 1);
+        case MLT : {
+            int left_node = 2 * index;
+            int right_node = 2*index+1;
+            std::string temp;
+
+            if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
+                temp += "(" + prettyString_(left_node) + ")" ;
+            else
+                temp += prettyString_(left_node);
+            temp += "∙";
+            if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
+                temp += "(" + prettyString_(right_node) + ")" ;
+            else
+                temp += prettyString_(right_node);
+            return temp;
+        }
+        case DIV : {
+            int left_node = 2 * index;
+            int right_node = 2*index+1;
+            std::string temp;
+
+            if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
+                temp += "(" + prettyString_(left_node) + ")" ;
+            else
+                temp += prettyString_(left_node);
+            temp += "/";
+            if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
+                temp += "(" + prettyString_(right_node) + ")" ;
+            else
+                temp += prettyString_(right_node);
+            return temp;
+        }
+        case COS :
+            return "cos(" + prettyString_(2 * index) + ")";
+        case SIN :
+            return "sin(" + prettyString_(2 * index) + ")";
+        default :
+            return "nan";
+    }
+
+
 }
 
 

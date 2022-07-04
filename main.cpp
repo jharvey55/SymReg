@@ -1,6 +1,12 @@
 #include <iostream>
+#include <string>
+#include <vector>
+#include <functional>
+#include <cmath>
+#include <stdio.h>
 
 #include <Node.h>
+#include <Point.h>
 #include <Contender.h>
 #include <Optimizers.h>
 
@@ -93,12 +99,50 @@ void stringTest2()
 
 }
 
+void loopTest1()
+{
+    std::string rPath = "./resources/";
+    std::string dPath = rPath  + "datasets/f2.txt";
+    std::string oPath = rPath + "out/";
+
+//    auto randGen = [&](std::vector<Contender> population) mutable {
+//        for(auto & member : population) {
+//            member = Contender();
+//            member.calcFitness();
+//        }
+//    };
+
+//    std::function<void(std::vector<Contender>)> randGen = [](std::vector<Contender> population) mutable {
+//        for(auto & member : population) {
+//            member = Contender();
+//            member.calcFitness();
+////            std::cout << "\t" << Contender::getEvalCount() << " : " << member.getFitness() << " : " << member.getEqString() << std::endl;
+//        }
+////        std::cout << "\n\n";
+//    };
+
+    std::function<std::vector<Contender>(std::vector<Contender>)> randGen = [](const std::vector<Contender>& population) {
+        std::vector<Contender> temp;
+        for(int i = 0; i < population.size(); i++) {
+            temp.emplace_back();
+            temp[i].calcFitness();
+        }
+        return temp;
+    };
+
+    Optimizers::OptLoop(dPath, oPath, "Random", "params", 300'000, 100, randGen);
+
+}
+
 int main()
 {
 //        sinTest();
-        stringTest();
-        std::cout << "\n\n";
-        stringTest2();
+//        stringTest();
+//        std::cout << "\n\n";
+//        stringTest2();
 
+    loopTest1();
+
+    return 0;
 }
 

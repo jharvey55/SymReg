@@ -5,6 +5,7 @@
 #pragma once
 
 #include <random>
+#include <string>
 
 // operator enum
 enum oprtr {VAR,    // 0
@@ -14,7 +15,8 @@ enum oprtr {VAR,    // 0
             MLT,    // 4
             DIV,    // 5
             COS,    // 6
-            SIN};   // 7
+            SIN,    // 7
+            BLANK}; // 8s
 
 class Node
 {
@@ -28,7 +30,7 @@ public:
     Node(oprtr act, double val = nan("0.0"));
 
     // Functions
-
+    std::string nodeString(int i);
     // Static Functions
 
 private:

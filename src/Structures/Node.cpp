@@ -6,6 +6,8 @@
 #include <cmath>
 #include <random>
 #include <iostream>
+#include <string>
+#include <stdio.h>
 
 // ################################################################################
 // Static member variable initialization (where feasible)
@@ -34,7 +36,7 @@ Node::Node()
     if(key == VAL)
         value = val_dist_(rng_);
     else
-        value = nan("-1.0");
+        value = nan("1.0");
 }
 
 
@@ -49,11 +51,41 @@ Node::Node(oprtr act, double val)
     key = act;
     if(key == VAL) {
         // Check for forced exit in random eq builder
-        if(!std::isnan(val))
+        if(!std::isnan(val)) {
             value = val;
+            std::cout << val << std::endl;
+        }
         else
             value = val_dist_(rng_);
     }
+}
+
+std::string Node::nodeString(int i) {
+    switch(key) {
+        case VAR :
+            return "( x )";
+        case VAL : {
+            char buffer[6];
+            std::sprintf(buffer, "(c%2i)", i);
+            return buffer;
+        }
+        case ADD :
+            return "( + )";
+        case SUB :
+            return "( - )";
+        case MLT :
+            return "( * )";
+        case DIV :
+            return "( / )";
+        case COS :
+            return "(cos)";
+        case SIN :
+            return "(sin)";
+        default :
+            return "     ";
+
+    }
+
 }
 
 
