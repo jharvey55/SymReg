@@ -12,6 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include <tuple>
 
 // ################################################################################
 // Static member variable initialization (where feasible)
@@ -565,17 +566,66 @@ std::string Contender::prettyString_(int index) {
 }
 
 
-//
-void Contender::swapBranch_() {
+// Heap Management -----------------------------------------------------------------------------------------------------
+void Contender::swapBranch_(const int& index) {
+
+}
+void Contender::clipBranch_(const int& index) {
+
+}
+void Contender::graftBranch_(const int& index, Node * branch) {
 
 }
 
 
-void Contender::clipBranch_() {
+/**
+ * Creates a heap from a branch in nodes_
+ * Gaurantees
+ *  - doesn't change
+ * @param index index of node to use as base of branch
+ * @return tuple<int branch_size, Node* branch>
+ */
+std::tuple<int, Node*> Contender::getBranch_( const int& index) {
 
+    // early exit for blank exit
+    if(nodes_[index].key == BLANK) {
+        return {0, nullptr};
+    }
+
+
+    // determine the level the base of the branch is on
+    int base_level = (int)(floor(log2(index)));
+    int max_depth = (int)(log2(size_));
+    int d = max_depth - base_level;
+    // Determine how big tree needs to be
+    int branch_size = (int)(pow(2, d)); // bottom right branch node of tree
+
+
+    for (int l = d; l >= 0; l--) {
+        int left_node = (int)(pow(2, l))*index;
+        for (int n = (int)(pow(2, l)) - 1; n >= 0; n--) {
+            if(nodes_[left_node+n].key != BLANK) {
+                branch_size = (int)(pow(2,l));
+                goto forward;
+            }
+        }
+    }
+
+    forward:
+
+    // Initialize branch
+    Node * branch = new Node[branch_size];
+
+    // Copy data to branch
+    int branchdex = 1;
+
+    for (int l = 0; l < d; l++) {
+        int left_node = (int)(pow(2, l))*index;
+        for (int n = 0; n <= l; n++) {
+            branch[branchdex] = nodes_[left_node + n];
+            branchdex++;
+        }
+    }
+
+    return {branch_size, branch};
 }
-
-
-
-
-

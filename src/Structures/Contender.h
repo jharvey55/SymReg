@@ -10,6 +10,9 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <tuple>
+
+
 
 class Contender {
 public:
@@ -74,7 +77,7 @@ private:
     void swapBranch_(const int& index);
     void clipBranch_(const int& index);
     void graftBranch_(const int& index, Node * branch);
-    void getBranch_( const int& index);
+    std::tuple<int, Node*> getBranch_( const int& index);
 
     // Private Static Member Elements ----------------------------------------------------
     static std::random_device rand_dev_;
