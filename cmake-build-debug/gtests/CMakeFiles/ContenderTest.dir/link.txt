@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/ContenderTest.dir/ContenderTest.cpp.o  -o ContenderTest  ../src/libstructs.a ../src/libdata_io.a ../lib/libgtest.a ../lib/libgtest_main.a ../lib/libgtest.a -lpthread 
+/usr/bin/c++  -g   CMakeFiles/ContenderTest.dir/ContenderTest.cpp.o  -o ContenderTest  ../src/libstructs.a ../src/libdata_io.a ../lib/libgtest.a ../lib/libgtest_main.a ../src/libstructs.a ../lib/libgtest.a -lpthread 

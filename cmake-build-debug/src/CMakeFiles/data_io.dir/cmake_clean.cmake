@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o"
+  "CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o"
   "libdata_io.a"
   "libdata_io.pdb"
 )

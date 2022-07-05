@@ -83,6 +83,7 @@ gtests/ContenderTest: src/libstructs.a
 gtests/ContenderTest: src/libdata_io.a
 gtests/ContenderTest: lib/libgtest.a
 gtests/ContenderTest: lib/libgtest_main.a
+gtests/ContenderTest: src/libstructs.a
 gtests/ContenderTest: lib/libgtest.a
 gtests/ContenderTest: gtests/CMakeFiles/ContenderTest.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ContenderTest"

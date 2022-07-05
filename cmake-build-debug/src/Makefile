@@ -212,32 +212,32 @@ structs/fast:
 	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/structs.dir/build.make src/CMakeFiles/structs.dir/build
 .PHONY : structs/fast
 
-DataIO/DataLogger.o: DataIO/DataLogger.cpp.o
+DataIO/DataLog.o: DataIO/DataLog.cpp.o
 
-.PHONY : DataIO/DataLogger.o
+.PHONY : DataIO/DataLog.o
 
 # target to build an object file
-DataIO/DataLogger.cpp.o:
-	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/data_io.dir/build.make src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o
-.PHONY : DataIO/DataLogger.cpp.o
+DataIO/DataLog.cpp.o:
+	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/data_io.dir/build.make src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o
+.PHONY : DataIO/DataLog.cpp.o
 
-DataIO/DataLogger.i: DataIO/DataLogger.cpp.i
+DataIO/DataLog.i: DataIO/DataLog.cpp.i
 
-.PHONY : DataIO/DataLogger.i
+.PHONY : DataIO/DataLog.i
 
 # target to preprocess a source file
-DataIO/DataLogger.cpp.i:
-	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/data_io.dir/build.make src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.i
-.PHONY : DataIO/DataLogger.cpp.i
+DataIO/DataLog.cpp.i:
+	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/data_io.dir/build.make src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.i
+.PHONY : DataIO/DataLog.cpp.i
 
-DataIO/DataLogger.s: DataIO/DataLogger.cpp.s
+DataIO/DataLog.s: DataIO/DataLog.cpp.s
 
-.PHONY : DataIO/DataLogger.s
+.PHONY : DataIO/DataLog.s
 
 # target to generate assembly for a file
-DataIO/DataLogger.cpp.s:
-	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/data_io.dir/build.make src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.s
-.PHONY : DataIO/DataLogger.cpp.s
+DataIO/DataLog.cpp.s:
+	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug && $(MAKE) -f src/CMakeFiles/data_io.dir/build.make src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.s
+.PHONY : DataIO/DataLog.cpp.s
 
 Optimizers/Optimizers.o: Optimizers/Optimizers.cpp.o
 
@@ -363,9 +363,9 @@ help:
 	@echo "... opts"
 	@echo "... data_io"
 	@echo "... structs"
-	@echo "... DataIO/DataLogger.o"
-	@echo "... DataIO/DataLogger.i"
-	@echo "... DataIO/DataLogger.s"
+	@echo "... DataIO/DataLog.o"
+	@echo "... DataIO/DataLog.i"
+	@echo "... DataIO/DataLog.s"
 	@echo "... Optimizers/Optimizers.o"
 	@echo "... Optimizers/Optimizers.i"
 	@echo "... Optimizers/Optimizers.s"

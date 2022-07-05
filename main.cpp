@@ -102,7 +102,7 @@ void stringTest2()
 void loopTest1()
 {
     std::string rPath = "./resources/";
-    std::string dPath = rPath  + "datasets/f2.txt";
+    std::string dPath = rPath  + "datasets/f1.txt";
     std::string oPath = rPath + "out/";
 
 //    auto randGen = [&](std::vector<Contender> population) mutable {

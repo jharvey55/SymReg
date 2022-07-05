@@ -29,18 +29,22 @@ public:
     Node *getNodes() const;
     void setNodes(Node *nodes);
     void setNode(Node& node, int index);
-    std::string getEqString();
+
     double getFitness() const;
+
+    // Logging/Display methods
+    std::string getEqString();
     std::string LogString();
+    void treePrint();
+
+    // Static variable getters/setters
     static int getEvalCount();
     static void ResetEvaluationCount();
-    void treePrint();
 
     // Member functions ------------------------------------------------------------------
     double EqParser(int index, const double& x);
     // std::function<double (double)> parseFun(int index);
 
-    void growHeap();
     void calcFitness(const Point * data, int num_points);
     void calcFitness();
     void randy(int index);
@@ -65,7 +69,14 @@ private:
     std::string buildEqString_(int index);
     std::string prettyString_(int index);
 
-        // Private Static Member Elements ----------------------------------------------------
+    // Heap Management
+    void growHeap_();
+    void swapBranch_(const int& index);
+    void clipBranch_(const int& index);
+    void graftBranch_(const int& index, Node * branch);
+    void getBranch_( const int& index);
+
+    // Private Static Member Elements ----------------------------------------------------
     static std::random_device rand_dev_;
     static std::mt19937 rng_;
     static std::uniform_int_distribution<> coin_flip_;

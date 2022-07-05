@@ -314,7 +314,7 @@ double Contender::EqParser(int index, const double& x) {
  * @brief Grows the heap
  * @param depth
  */
-void Contender::growHeap() {
+void Contender::growHeap_() {
     // int temp_size = growthSize_(depth);
     int temp_size = size_*2;
     // Create new array
@@ -353,7 +353,7 @@ void Contender::randy(int index) {
             int l_child = 2*index;
             
             if(l_child >= size_) {
-                growHeap(); // If not big enough, add next layer of depth
+                growHeap_(); // If not big enough, add next layer of depth
 
             }
             randy(l_child); // Recursively call for left child
@@ -562,7 +562,16 @@ std::string Contender::prettyString_(int index) {
         default :
             return "nan";
     }
+}
 
+
+//
+void Contender::swapBranch_() {
+
+}
+
+
+void Contender::clipBranch_() {
 
 }
 

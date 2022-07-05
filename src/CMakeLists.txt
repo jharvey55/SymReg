@@ -13,8 +13,7 @@ target_include_directories(structs PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Structure
 add_library(
         data_io
         DataIO/DataLog.h
-        DataIO/DataLog.cpp
-)
+        DataIO/DataLog.cpp)
 target_include_directories(data_io PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/DataIO")
 target_link_libraries(data_io PRIVATE structs)
 
@@ -22,7 +21,7 @@ add_library(
         opts
         Optimizers/Optimizers.h
         Optimizers/Optimizers.cpp
-)
+        )
 
 target_include_directories(opts PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Optimizers")
 target_link_libraries(opts PRIVATE structs)

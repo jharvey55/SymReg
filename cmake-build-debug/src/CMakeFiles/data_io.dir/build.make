@@ -57,27 +57,27 @@ include src/CMakeFiles/data_io.dir/progress.make
 # Include the compile flags for this target's objects.
 include src/CMakeFiles/data_io.dir/flags.make
 
-src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o: src/CMakeFiles/data_io.dir/flags.make
-src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o: ../src/DataIO/DataLogger.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o"
-	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLogger.cpp
+src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o: src/CMakeFiles/data_io.dir/flags.make
+src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o: ../src/DataIO/DataLog.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o"
+	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLog.cpp
 
-src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.i"
-	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLogger.cpp > CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.i
+src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/data_io.dir/DataIO/DataLog.cpp.i"
+	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLog.cpp > CMakeFiles/data_io.dir/DataIO/DataLog.cpp.i
 
-src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.s"
-	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLogger.cpp -o CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.s
+src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/data_io.dir/DataIO/DataLog.cpp.s"
+	cd /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLog.cpp -o CMakeFiles/data_io.dir/DataIO/DataLog.cpp.s
 
 # Object files for target data_io
 data_io_OBJECTS = \
-"CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o"
+"CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o"
 
 # External object files for target data_io
 data_io_EXTERNAL_OBJECTS =
 
-src/libdata_io.a: src/CMakeFiles/data_io.dir/DataIO/DataLogger.cpp.o
+src/libdata_io.a: src/CMakeFiles/data_io.dir/DataIO/DataLog.cpp.o
 src/libdata_io.a: src/CMakeFiles/data_io.dir/build.make
 src/libdata_io.a: src/CMakeFiles/data_io.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libdata_io.a"

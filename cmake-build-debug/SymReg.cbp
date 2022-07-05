@@ -146,6 +146,7 @@
 				<Compiler>
 					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Optimizers"/>
 					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Structures"/>
+					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO"/>
 					<Add directory="/usr/include/c++/9"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
 					<Add directory="/usr/include/c++/9/backward"/>
@@ -170,6 +171,7 @@
 				<Compiler>
 					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Optimizers"/>
 					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Structures"/>
+					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO"/>
 					<Add directory="/usr/include/c++/9"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
 					<Add directory="/usr/include/c++/9/backward"/>
@@ -193,6 +195,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO"/>
+					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Structures"/>
 					<Add directory="/usr/include/c++/9"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
 					<Add directory="/usr/include/c++/9/backward"/>
@@ -216,6 +219,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO"/>
+					<Add directory="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Structures"/>
 					<Add directory="/usr/include/c++/9"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
 					<Add directory="/usr/include/c++/9/backward"/>
@@ -548,10 +552,10 @@
 		<Unit filename="/mnt/c/Users/atlas1323/CLionProjects/SymReg/main.cpp">
 			<Option target="SymReg"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLogger.cpp">
+		<Unit filename="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLog.cpp">
 			<Option target="data_io"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLogger.h">
+		<Unit filename="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO/DataLog.h">
 			<Option target="data_io"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Optimizers/Optimizers.cpp">

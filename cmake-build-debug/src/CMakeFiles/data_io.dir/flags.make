@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++2a
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO 
+CXX_INCLUDES = -I/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/DataIO -I/mnt/c/Users/atlas1323/CLionProjects/SymReg/src/Structures 
 
