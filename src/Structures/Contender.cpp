@@ -570,7 +570,22 @@ std::string Contender::prettyString_(int index) {
 void Contender::swapBranch_(const int& index) {
 
 }
+
+/**
+ * Sets all nodes in branch to blank
+ *  * @param index
+ */
 void Contender::clipBranch_(const int& index) {
+
+    int base_level = (int)(floor(log2(index)));
+    int max_depth = (int)(log2(size_));
+    int d = max_depth - base_level;
+
+    for (int l = 0; l < d; l++) {
+        int left_node = (int)(pow(2, l))*index;
+        for (int n = 0; n <= l; n++)
+             nodes_[left_node + n] = Node(BLANK);
+    }
 
 }
 void Contender::graftBranch_(const int& index, Node * branch) {
@@ -579,9 +594,13 @@ void Contender::graftBranch_(const int& index, Node * branch) {
 
 
 /**
- * Creates a heap from a branch in nodes_
- * Gaurantees
- *  - doesn't change
+ * @brief Creates a heap from a branch in nodes_
+ *
+ * @Guarantees
+ *
+ *      + doesn't change nodes
+ *      + Branch clips layers of all blank nodes
+ *
  * @param index index of node to use as base of branch
  * @return tuple<int branch_size, Node* branch>
  */
