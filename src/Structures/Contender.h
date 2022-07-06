@@ -73,10 +73,10 @@ private:
     std::string prettyString_(int index);
 
     // Heap Management
-    void growHeap_();
+    void growHeap_(int growFactor);
     void swapBranch_(const int& index);
     void clipBranch_(const int& index);
-    void graftBranch_(const int& index, Node * branch);
+    void graftBranch_(const int& index, const int& branch_size, const Node * branch);
     std::tuple<int, Node*> getBranch_( const int& index);
 
     // Private Static Member Elements ----------------------------------------------------
