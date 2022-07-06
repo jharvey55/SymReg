@@ -9,7 +9,10 @@
 #include <algorithm>
 
 namespace Optimizers {
-    void OptLoop(const std::string& dPath, const std::string& oPath, const std::string& method, const std::string& params, const int& max_evals, const int& pop_size, const std::function<std::vector<Contender>(std::vector<Contender>)>&  generator) {
+    void
+    OptLoop(const std::string &dPath, const std::string &oPath, const std::string &method, const std::string &params,
+            const int &max_evals, const int &pop_size,
+            const std::function<std::vector<Contender>(std::vector<Contender>)> &generator) {
         std::cout << "Beginning " << method << " optimization loop...\n";
 
         // Generate Logging Tool
@@ -38,11 +41,11 @@ namespace Optimizers {
 
         logger.LogEntry(population[0].LogString());
         best = population[0];
-        std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString() << std::endl;
+        std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
+                  << best.getEqString() << std::endl;
 
 
-
-        while(Contender::getEvalCount() < max_evals) {
+        while (Contender::getEvalCount() < max_evals) {
 
             // Generate new solutions
             population = generator(population);
@@ -55,11 +58,13 @@ namespace Optimizers {
                 best = population[0];
                 logger.LogEntry(population[0].LogString());
                 // TODO: Console output
-                std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString() << std::endl;
+                std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString()
+                          << std::endl;
             }
         }
 
-        std::cout << "\n\n\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString() << std::endl;
+        std::cout << "\n\n\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
+                  << best.getEqString() << std::endl;
         best.treePrint();
         // Cleanup
         Contender::ResetEvaluationCount();

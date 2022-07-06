@@ -29,11 +29,10 @@ std::uniform_real_distribution<double> Node::val_dist_(-10, 10);
  * keys are limited to those defied enum oprtr
  * Values are kept within the domain [-10, 10]
  */
-Node::Node()
-{
+Node::Node() {
     int temp = act_dist_(rng_);
     key = static_cast<oprtr>(temp);
-    if(key == VAL)
+    if (key == VAL)
         value = val_dist_(rng_);
     else
         value = nan("1.0");
@@ -46,22 +45,20 @@ Node::Node()
  * @param act 
  * @param val 
  */
-Node::Node(oprtr act, double val)
-{
+Node::Node(oprtr act, double val) {
     key = act;
-    if(key == VAL) {
+    if (key == VAL) {
         // Check for forced exit in random eq builder
-        if(!std::isnan(val)) {
+        if (!std::isnan(val)) {
             value = val;
             std::cout << val << std::endl;
-        }
-        else
+        } else
             value = val_dist_(rng_);
     }
 }
 
 std::string Node::nodeString(int i) {
-    switch(key) {
+    switch (key) {
         case VAR :
             return "( x )";
         case VAL : {

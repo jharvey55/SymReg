@@ -11,35 +11,34 @@
 #include <Optimizers.h>
 
 
-void test()
-{
+void test() {
     std::cout << "Welcome to SymReg" << std::endl;
-        Contender add_contender;
-        
-        int small_size = 4;
-        Node* add_nodes = new Node[small_size];
-        add_nodes[1] = Node(ADD);
-        add_nodes[2] = Node(VAR);
-        add_nodes[3] = Node(VAL, 2.0f);
-        
-        add_contender = Contender(small_size, add_nodes);
-        // add_contender = Contender();
+    Contender add_contender;
 
-        // delete[] cos_nodes;
-        delete[] add_nodes;
+    int small_size = 4;
+    Node *add_nodes = new Node[small_size];
+    add_nodes[1] = Node(ADD);
+    add_nodes[2] = Node(VAR);
+    add_nodes[3] = Node(VAL, 2.0f);
 
-        std::cout << add_contender.EqParser(1, 3.0f) << std::endl;
+    add_contender = Contender(small_size, add_nodes);
+    // add_contender = Contender();
+
+    // delete[] cos_nodes;
+    delete[] add_nodes;
+
+    std::cout << add_contender.EqParser(1, 3.0f) << std::endl;
 }
 
 void cosTest() {
     // Contender cos_contender;
     int trig_size = 4;
-    Node* cos_nodes = new Node[trig_size];
+    Node *cos_nodes = new Node[trig_size];
     cos_nodes[1] = Node(COS);
     cos_nodes[2] = Node(VAR);
     Contender cos_contender = Contender(trig_size, cos_nodes);
-    
-    delete[] cos_nodes; 
+
+    delete[] cos_nodes;
 
     std::cout << cos_contender.EqParser(1, 0.0f) << std::endl;
 
@@ -48,11 +47,11 @@ void cosTest() {
 void sinTest() {
     Contender sin_contender;
     int trig_size = 4;
-    Node* sin_nodes = new Node[trig_size];
+    Node *sin_nodes = new Node[trig_size];
     sin_nodes[1] = Node(SIN);
     sin_nodes[2] = Node(VAR);
     sin_contender = Contender(trig_size, sin_nodes);
-    delete[] sin_nodes; 
+    delete[] sin_nodes;
 
     // std::cout << "Still stable :D" << std::endl;
     std::cout << sin_contender.EqParser(1, 0.0f) << std::endl;
@@ -62,7 +61,7 @@ void sinTest() {
 void stringTest() {
     Contender sin_contender;
     int trig_size = 4;
-    Node* sin_nodes = new Node[trig_size];
+    Node *sin_nodes = new Node[trig_size];
     sin_nodes[1] = Node(SIN);
     sin_nodes[2] = Node(VAR);
     sin_contender = Contender(trig_size, sin_nodes);
@@ -72,7 +71,7 @@ void stringTest() {
     std::cout << sin_contender.getEqString() << std::endl;
 
     int big_size = 32;
-    Node* big_nodes = new Node[big_size];
+    Node *big_nodes = new Node[big_size];
     big_nodes[1] = Node(DIV);
     big_nodes[2] = Node(SIN);
     big_nodes[3] = Node(COS);
@@ -89,20 +88,17 @@ void stringTest() {
     std::cout << bigEq.getEqString() << std::endl;
 }
 
-void stringTest2()
-{
-    for(int i = 0; i<5; i++)
-    {
+void stringTest2() {
+    for (int i = 0; i < 5; i++) {
         Contender temp = Contender();
         std::cout << temp.getEqString() << std::endl;
     }
 
 }
 
-void loopTest1()
-{
+void loopTest1() {
     std::string rPath = "./resources/";
-    std::string dPath = rPath  + "datasets/f1.txt";
+    std::string dPath = rPath + "datasets/f1.txt";
     std::string oPath = rPath + "out/";
 
 //    auto randGen = [&](std::vector<Contender> population) mutable {
@@ -121,9 +117,10 @@ void loopTest1()
 ////        std::cout << "\n\n";
 //    };
 
-    std::function<std::vector<Contender>(std::vector<Contender>)> randGen = [](const std::vector<Contender>& population) {
+    std::function<std::vector<Contender>(std::vector<Contender>)> randGen = [](
+            const std::vector<Contender> &population) {
         std::vector<Contender> temp;
-        for(int i = 0; i < population.size(); i++) {
+        for (int i = 0; i < population.size(); i++) {
             temp.emplace_back();
             temp[i].calcFitness();
         }
@@ -134,8 +131,7 @@ void loopTest1()
 
 }
 
-int main()
-{
+int main() {
 //        sinTest();
 //        stringTest();
 //        std::cout << "\n\n";
