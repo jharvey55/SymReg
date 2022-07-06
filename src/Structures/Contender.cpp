@@ -310,7 +310,7 @@ double Contender::EqParser(int index, const double &x) {
  * @brief Grows the heap
  * @param depth
  */
-void Contender::growHeap_(int growFactor) {
+void Contender::growHeap_(const int &growFactor) {
     // int temp_size = growthSize_(depth);
     int temp_size = size_ * (int) pow(2, growFactor);
     // Create new array
@@ -330,7 +330,7 @@ void Contender::growHeap_(int growFactor) {
 }
 
 
-void Contender::randy(int index) {
+void Contender::randy(const int &index) {
 
     // Guard rail to keep variable from growing too large
     if (size_ >= 64 && index > 31) {
@@ -361,6 +361,25 @@ void Contender::randy(int index) {
 
 
 }
+
+// ################################################################################
+// Optimization tools
+// ################################################################################
+
+// Mutations -----------------------------------------------------------------------------------------------------------
+
+/**
+ * mutates a VAL node by value
+ * @param index
+ */
+void Contender::valueMutate(const int &index) {
+    if (nodes_[index].key != VAL)
+        throw std::invalid_argument("Node must be VALUE type to mutate value");
+
+    nodes_[index].value *= 0.9 + coin_flip_(rng_) * 0.2;
+}
+
+// GP Tools ------------------------------------------------------------------------------------------------------------
 
 
 /**
@@ -474,6 +493,12 @@ int Contender::growthSize_(const int &depth) {
     return 2 ^ depth;
 }
 
+/**
+ * Parses equation and returns string representation of equation
+ *
+ * @param index
+ * @return string representation of equation
+ */
 std::string Contender::buildEqString_(int index) {
     switch (nodes_[index].key) {
         case VAR :
