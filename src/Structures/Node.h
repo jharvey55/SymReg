@@ -16,7 +16,7 @@ enum oprtr {VAR,    // 0
             DIV,    // 5
             COS,    // 6
             SIN,    // 7
-            BLANK}; // 8s
+            BLANK}; // 8
 
 class Node
 {
@@ -27,7 +27,7 @@ public:
 
     // Constructors
     Node();
-    Node(oprtr act, double val = nan("0.0"));
+    explicit Node(oprtr act, double val = nan("0.0"));
 
     // Functions
     std::string nodeString(int i);

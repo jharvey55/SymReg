@@ -315,9 +315,9 @@ double Contender::EqParser(int index, const double& x) {
  * @brief Grows the heap
  * @param depth
  */
-void Contender::growHeap_() {
+void Contender::growHeap_(int growFactor) {
     // int temp_size = growthSize_(depth);
-    int temp_size = size_*2;
+    int temp_size = size_*(int)pow(2, growFactor);
     // Create new array
     Node* temp_nodes = new Node[temp_size];
 
@@ -354,7 +354,7 @@ void Contender::randy(int index) {
             int l_child = 2*index;
             
             if(l_child >= size_) {
-                growHeap_(); // If not big enough, add next layer of depth
+                growHeap_(2); // If not big enough, add next layer of depth
 
             }
             randy(l_child); // Recursively call for left child
@@ -588,8 +588,32 @@ void Contender::clipBranch_(const int& index) {
     }
 
 }
-void Contender::graftBranch_(const int& index, Node * branch) {
 
+/**
+ * @brief adds a branch of nodes to the heap nodes_
+ *
+ * @param index spot to graft branch onto
+ * @param branch_size size of branch to be added
+ * @param branch source heap to be copied into contender heap
+ */
+void Contender::graftBranch_(const int& index, const int& branch_size, const Node * branch) {
+    // determine the level the base of the branch is on
+    int base_level = (int)(floor(log2(index)));
+    int max_depth = (int)(log2(size_));
+    int d = max_depth - base_level;
+
+    if(d > branch_size)
+        growHeap_(d-branch_size);
+
+    int branchdex = 1;
+
+    for (int l = 0; l < d; l++) {
+        int left_node = (int)(pow(2, l))*index;
+        for (int n = 0; n <= l; n++) {
+             nodes_[left_node + n] = branch[branchdex];
+            branchdex++;
+        }
+    }
 }
 
 
