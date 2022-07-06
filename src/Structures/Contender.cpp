@@ -638,7 +638,7 @@ std::tuple<int, Node *> Contender::getBranch_(const int &index) {
         int left_node = (int) (pow(2, l)) * index;
         for (int n = (int) (pow(2, l)) - 1; n >= 0; n--) {
             if (nodes_[left_node + n].key != BLANK) {
-                branch_size = (int) (pow(2, l));
+                branch_size = (int) (pow(2, l + 1));
                 goto forward;
             }
         }
