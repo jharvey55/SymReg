@@ -15,7 +15,7 @@ d = max_depth - base_level
 
 println("#############################################")
 
-for l in d:-1:0
+for l in (d - 1):-1:0
     left_node = (2^l) * index
     for n in (2^l - 1):-1:0
         print(left_node + n, " ")

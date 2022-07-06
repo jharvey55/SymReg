@@ -652,7 +652,7 @@ std::tuple<int, Node *> Contender::getBranch_(const int &index) {
     // Copy data to branch
     int branchdex = 1;
 
-    for (int l = 0; l < d; l++) {
+    for (int l = 0; l < d - 1; l++) {
         int left_node = (int) (pow(2, l)) * index;
         for (int n = 0; n <= (int) (pow(2, l) - 1); n++) {
             branch[branchdex] = nodes_[left_node + n];
