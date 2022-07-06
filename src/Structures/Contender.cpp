@@ -49,7 +49,7 @@ Contender::Contender() {
  * @param size size of node array
  * @param nodes node array to fill new contender
  */
-Contender::Contender(const int& size, const Node *nodes) {
+Contender::Contender(const int &size, const Node *nodes) {
     // delete[] nodes_;
     size_ = size;
     nodes_ = new Node[size_];
@@ -65,17 +65,17 @@ Contender::Contender(const int& size, const Node *nodes) {
  * 
  * @param that Contender to copy
  */
-Contender::Contender(const Contender& that) {   
+Contender::Contender(const Contender &that) {
     this->size_ = that.size_;
     this->fitness_ = that.fitness_;
     this->nodes_ = new Node[that.size_];
     // for(int i = 0; i < that.size_; i++)
     //     this->nodes_[i] = that.nodes_[i];
     std::copy(that.nodes_, that.nodes_ + that.size_, this->nodes_);
-    
+
 }
 
-Contender::Contender(Contender&& that) noexcept {
+Contender::Contender(Contender &&that) noexcept {
     this->size_ = that.size_;
     that.size_ = 0;
     this->fitness_ = that.fitness_;
@@ -108,7 +108,7 @@ void Contender::setNodes(Node *nodes) {
     nodes_ = nodes;
 }
 
-void Contender::setNode(Node& node, int index) {
+void Contender::setNode(Node &node, int index) {
     nodes_[index] = node;
 }
 
@@ -142,80 +142,76 @@ void Contender::ResetEvaluationCount() {
 
 void Contender::treePrint() {
     std::cout << "Making tree!!!" << std::endl;
-    int n_layers = (int)std::log2(size_);
+    int n_layers = (int) std::log2(size_);
     double n_gaps = n_layers - 1;
     double max_depth = n_layers + n_gaps;
 
-    for(int depth = 0; depth < max_depth; depth++)
-    {
+    for (int depth = 0; depth < max_depth; depth++) {
         int layer = depth / 2;
         // case for node depth
-        if(depth % 2 == 0) {
+        if (depth % 2 == 0) {
             std::string l_string;
 
-            int lead = 3*(int)pow(2, n_layers-layer-1)-3;
+            int lead = 3 * (int) pow(2, n_layers - layer - 1) - 3;
             int lag = lead + 1;
-            int n_size = 6+lead+lag;
+            int n_size = 6 + lead + lag;
 
-            int first_node = (int)pow(2, layer);
-            int last_node = 2*first_node;
-            for(int n = first_node; n < last_node; n++ )
-            {
+            int first_node = (int) pow(2, layer);
+            int last_node = 2 * first_node;
+            for (int n = first_node; n < last_node; n++) {
                 char buffer[n_size];
-                std::sprintf(buffer, "%*s%*s", lead+5, nodes_[n].nodeString(n).c_str(), lag, " ");
+                std::sprintf(buffer, "%*s%*s", lead + 5, nodes_[n].nodeString(n).c_str(), lag, " ");
                 l_string += buffer;
             }
-            std::cout << l_string.substr(0, l_string.size() -1) << std::endl;
+            std::cout << l_string.substr(0, l_string.size() - 1) << std::endl;
         }
-        // case for gap depth
+            // case for gap depth
         else {
             std::string l_string;
             int layer = depth / 2 + 1;
-            int lead = 3*(int)pow(2, n_layers-layer-1)-1;
-            int n_gap = (int)pow(2, layer-1);
+            int lead = 3 * (int) pow(2, n_layers - layer - 1) - 1;
+            int n_gap = (int) pow(2, layer - 1);
 
-            for(int i = 0; i < n_gap; i++) {
-                int left_node = (int)pow(2, layer)+2*i;
+            for (int i = 0; i < n_gap; i++) {
+                int left_node = (int) pow(2, layer) + 2 * i;
                 bool ltest = nodes_[left_node].key != BLANK;
-                bool rtest = nodes_[left_node+1].key != BLANK;
+                bool rtest = nodes_[left_node + 1].key != BLANK;
 
                 l_string.append(lead, ' ');
 
-                if(ltest) {
+                if (ltest) {
                     l_string.append("╔");
                     for (int j = 0; j < lead; j++)
                         l_string += "═";
-                }
-                else
-                    l_string.append(lead+1, ' ');
+                } else
+                    l_string.append(lead + 1, ' ');
 
-                if(ltest && rtest)
+                if (ltest && rtest)
                     l_string.append("╩");
-                else if(ltest)
+                else if (ltest)
                     l_string.append("╝");
-                else if(rtest)
+                else if (rtest)
                     l_string.append("╚");
                 else
                     l_string.append(" ");
 
-                if(rtest) {
+                if (rtest) {
                     for (int j = 0; j < lead; j++)
                         l_string += "═";
                     l_string.append("╗");
-                }
-                else
-                    l_string.append(lead+1, ' ');
+                } else
+                    l_string.append(lead + 1, ' ');
 
-                l_string.append(lead+1, ' ');
+                l_string.append(lead + 1, ' ');
             }
 
-            std::cout << l_string.substr(0, l_string.size() -1) << std::endl;
+            std::cout << l_string.substr(0, l_string.size() - 1) << std::endl;
 
         }
     }
 
-    for(int i = 0; i < size_; i++) {
-        if(nodes_[i].key == VAL)
+    for (int i = 0; i < size_; i++) {
+        if (nodes_[i].key == VAL)
             std::printf("c%2d: %f\n", i, nodes_[i].value);
 //        if(nodes_[i].key == BLANK)
 //            std::cout << "BLANK: " << i << std::endl;
@@ -233,16 +229,15 @@ static double max = std::numeric_limits<double>::max();
 static double min = std::numeric_limits<double>::lowest();
 
 
-
 /**
  *
  * @param index
  * @param x
  * @return
  */
-double Contender::EqParser(int index, const double& x) {
-    int left_node = 2*index;
-    int right_node = 2*index+1;
+double Contender::EqParser(int index, const double &x) {
+    int left_node = 2 * index;
+    int right_node = 2 * index + 1;
     switch (nodes_[index].key) {
         case VAR :
             return x;
@@ -262,16 +257,16 @@ double Contender::EqParser(int index, const double& x) {
         }
         case MLT : {
             double val = EqParser(left_node, x) * EqParser(right_node, x);
-            if(std::isinf(val))
+            if (std::isinf(val))
                 val = val > 0 ? max : min;
             return val;
         }
         case DIV : {
             // safe divide
-            double val = EqParser(left_node, x)/EqParser(right_node, x);
-            if(std::isinf(val))
+            double val = EqParser(left_node, x) / EqParser(right_node, x);
+            if (std::isinf(val))
                 val = val > 0 ? max : min;
-            if(std::isnan(val))
+            if (std::isnan(val))
                 val = 1.0f;
             return val;
         }
@@ -317,15 +312,15 @@ double Contender::EqParser(int index, const double& x) {
  */
 void Contender::growHeap_(int growFactor) {
     // int temp_size = growthSize_(depth);
-    int temp_size = size_*(int)pow(2, growFactor);
+    int temp_size = size_ * (int) pow(2, growFactor);
     // Create new array
-    Node* temp_nodes = new Node[temp_size];
+    Node *temp_nodes = new Node[temp_size];
 
     // Copy old items to new array
     std::copy(nodes_, nodes_ + size_, temp_nodes);
     // for(int i = 0; i < size_; i++)
     //     temp_nodes[i] = nodes_[i];
-    for(int i = size_; i < temp_size; i++ )
+    for (int i = size_; i < temp_size; i++)
         temp_nodes[i] = Node(BLANK);
     size_ = temp_size;
     delete[] nodes_;
@@ -338,36 +333,33 @@ void Contender::growHeap_(int growFactor) {
 void Contender::randy(int index) {
 
     // Guard rail to keep variable from growing too large
-    if (size_ >= 64 && index > 31)
-    {
-        if(coin_flip_(rng_))
+    if (size_ >= 64 && index > 31) {
+        if (coin_flip_(rng_))
             nodes_[index] = Node(VAR);
         else
             nodes_[index] = Node(VAL);
-    }
-
-    else {
+    } else {
         nodes_[index] = Node();
-        
+
         // Check if node is terminus, move forward if not terminus
-        if(nodes_[index].key != VAR && nodes_[index].key != VAL) {
-            int l_child = 2*index;
-            
-            if(l_child >= size_) {
+        if (nodes_[index].key != VAR && nodes_[index].key != VAL) {
+            int l_child = 2 * index;
+
+            if (l_child >= size_) {
                 growHeap_(2); // If not big enough, add next layer of depth
 
             }
             randy(l_child); // Recursively call for left child
 
             // CHeck if node has 2 children, continue if true
-            if(nodes_[index].key != COS && nodes_[index].key != SIN) {
+            if (nodes_[index].key != COS && nodes_[index].key != SIN) {
                 // Guard for dividing by zero
-                randy(l_child+1); // Recursively call for right child
+                randy(l_child + 1); // Recursively call for right child
             }
         }
     }
 
-    
+
 }
 
 
@@ -378,17 +370,17 @@ void Contender::randy(int index) {
  * @param data point array holding the data to test
  * @param num_points int representing the number of points in the dataset
  */
-void Contender::calcFitness(const Point * data, int num_points) {
+void Contender::calcFitness(const Point *data, int num_points) {
     double sum = 0.0f;
     double diff;
-    for(int i = 0; i < num_points; i++) {
+    for (int i = 0; i < num_points; i++) {
         diff = data[i].y - EqParser(1, data[i].x);
 
         sum += std::pow(diff, 2);
     }
 
     // Update rms_
-    fitness_ = std::sqrt(sum/num_points);
+    fitness_ = std::sqrt(sum / num_points);
 
     evaluations_++;
 }
@@ -396,16 +388,16 @@ void Contender::calcFitness(const Point * data, int num_points) {
 void Contender::calcFitness() {
     double sum = 0.0f;
     double diff;
-    for(auto & Point : Points) {
+    for (auto &Point: Points) {
         diff = Point.y - EqParser(1, Point.x);
-        if(std::isnan(diff))
+        if (std::isnan(diff))
             std::cout << Point.x << std::endl;
         sum += std::pow(diff, 2);
     }
 
     // Update rms_
-    double num_points = (double)Points.size();
-    fitness_ = std::sqrt(sum/num_points);
+    double num_points = (double) Points.size();
+    fitness_ = std::sqrt(sum / num_points);
 
     evaluations_++;
 }
@@ -419,7 +411,7 @@ void Contender::calcFitness() {
  * @param that
  * @return
  */
-bool Contender::operator<(const Contender& that) const {
+bool Contender::operator<(const Contender &that) const {
     return this->fitness_ < that.fitness_;
 }
 
@@ -429,7 +421,7 @@ bool Contender::operator<(const Contender& that) const {
  * @param that 
  * @return Contender& 
  */
-Contender& Contender::operator=(const Contender& that) {
+Contender &Contender::operator=(const Contender &that) {
     if (this != &that) {
         delete[] this->nodes_;
 
@@ -441,8 +433,7 @@ Contender& Contender::operator=(const Contender& that) {
             // for(int i = 0; i < that.size_; i++)
             //     this->nodes_[i] = that.nodes_[i];
             std::copy(that.nodes_, that.nodes_ + that.size_, this->nodes_);
-        }
-        else {
+        } else {
             this->nodes_ = nullptr;
         }
     }
@@ -455,7 +446,7 @@ Contender& Contender::operator=(const Contender& that) {
  * @param that 
  * @return Contender& 
  */
-Contender& Contender::operator=(Contender&& that) noexcept{
+Contender &Contender::operator=(Contender &&that) noexcept {
     if (this != &that) {
         delete[] this->nodes_;
         this->nodes_ = that.nodes_;
@@ -479,9 +470,8 @@ Contender& Contender::operator=(Contender&& that) noexcept{
  * @param depth
  * @return
  */
-int Contender::growthSize_(const int& depth)
-{
-    return 2^depth;
+int Contender::growthSize_(const int &depth) {
+    return 2 ^ depth;
 }
 
 std::string Contender::buildEqString_(int index) {
@@ -496,13 +486,13 @@ std::string Contender::buildEqString_(int index) {
             return "(" + buildEqString_(2 * index) + " - " + buildEqString_(2 * index + 1) + ")";
         case MLT : {
             int left_node = 2 * index;
-            int right_node = 2*index+1;
+            int right_node = 2 * index + 1;
             return "(" + buildEqString_(left_node) + " ∙ " + buildEqString_(right_node) + ")";
 
         }
         case DIV : {
             int left_node = 2 * index;
-            int right_node = 2*index+1;
+            int right_node = 2 * index + 1;
             return "(" + buildEqString_(left_node) + " / " + buildEqString_(right_node) + ")";
         }
         case COS :
@@ -526,32 +516,32 @@ std::string Contender::prettyString_(int index) {
             return prettyString_(2 * index) + " - " + buildEqString_(2 * index + 1);
         case MLT : {
             int left_node = 2 * index;
-            int right_node = 2*index+1;
+            int right_node = 2 * index + 1;
             std::string temp;
 
             if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
-                temp += "(" + prettyString_(left_node) + ")" ;
+                temp += "(" + prettyString_(left_node) + ")";
             else
                 temp += prettyString_(left_node);
             temp += "∙";
             if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
-                temp += "(" + prettyString_(right_node) + ")" ;
+                temp += "(" + prettyString_(right_node) + ")";
             else
                 temp += prettyString_(right_node);
             return temp;
         }
         case DIV : {
             int left_node = 2 * index;
-            int right_node = 2*index+1;
+            int right_node = 2 * index + 1;
             std::string temp;
 
             if (nodes_[left_node].key == ADD || nodes_[left_node].key == SUB)
-                temp += "(" + prettyString_(left_node) + ")" ;
+                temp += "(" + prettyString_(left_node) + ")";
             else
                 temp += prettyString_(left_node);
             temp += "/";
             if (nodes_[right_node].key == ADD || nodes_[right_node].key == SUB)
-                temp += "(" + prettyString_(right_node) + ")" ;
+                temp += "(" + prettyString_(right_node) + ")";
             else
                 temp += prettyString_(right_node);
             return temp;
@@ -567,7 +557,7 @@ std::string Contender::prettyString_(int index) {
 
 
 // Heap Management -----------------------------------------------------------------------------------------------------
-void Contender::swapBranch_(const int& index) {
+void Contender::swapBranch_(const int &index) {
 
 }
 
@@ -575,16 +565,16 @@ void Contender::swapBranch_(const int& index) {
  * Sets all nodes in branch to blank
  *  * @param index
  */
-void Contender::clipBranch_(const int& index) {
+void Contender::clipBranch_(const int &index) {
 
-    int base_level = (int)(floor(log2(index)));
-    int max_depth = (int)(log2(size_));
+    int base_level = (int) (floor(log2(index)));
+    int max_depth = (int) (log2(size_));
     int d = max_depth - base_level;
 
     for (int l = 0; l < d; l++) {
-        int left_node = (int)(pow(2, l))*index;
+        int left_node = (int) (pow(2, l)) * index;
         for (int n = 0; n <= l; n++)
-             nodes_[left_node + n] = Node(BLANK);
+            nodes_[left_node + n] = Node(BLANK);
     }
 
 }
@@ -596,21 +586,21 @@ void Contender::clipBranch_(const int& index) {
  * @param branch_size size of branch to be added
  * @param branch source heap to be copied into contender heap
  */
-void Contender::graftBranch_(const int& index, const int& branch_size, const Node * branch) {
+void Contender::graftBranch_(const int &index, const int &branch_size, const Node *branch) {
     // determine the level the base of the branch is on
-    int base_level = (int)(floor(log2(index)));
-    int max_depth = (int)(log2(size_));
+    int base_level = (int) (floor(log2(index)));
+    int max_depth = (int) (log2(size_));
     int d = max_depth - base_level;
 
-    if(d > branch_size)
-        growHeap_(d-branch_size);
+    if (d > branch_size)
+        growHeap_(d - branch_size);
 
     int branchdex = 1;
 
     for (int l = 0; l < d; l++) {
-        int left_node = (int)(pow(2, l))*index;
+        int left_node = (int) (pow(2, l)) * index;
         for (int n = 0; n <= l; n++) {
-             nodes_[left_node + n] = branch[branchdex];
+            nodes_[left_node + n] = branch[branchdex];
             branchdex++;
         }
     }
@@ -628,27 +618,27 @@ void Contender::graftBranch_(const int& index, const int& branch_size, const Nod
  * @param index index of node to use as base of branch
  * @return tuple<int branch_size, Node* branch>
  */
-std::tuple<int, Node*> Contender::getBranch_( const int& index) {
+std::tuple<int, Node *> Contender::getBranch_(const int &index) {
 
     // early exit for blank exit
-    if(nodes_[index].key == BLANK) {
+    if (nodes_[index].key == BLANK) {
         return {0, nullptr};
     }
 
 
     // determine the level the base of the branch is on
-    int base_level = (int)(floor(log2(index)));
-    int max_depth = (int)(log2(size_));
+    int base_level = (int) (floor(log2(index)));
+    int max_depth = (int) (log2(size_));
     int d = max_depth - base_level;
     // Determine how big tree needs to be
-    int branch_size = (int)(pow(2, d)); // bottom right branch node of tree
+    int branch_size = (int) (pow(2, d)); // bottom right branch node of tree
 
 
     for (int l = d; l >= 0; l--) {
-        int left_node = (int)(pow(2, l))*index;
-        for (int n = (int)(pow(2, l)) - 1; n >= 0; n--) {
-            if(nodes_[left_node+n].key != BLANK) {
-                branch_size = (int)(pow(2,l));
+        int left_node = (int) (pow(2, l)) * index;
+        for (int n = (int) (pow(2, l)) - 1; n >= 0; n--) {
+            if (nodes_[left_node + n].key != BLANK) {
+                branch_size = (int) (pow(2, l));
                 goto forward;
             }
         }
@@ -657,13 +647,13 @@ std::tuple<int, Node*> Contender::getBranch_( const int& index) {
     forward:
 
     // Initialize branch
-    Node * branch = new Node[branch_size];
+    Node *branch = new Node[branch_size];
 
     // Copy data to branch
     int branchdex = 1;
 
     for (int l = 0; l < d; l++) {
-        int left_node = (int)(pow(2, l))*index;
+        int left_node = (int) (pow(2, l)) * index;
         for (int n = 0; n <= l; n++) {
             branch[branchdex] = nodes_[left_node + n];
             branchdex++;
