@@ -573,7 +573,7 @@ void Contender::clipBranch_(const int &index) {
 
     for (int l = 0; l < d; l++) {
         int left_node = (int) (pow(2, l)) * index;
-        for (int n = 0; n <= l; n++)
+        for (int n = 0; n <= (int) (pow(2, l) - 1); n++)
             nodes_[left_node + n] = Node(BLANK);
     }
 
@@ -599,7 +599,7 @@ void Contender::graftBranch_(const int &index, const int &branch_size, const Nod
 
     for (int l = 0; l < d; l++) {
         int left_node = (int) (pow(2, l)) * index;
-        for (int n = 0; n <= l; n++) {
+        for (int n = 0; n <= (int) (pow(2, l) - 1); n++) {
             nodes_[left_node + n] = branch[branchdex];
             branchdex++;
         }
@@ -654,7 +654,7 @@ std::tuple<int, Node *> Contender::getBranch_(const int &index) {
 
     for (int l = 0; l < d; l++) {
         int left_node = (int) (pow(2, l)) * index;
-        for (int n = 0; n <= l; n++) {
+        for (int n = 0; n <= (int) (pow(2, l) - 1); n++) {
             branch[branchdex] = nodes_[left_node + n];
             branchdex++;
         }
