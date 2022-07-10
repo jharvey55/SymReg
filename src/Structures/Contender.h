@@ -57,9 +57,27 @@ public:
 
     // Optomization tools ----------------------------------------------------------------------------------------------
 
-    // TODO: Mutations
+    // Spot Mutations
     void valueMutate(const int &index);
+
+    // Section Mutations
+    void inversionMutate();
+
+    void scrambleMutate();
+
+    void swapMutate();
+
+    // Mutate broad strokes
+    void Mutate(const double &mutRate);
+
+    Node *muteBranch(const Node &root, const Node *branch, const int &branch_size);
+
     // TODO: GP Tools {Selection, Crossover}
+    // GP Tools - Selection
+
+    // GP Tools - Crossover
+
+    // GP Tools - Pruning
 
     // Overloaded operators
     bool operator<(const Contender &that) const;

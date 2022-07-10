@@ -376,8 +376,136 @@ void Contender::valueMutate(const int &index) {
     if (nodes_[index].key != VAL)
         throw std::invalid_argument("Node must be VALUE type to mutate value");
 
-    nodes_[index].value *= 0.9 + coin_flip_(rng_) * 0.2;
+//    nodes_[index].value *= 0.9 + coin_flip_(rng_) * 0.2;
+
+    switch (coin_flip_(rng_)) {
+        case 0 :
+            nodes_[index].value -= 0.1;
+            break;
+        default :
+            nodes_[index].value += 0.1;
+            break;
+    }
 }
+
+// General Mutation
+
+/**
+ * Creates a small "safe" mutation
+ * @param mutRate
+ */
+void Contender::Mutate(const double &mutRate) {
+
+//    std::uniform_real_distribution<double> doMut(0.0f, 100.0f);
+    bool proceed = true;
+    std::uniform_int_distribution<> mutLoc(1, size_ - 1);
+
+    while (proceed) {
+        int index = mutLoc(rng_);
+        int branch_size;
+        Node *branch;
+        switch (nodes_[index].key) {
+            case VAL :
+                valueMutate(index);
+                proceed = false;
+                break;
+            case ADD : {
+                // Copy target branch
+                std::tie(branch_size, branch) = getBranch_(index);
+                // Clip target branch
+                clipBranch_(index);
+                // Create intertion branch
+                Node temp[4] = {Node(BLANK), Node(ADD), Node(BLANK), Node(VAL, 0.1)};
+                // Insert branch
+                graftBranch_(index, 4, temp);
+                // Re-insert target branch as child
+                graftBranch_(index * 2, branch_size, branch);
+                proceed = false;
+                break;
+            }
+            case SUB : {
+                // Copy target branch
+                std::tie(branch_size, branch) = getBranch_(index);
+                // Clip target branch
+                clipBranch_(index);
+                // Create intertion branch
+                Node temp[4] = {Node(BLANK), Node(SUB), Node(BLANK), Node(VAL, 0.1)};
+                // Insert branch
+                graftBranch_(index, 4, temp);
+                // Re-insert target branch as child
+                graftBranch_(index * 2, branch_size, branch);
+                proceed = false;
+                break;
+            }
+            case MLT : {
+                // Copy target branch
+                std::tie(branch_size, branch) = getBranch_(index);
+                // Clip target branch
+                clipBranch_(index);
+                // Create intertion branch
+                Node temp[4] = {Node(BLANK), Node(MLT), Node(BLANK), Node(VAL, 0.1)};
+                // Insert branch
+                graftBranch_(index, 4, temp);
+                // Re-insert target branch as child
+                graftBranch_(index * 2, branch_size, branch);
+                proceed = false;
+                break;
+            }
+            case DIV : {
+                // Copy target branch
+                std::tie(branch_size, branch) = getBranch_(index);
+                // Clip target branch
+                clipBranch_(index);
+                // Create intertion branch
+                Node temp[4] = {Node(BLANK), Node(DIV), Node(BLANK), Node(VAL, 0.1)};
+                // Insert branch
+                graftBranch_(index, 4, temp);
+                // Re-insert target branch as child
+                graftBranch_(index * 2, branch_size, branch);
+                proceed = false;
+                break;
+            }
+            case COS : {
+                // Copy target branch
+                std::tie(branch_size, branch) = getBranch_(index);
+                // Clip target branch
+                clipBranch_(index);
+                // Create intertion branch
+                Node temp[4] = {Node(BLANK), Node(COS), Node(BLANK), Node(BLANK)};
+                // Insert branch
+                graftBranch_(index, 4, temp);
+                // Re-insert target branch as child
+                graftBranch_(index * 2, branch_size, branch);
+                proceed = false;
+                break;
+            }
+            case SIN : {
+                // Copy target branch
+                std::tie(branch_size, branch) = getBranch_(index);
+                // Clip target branch
+                clipBranch_(index);
+                // Create intertion branch
+                Node temp[4] = {Node(BLANK), Node(SIN), Node(BLANK), Node(BLANK)};
+                // Insert branch
+                graftBranch_(index, 4, temp);
+                // Re-insert target branch as child
+                graftBranch_(index * 2, branch_size, branch);
+                proceed = false;
+                break;
+            }
+            default : {
+                branch = new Node[0];
+                break;
+            }
+        }
+        delete[] branch;
+    }
+}
+
+Node *Contender::muteBranch(const Node &root, const Node *branch, const int &branch_size) {
+
+}
+
 
 // GP Tools ------------------------------------------------------------------------------------------------------------
 
