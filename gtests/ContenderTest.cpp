@@ -279,3 +279,7 @@ TEST_F(ContenderTest, ToStringTest) {
     EXPECT_EQ(0, 0);
 }
 
+
+TEST_F(ContenderTest, ClipBranchTest) {
+    auto [branch_size, branch] = bigEq.
+}
