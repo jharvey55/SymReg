@@ -35,13 +35,21 @@ public:
 
     Heap getBranch(const int &index);
 
+    void growHeap(const int &growFactor);
+
+    void trimHeap();
+
 //  █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 //  Getters/Setters ------------------------------------------------------------------------------------------------
 //  █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
     int getSize() const;
 
-    void setNode(const Node &node, const int &index);
+    int getDepth() const;
+
+    void setNode(const int &index, const Node &node);
+
+    Node getNode(const int &index);
 
 //  █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 //  Overloaded Operators -------------------------------------------------------------------------------------------
@@ -54,10 +62,4 @@ public:
 private:
     int size_;
     Node *nodes_;
-
-    void growHeap_(const int &growFactor);
-
-    void trimHeap_();
-
-
 };

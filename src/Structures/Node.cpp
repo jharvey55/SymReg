@@ -51,7 +51,7 @@ Node::Node(oprtr act, double val) {
         // Check for forced exit in random eq builder
         if (!std::isnan(val)) {
             value = val;
-            std::cout << val << std::endl;
+//            std::cout << val << std::endl;
         } else
             value = val_dist_(rng_);
     }

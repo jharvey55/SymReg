@@ -130,7 +130,7 @@ protected:
 };
 
 TEST_F(ContenderTest, ValidConstructorTest) {
-    // EXPECT_EQ(0, 0);
+    EXPECT_EQ(0, 0);
     Contender test = Contender();
     // double sizeof
     //    FAIL();

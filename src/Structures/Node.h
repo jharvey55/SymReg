@@ -8,18 +8,20 @@
 #include <string>
 
 // operator enum
-enum oprtr {VAR,    // 0
-            VAL,    // 1
-            ADD,    // 2
-            SUB,    // 3
-            MLT,    // 4
-            DIV,    // 5
-            COS,    // 6
-            SIN,    // 7
-            BLANK}; // 8
+enum oprtr {
+    VAR,    // 0
+    VAL,    // 1
+    ADD,    // 2
+    SUB,    // 3
+    MLT,    // 4
+    DIV,    // 5
+    COS,    // 6
+    SIN,    // 7
+    BLANK,  // 8
+    ROOT
+};  // 9
 
-class Node
-{
+class Node {
 public:
     // member variables
     oprtr key;

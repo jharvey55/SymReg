@@ -10,6 +10,11 @@ target_link_libraries(ContenderTest PRIVATE structs data_io)
 # target_link_libraries(ContenderTest PRIVATE data_io)
 target_link_libraries(ContenderTest PRIVATE gtest gtest_main)
 
+add_executable(HeapTest HeapTest.cpp)
+target_link_libraries(HeapTest PRIVATE structs data_io)
+# target_link_libraries(ContenderTest PRIVATE data_io)
+target_link_libraries(HeapTest PRIVATE gtest gtest_main)
+
 include(GoogleTest)
 
 # add_test(NAME )
