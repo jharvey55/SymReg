@@ -6,6 +6,7 @@
 
 #include <Node.h>
 #include <Point.h>
+#include <Heap.h>
 
 #include <functional>
 #include <string>
@@ -38,13 +39,11 @@ public:
 
     int getSize() const;
 
-    void setSize(int size);
-
-    Node *getNodes() const;
-
-    void setNodes(Node *nodes);
+    void setNodes(const int &size, const Node *nodes);
 
     void setNode(Node &node, int index);
+
+    Node getNode(const int &index);
 
     double getFitness() const;
 
@@ -54,6 +53,7 @@ public:
     std::string LogString();
 
     void treePrint();
+
 
     // Static variable getters/setters
     static int getEvalCount();
@@ -65,6 +65,7 @@ public:
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
     double EqParser(int index, const double &x);
+
     // std::function<double (double)> parseFun(int index);
 
     // Node Generation and field updates
@@ -89,9 +90,7 @@ public:
     void swapMutate();
 
     // Mutate broad strokes
-    void Mutate(const double &mutRate);
-
-    Node *muteBranch(const Node &root, const Node *branch, const int &branch_size);
+    void Mutate(const int &index, const oprtr &op);
 
     // TODO: GP Tools {Selection, Crossover}
     // GP Tools - Selection
@@ -115,9 +114,10 @@ private:
     // Private Member Elements -----------------------------------------------------------------------------------------
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
-    int size_;
-    Node *nodes_;
+//    int size_;
+//    Node *nodes_;
     double fitness_;
+    Heap tree_;
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Private Member Functions ----------------------------------------------------------------------------------------
@@ -125,18 +125,8 @@ private:
 
     std::string buildEqString_(int index);
 
+
     std::string prettyString_(int index);
-
-    // Heap Management
-    void growHeap_(const int &growFactor);
-
-    void swapBranch_(const int &index);
-
-    void clipBranch_(const int &index);
-
-    void graftBranch_(const int &index, const int &branch_size, const Node *branch);
-
-    std::tuple<int, Node *> getBranch_(const int &index);
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Private Static Member Elements ----------------------------------------------------------------------------------
@@ -150,5 +140,5 @@ private:
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Private Static Member functions ---------------------------------------------------------------------------------
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
-    static int growthSize_(const int &depth);
+
 };

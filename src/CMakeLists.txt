@@ -6,8 +6,8 @@ add_library(
         Structures/Contender.cpp
         Structures/Point.h
         Structures/Point.cpp
-        Structures/heap.h
-        Structures/heap.cpp)
+        Structures/Heap.h
+        Structures/Heap.cpp)
 target_include_directories(structs PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Structures")
 
 add_library(

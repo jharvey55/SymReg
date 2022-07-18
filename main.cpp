@@ -131,14 +131,47 @@ void loopTest1() {
 
 }
 
+void mutation() {
+    int big_size = 32;
+    Node *big_nodes = new Node[big_size];
+    big_nodes[1] = Node(DIV);
+    big_nodes[2] = Node(SIN);
+    big_nodes[3] = Node(COS);
+    big_nodes[4] = Node(SUB);
+    big_nodes[8] = Node(MLT);
+    big_nodes[16] = Node(VAL, 2.0f);
+    big_nodes[17] = Node(VAR);
+    big_nodes[9] = Node(VAL, 1.0f);
+    big_nodes[6] = Node(ADD);
+    big_nodes[12] = Node(VAR);
+    big_nodes[13] = Node(VAL, M_PI);
+    Contender bigEq = Contender(big_size, big_nodes);
+    std::cout << bigEq.getSize() << std::endl;
+    bigEq.treePrint();
+//    bigEq.treePrint();
+    bigEq.Mutate(16, SUB);
+    bigEq.treePrint();
+
+    std::cout << "Mut-again" << std::endl;
+
+    bigEq.Mutate(16, ADD);
+    std::cout << "DONE" << std::endl;
+    std::cout << bigEq.getSize() << std::endl;
+//    for(int i = 0; i < bigEq.getSize(); i++) {
+//        std::cout << i << ": " << bigEq.getNode(i).nodeString(i) << std::endl;
+//    }
+
+    bigEq.treePrint();
+}
+
 int main() {
 //        sinTest();
 //        stringTest();
 //        std::cout << "\n\n";
 //        stringTest2();
 
-    loopTest1();
-
+//    loopTest1();
+    mutation();
     return 0;
 }
 

@@ -2,7 +2,7 @@
 // Created by atlas1323 on 7/10/2022.
 //
 
-#include "heap.h"
+#include "Heap.h"
 #include <Node.h>
 #include <cmath>
 #include <iostream>
@@ -31,6 +31,26 @@ Heap::Heap(const int &size, const Node *nodes) {
     size_ = size;
     nodes_ = new Node[size_];
     std::copy(nodes, nodes + size, this->nodes_);
+    for (int i = 1; i < size_ / 2; i++) {
+        int left_node = 2 * i;
+        int right_node = left_node + 1;
+        switch (nodes_[i].key) {
+            case VAR:
+            case VAL:
+            case BLANK: {
+                nodes_[left_node] = Node(BLANK);
+                nodes_[right_node] = Node(BLANK);
+                break;
+            }
+            case COS:
+            case SIN: {
+                nodes_[right_node] = Node(BLANK);
+                break;
+            }
+            default :
+                break;
+        }
+    }
     nodes_[0] = Node(ROOT);
 }
 
@@ -89,22 +109,26 @@ void Heap::clipBranch(const int &index) {
  * @param branch
  */
 void Heap::graftBranch(const int &index, const Heap &branch) {
+
+    // Establish boundaries
     int base_level = (int) (floor(log2(index)));
     int max_depth = getDepth();
-    int diff = max_depth - base_level;
 
-    if (diff < branch.getDepth())
-        growHeap(branch.getDepth() - diff);
+    // Relocate boundaries if necessary
+    if (max_depth < branch.getDepth() + base_level) {
+        growHeap(branch.getDepth() + base_level - max_depth);
+        max_depth = getDepth();
+    }
 
+    // Begin Loop and copy
     int branch_index = 1;
-    for (int level = 0; level < getDepth(); ++level) {
-        int left_node = (int) (pow(2, level)) * index;
-        for (int nodex = 0; nodex <= (int) (pow(2, level) - 1); nodex++) {
-            if (branch_index < branch.getSize()) {
-                nodes_[left_node + nodex] = branch.nodes_[branch_index];
-                branch_index++;
-            } else
-                nodes_[left_node + nodex] = Node(BLANK);
+    for (int level = 1; level < pow(2, max_depth - base_level); level *= 2) {
+        for (int step = 0; step < level; step++) {
+            if (branch_index * level + step < branch.size_) {
+                nodes_[index * level + step] = branch.nodes_[branch_index * level + step];
+            } else {
+                nodes_[index * level + step] = Node(BLANK);
+            }
         }
     }
 }
@@ -220,6 +244,18 @@ Node Heap::getNode(const int &index) {
     return nodes_[index];
 }
 
+oprtr Heap::getKey(const int &index) {
+    return nodes_[index].key;
+}
+
+void Heap::setVal(const int &index, double value) {
+    nodes_[index].value = value;
+}
+
+
+double Heap::getVal(const int &index) {
+    return nodes_[index].value;
+}
 
 // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 // Overloaded Operators -------------------------------------------------------------------------------------------

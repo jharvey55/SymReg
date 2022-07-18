@@ -7,12 +7,14 @@
 #include <Heap.h>
 #include <cmath>
 #include <iostream>
+#include <string>
 
 class HeapTest : public ::testing::Test {
 protected:
     void SetUp() override {
         // Build testHeap
         Node testHeapNodes[32];
+        testHeapNodes[0] = Node(ROOT);
         for (int i = 1; i < 16; ++i)
             testHeapNodes[i] = Node(ADD);
         for (int i = 16; i < 32; i++)
@@ -22,6 +24,7 @@ protected:
 
         // Build branch
         Node branchNodes[8];
+        branchNodes[0] = Node(ROOT);
         branchNodes[1] = Node(SUB);
         branchNodes[2] = Node(SUB);
         branchNodes[3] = Node(VAL, 2.0f);
@@ -69,6 +72,10 @@ TEST_F(HeapTest, GraftRootTest) {
     testHeap.graftBranch(1, branch);
     testHeap.trimHeap();
 
+//    for(int i = 0; i < testHeap.getSize(); i++) {
+//        std::cout << i << " : " << testHeap.getKey(i) << std::endl;
+//    }
+
     ASSERT_EQ(testHeap.getSize(), branch.getSize());
     for (int i = 0; i < testHeap.getSize(); ++i) {
         EXPECT_EQ(testHeap.getNode(i).key, branch.getNode(i).key)
@@ -79,6 +86,7 @@ TEST_F(HeapTest, GraftRootTest) {
 }
 
 TEST_F(HeapTest, GraftMidTest) {
+
     testHeap.graftBranch(3, branch);
     ASSERT_EQ(testHeap.getSize(), 32);
     int blank_count = 0;
@@ -94,7 +102,7 @@ TEST_F(HeapTest, GraftGrowTest) {
     ASSERT_EQ(testHeap.getSize(), 64);
     int blank_count = 0;
     for (int i = 0; i < testHeap.getSize(); i++) {
-        if (testHeap.getNode(i).key == BLANK)
+        if (testHeap.getKey(i) == BLANK)
             blank_count++;
     }
     EXPECT_EQ(blank_count, 30);
@@ -165,3 +173,31 @@ TEST_F (HeapTest, GetBranchTest) {
     testBranch = testHeap.getBranch(3);
     EXPECT_EQ(testBranch.getSize(), 2);
 }
+
+//TEST_F (HeapTest, MemTest) {
+//    Node addB[] = {Node(ROOT), Node(SUB), Node(BLANK), Node(VAL, 0.1f)};
+////    Heap addH = Heap(4, addB);
+//
+//    std::cout << "Getting branch" << std::endl;
+//    Heap gb = testHeap.getBranch(7);
+//
+//    std::cout << "Clipping" << std::endl;
+//    testHeap.clipBranch(7);
+//
+//    std::cout << "Merging" << std::endl;
+//    testHeap.graftBranch(7, Heap(4, addB));
+//
+//    std::cout << "Wrapping up" << std::endl;
+//    testHeap.graftBranch(14, gb);
+//
+//    int blank_count = 0;
+//    for (int i = 0; i < testHeap.getSize(); i++) {
+//        if (testHeap.getNode(i).key == BLANK)
+//            blank_count++;
+//
+//        std::cout << i << ": " << testHeap.getNode(i).nodeString(i) << std::endl;
+//    }
+//    std::cout << std::endl;
+//    EXPECT_EQ(blank_count, 30);
+//
+//}

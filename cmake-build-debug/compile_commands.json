@@ -7,6 +7,12 @@
 
 {
   "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
+  "command": "/usr/bin/c++   -I../src/Structures -I../src/DataIO -isystem ../gtests/lib/googletest/include -isystem ../gtests/lib/googletest  -g   -std=gnu++2a -o gtests/CMakeFiles/HeapTest.dir/HeapTest.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/HeapTest.cpp",
+  "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/HeapTest.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
   "command": "/usr/bin/c++   -I../src/Structures -I../src/DataIO -isystem ../gtests/lib/googletest/include -isystem ../gtests/lib/googletest  -g   -std=gnu++2a -o gtests/CMakeFiles/ContenderTest.dir/ContenderTest.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/ContenderTest.cpp",
   "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/ContenderTest.cpp"
 },
@@ -33,5 +39,17 @@
   "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
   "command": "/usr/bin/c++   -I../gtests/lib/googletest/include -I../gtests/lib/googletest  -g   -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++2a -o gtests/lib/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/lib/googletest/src/gtest-all.cc",
   "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/lib/googletest/src/gtest-all.cc"
+},
+
+{
+  "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
+  "command": "/usr/bin/c++    -g   -std=gnu++2a -o sandbox/CMakeFiles/tree.dir/tree.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/sandbox/tree.cpp",
+  "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/sandbox/tree.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
+  "command": "/usr/bin/c++    -g   -std=gnu++2a -o sandbox/CMakeFiles/sandbox1.dir/sandbox1.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/sandbox/sandbox1.cpp",
+  "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/sandbox/sandbox1.cpp"
 }
 ]

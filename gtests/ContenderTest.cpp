@@ -279,7 +279,32 @@ TEST_F(ContenderTest, ToStringTest) {
     EXPECT_EQ(0, 0);
 }
 
+//
+//TEST_F(ContenderTest, ClipBranchTest) {
+//    auto [branch_size, branch] = bigEq.
+//}
 
-TEST_F(ContenderTest, ClipBranchTest) {
-    auto [branch_size, branch] = bigEq.
+TEST_F(ContenderTest, MutateTest) {
+    int blank_count = 0;
+    std::cout << "Counting" << std::endl;
+    for (int i = 0; i < bigEq.getSize(); i++) {
+        if (bigEq.getNode(i).key == BLANK)
+            blank_count++;
+    }
+
+    ASSERT_EQ(20, blank_count);
+    bigEq.treePrint();
+    std::cout << "MUtating" << std::endl;
+    bigEq.Mutate(4, ADD);
+    std::cout << "Mutation complete\n\n";
+    bigEq.treePrint();
+//    FAIL();
+    std::cout << "Countng again\n";
+    blank_count = 0;
+    for (int i = 0; i < bigEq.getSize(); i++) {
+        if (bigEq.getNode(i).key == BLANK)
+            blank_count++;
+    }
+    ASSERT_EQ(18, blank_count);
+
 }
