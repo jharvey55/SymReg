@@ -2,8 +2,6 @@ add_library(
         structs
         Structures/Node.h
         Structures/Node.cpp
-        Structures/Contender.h
-        Structures/Contender.cpp
         Structures/Point.h
         Structures/Point.cpp
         Structures/Heap.h
@@ -21,10 +19,11 @@ add_library(
         opts
         Optimizers/Optimizers.h
         Optimizers/Optimizers.cpp
-        )
+        Optimizers/Contender.h
+        Optimizers/Contender.cpp
+)
 
 target_include_directories(opts PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Optimizers")
 target_link_libraries(opts PRIVATE structs)
 target_link_libraries(opts PRIVATE data_io)
-
 

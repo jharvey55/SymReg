@@ -18,8 +18,8 @@ enum oprtr {
     COS,    // 6
     SIN,    // 7
     BLANK,  // 8
-    ROOT
-};  // 9
+    ROOT    // 9
+};
 
 class Node {
 public:

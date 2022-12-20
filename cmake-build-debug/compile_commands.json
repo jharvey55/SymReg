@@ -7,6 +7,18 @@
 
 {
   "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
+  "command": "/usr/bin/c++   -I../src/Structures -I../src/DataIO -isystem ../gtests/lib/googletest/include -isystem ../gtests/lib/googletest  -g   -std=gnu++2a -o gtests/CMakeFiles/SelTest.dir/SelectionTest.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/SelectionTest.cpp",
+  "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/SelectionTest.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
+  "command": "/usr/bin/c++   -I../src/Structures -I../src/DataIO -isystem ../gtests/lib/googletest/include -isystem ../gtests/lib/googletest  -g   -std=gnu++2a -o gtests/CMakeFiles/FitTest.dir/FitnessTest.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/FitnessTest.cpp",
+  "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/FitnessTest.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
   "command": "/usr/bin/c++   -I../src/Structures -I../src/DataIO -isystem ../gtests/lib/googletest/include -isystem ../gtests/lib/googletest  -g   -std=gnu++2a -o gtests/CMakeFiles/HeapTest.dir/HeapTest.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/HeapTest.cpp",
   "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/HeapTest.cpp"
 },
@@ -39,6 +51,12 @@
   "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
   "command": "/usr/bin/c++   -I../gtests/lib/googletest/include -I../gtests/lib/googletest  -g   -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++2a -o gtests/lib/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/lib/googletest/src/gtest-all.cc",
   "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/gtests/lib/googletest/src/gtest-all.cc"
+},
+
+{
+  "directory": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug",
+  "command": "/usr/bin/c++    -g   -std=gnu++2a -o sandbox/CMakeFiles/multVect.dir/multVect.cpp.o -c /mnt/c/Users/atlas1323/CLionProjects/SymReg/sandbox/multVect.cpp",
+  "file": "/mnt/c/Users/atlas1323/CLionProjects/SymReg/sandbox/multVect.cpp"
 },
 
 {

@@ -3,11 +3,15 @@
 #include <vector>
 #include <functional>
 #include <cmath>
+#include <ctime>
+#include <random>
 #include <stdio.h>
+#include <random>
+#include <set>
 
 #include <Node.h>
 #include <Point.h>
-#include <Contender.h>
+#include "Contender.h"
 #include <Optimizers.h>
 
 
@@ -98,24 +102,8 @@ void stringTest2() {
 
 void loopTest1() {
     std::string rPath = "./resources/";
-    std::string dPath = rPath + "datasets/f1.txt";
+    std::string dPath = rPath + "datasets/data.txt";
     std::string oPath = rPath + "out/";
-
-//    auto randGen = [&](std::vector<Contender> population) mutable {
-//        for(auto & member : population) {
-//            member = Contender();
-//            member.calcFitness();
-//        }
-//    };
-
-//    std::function<void(std::vector<Contender>)> randGen = [](std::vector<Contender> population) mutable {
-//        for(auto & member : population) {
-//            member = Contender();
-//            member.calcFitness();
-////            std::cout << "\t" << Contender::getEvalCount() << " : " << member.getFitness() << " : " << member.getEqString() << std::endl;
-//        }
-////        std::cout << "\n\n";
-//    };
 
     std::function<std::vector<Contender>(std::vector<Contender>)> randGen = [](
             const std::vector<Contender> &population) {
@@ -127,8 +115,210 @@ void loopTest1() {
         return temp;
     };
 
-    Optimizers::OptLoop(dPath, oPath, "Random", "params", 300'000, 100, randGen);
+    std::function<void(std::vector<Contender> &)> randGen2 = [](
+            std::vector<Contender> &population) {
+        for (int i = 0; i < population.size(); i++) {
+            population[i] = Contender();
+            population[i].calcFitness();
+        }
+    };
 
+    Optimizers::OptLoop(dPath, oPath, "Random", "params", 50'000, 100, randGen2);
+    Optimizers::OptLoop(dPath, oPath, "Random", "params", 50'000, 100, randGen);
+
+}
+
+void loopTest2() {
+    std::string rPath = "./resources/";
+    std::string dPath = rPath + "datasets/data.txt";
+    std::string oPath = rPath + "out/";
+    int max_evals = 500'000;
+    int pop_size = 500;
+
+    std::function<std::vector<Contender>(std::vector<Contender>)> mutGen = [](
+            const std::vector<Contender> &population) {
+//        std::cout << Contender::getEvalCount() << std::endl;
+        std::vector<Contender> output;
+        int max = (int) population.size();
+        int cutoff = (int) (0.95 * population.size());
+        for (int i = 0; i < max; ++i) {
+            if (i < cutoff) {
+                Contender temp = population[i];
+                temp.randMutate();
+                temp.calcFitness();
+                output.push_back(population[i] < temp ? population[i] : temp);
+            } else {
+                output.emplace_back();
+                output[i].calcFitness();
+            }
+        }
+        return output;
+    };
+    Optimizers::OptLoop(dPath, oPath, "RMHC", "params", max_evals, pop_size, mutGen);
+
+}
+
+void loopTest3() {
+    std::string rPath = "./resources/";
+    std::string dPath = rPath + "datasets/data.txt";
+    std::string oPath = rPath + "out/";
+    int max_evals = 100'000;
+    int pop_size = 100;
+
+    std::function<std::vector<Contender>(std::vector<Contender>)> mutGen = [](
+            const std::vector<Contender> &population) {
+//        std::cout << Contender::getEvalCount() << std::endl;
+        std::vector<Contender> output;
+        int max = (int) population.size();
+        int cutoff = (int) (0.95 * population.size());
+        for (int i = 0; i < max; ++i) {
+            if (i < cutoff) {
+                Contender temp = population[i];
+                temp.randMutate();
+                temp.calcFitness();
+                output.push_back(population[i] < temp ? population[i] : temp);
+            } else {
+                output.emplace_back();
+                output[i].calcFitness();
+            }
+        }
+        return output;
+    };
+
+    std::function<std::vector<Contender>(std::vector<Contender>)> mutGen2 = [](
+            const std::vector<Contender> &population) {
+//        std::cout << Contender::getEvalCount() << std::endl;
+        std::vector<Contender> output;
+        int max = (int) population.size();
+        int cutoff = (int) (0.2 * (double) population.size());
+        for (int i = 0; i < max; ++i) {
+            if (i < cutoff) {
+                output.push_back(population[i]);
+            } else {
+                int index = i % cutoff;
+//                std::cout << i << " : " << index << std::endl;
+                Contender temp = population[index];
+                temp.randMutate();
+                temp.calcFitness();
+                output.push_back(temp);
+            }
+        }
+        return output;
+    };
+
+    std::function<std::vector<Contender>(std::vector<Contender>)> randGen = [](
+            const std::vector<Contender> &population) {
+        std::vector<Contender> temp;
+        for (int i = 0; i < population.size(); i++) {
+            temp.emplace_back();
+            temp[i].calcFitness();
+        }
+        return temp;
+    };
+
+
+    int runs = 3;
+    double ranAvg = 0.0f;
+    double mutAvg = 0.0f;
+    for (int i = 0; i < runs; i++) {
+        std::cout << "Round: " << i << std::endl;
+        ranAvg +=
+                Optimizers::OptLoopRun(dPath, oPath, "Random", "params", max_evals, pop_size, randGen) / (double) runs;
+        mutAvg += Optimizers::OptLoopRun(dPath, oPath, "RMHC", "params", max_evals, pop_size, mutGen) / (double) runs;
+        std::cout << "\n" << std::endl;
+    }
+
+    std::cout << "Random: " << ranAvg << std::endl;
+    std::cout << "Mutate: " << mutAvg << std::endl;
+
+}
+
+void CrossTest() {
+    std::string rPath = "./resources/";
+    std::string dPath = rPath + "datasets/data.txt";
+    std::string oPath = rPath + "out/";
+
+    std::function<void(std::vector<Contender> &)> crossover = [&](
+            std::vector<Contender> &population) {
+        std::random_device rdev;
+        std::mt19937 rng(rdev());
+
+        std::uniform_real_distribution<double> rdist(0.0f, 100.0f);
+
+        double muteRate = 5.0f;
+        int cutoff = (int) (0.5 * (double) population.size());
+        int restPoint = (int) (0.95 * (double) population.size());
+        double sum_fitness = 0.0f;
+        for (int i = 0; i < cutoff; i++) {
+            sum_fitness += 1.0f / population[i].getFitness();
+        }
+
+        for (int i = cutoff; i < restPoint; i += 2) {
+//            std::cout << i << std::endl;
+            int index1 = Contender::ProportionalSelection(population, sum_fitness);
+            int index2 = index1;
+            while (index2 == index1) { index2 = Contender::ProportionalSelection(population, sum_fitness); }
+            Contender::RandCrossover(population[index1], population[index2], population[i], population[i + 1]);
+//            if(rdist(rng) < muteRate){
+//                population[i].randMutate();
+//                population[i].calcFitness();
+//                population[i+1].randMutate();
+//                population[i+1].calcFitness();
+//            }
+
+        }
+
+        for (int i = restPoint; i < (int) population.size() - 1; i++) {
+            population[i] = Contender();
+            population[i].calcFitness();
+        }
+    };
+
+    Optimizers::OptLoop(dPath, oPath, "Cross", "params", 3'000'000, 500, crossover);
+
+}
+
+void hfcTest() {
+    std::string rPath = "./resources/";
+    std::string dPath = rPath + "datasets/data.txt";
+    std::string oPath = rPath + "out/";
+
+    std::function<void(std::vector<Contender> &)> crossover = [&](
+            std::vector<Contender> &population) {
+        std::random_device rdev;
+        std::mt19937 rng(rdev());
+
+        std::uniform_real_distribution<double> rdist(0.0f, 100.0f);
+
+        double muteRate = 15.0f;
+        int cutoff = (int) (0.5 * (double) population.size());
+        int restPoint = (int) (0.95 * (double) population.size());
+        double sum_fitness = 0.0f;
+        for (int i = 0; i < cutoff; i++) {
+//            sum_fitness += 1.0f/((double)(population[i].getSize())*0.01 + population[i].getFitness());
+            sum_fitness += 1.0f / population[i].getFitness();
+
+        }
+
+        for (int i = cutoff; i < restPoint; i += 2) {
+//            std::cout << i << std::endl;
+            int index1 = Contender::ProportionalSelection(population, sum_fitness);
+            int index2 = index1;
+            while (index2 == index1) { index2 = Contender::ProportionalSelection(population, sum_fitness); }
+            Contender::RandCrossover(population[index1], population[index2], population[i], population[i + 1]);
+            if (rdist(rng) < muteRate) {
+                population[i].randMutate();
+                population[i].calcFitness();
+                population[i + 1].randMutate();
+                population[i + 1].calcFitness();
+            }
+
+        }
+    };
+
+//    Optimizers::OptLoop(dPath, oPath, "Cross", "params", 3'000'000, 500, crossover);
+
+    Optimizers::HFC(dPath, oPath, "HFC-Cross", "params", 500'000, 500, 4, 0.5, 50, crossover);
 }
 
 void mutation() {
@@ -171,7 +361,22 @@ int main() {
 //        stringTest2();
 
 //    loopTest1();
-    mutation();
+//    mutation();
+//    loopTest1();
+//    loopTest2();
+//    loopTest3();
+//    CrossTest()
+    hfcTest();
+
+
+//std::vector<std::vector<Point>> test;
+//
+//test.emplace_back();
+////std::cout << test[0][0].x << std::endl;
+//std::cout << test.size() << std::endl;
+//test[0].push_back(Point(4.0, 2.0));
+//std::cout << test[0][0].x << std::endl;
+
     return 0;
 }
 

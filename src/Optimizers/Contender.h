@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include <Node.h>
-#include <Point.h>
-#include <Heap.h>
+#include "Node.h"
+#include "Point.h"
+#include "Heap.h"
+#include "DataLog.h"
 
 #include <functional>
 #include <string>
@@ -14,10 +15,11 @@
 #include <tuple>
 
 
-
 class Contender {
 public:
     static std::vector<Point> Points;
+    static DataLog logger;
+    static bool do_dot;
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Constructors/Destructors ----------------------------------------------------------------------------------------
@@ -50,6 +52,8 @@ public:
     // Logging/Display methods
     std::string getEqString();
 
+    std::string getHeapString();
+
     std::string LogString();
 
     void treePrint();
@@ -59,6 +63,8 @@ public:
     static int getEvalCount();
 
     static void ResetEvaluationCount();
+
+
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Member functions ------------------------------------------------------------------------------------------------
@@ -70,6 +76,8 @@ public:
 
     // Node Generation and field updates
     void calcFitness(const Point *data, int num_points);
+
+    double testFitness(const std::vector<Point> &sub_series);
 
     void calcFitness();
 
@@ -92,10 +100,22 @@ public:
     // Mutate broad strokes
     void Mutate(const int &index, const oprtr &op);
 
-    // TODO: GP Tools {Selection, Crossover}
+    bool safeMutate(int &index, const oprtr &mutKey);
+
+    void randMutate();
+
+    // TODO: GP Tools {Selection, RandCrossover}
     // GP Tools - Selection
 
-    // GP Tools - Crossover
+    // GP Tools - RandCrossover
+    static void RandCrossover(const Contender &Parent1, const Contender &Parent2, Contender &child1, Contender &child2);
+
+    static void Crossover(const Contender &Parent1, const Contender &Parent2, const int &index1, Contender &child1,
+                          const int &index2, Contender &child2);
+
+    static int ProportionalSelection(const std::vector<Contender> &population, const double &sum_fit);
+
+
 
     // GP Tools - Pruning
 
@@ -135,6 +155,8 @@ private:
     static std::random_device rand_dev_;
     static std::mt19937 rng_;
     static std::uniform_int_distribution<> coin_flip_;
+    static std::uniform_int_distribution<> key_range_;
+
     static int evaluations_;
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
@@ -142,3 +164,4 @@ private:
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
 };
+

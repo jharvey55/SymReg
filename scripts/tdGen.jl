@@ -13,7 +13,7 @@ function writeData(fname::String, xs::Vector{Float64}, ys::Vector{Float64})
 
     open(fpath, "a") do io
         for (index, x) in enumerate(xs)
-            line = string(x) * " " * string(ys[index]) * "\n"
+            line = string(x) * "\t" * string(ys[index]) * "\n"
             write(io, line)
         end
     end
@@ -21,7 +21,7 @@ end
 
 
 function main()
-    x = collect(0.1:0.1:20)
+    x = collect(-20:0.1:20)
 
     f1 = fill(3.14, size(x))
     writeData("f1.txt", x, f1)

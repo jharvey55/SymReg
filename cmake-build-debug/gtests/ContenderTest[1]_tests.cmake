@@ -8,4 +8,6 @@ add_test( ContenderTest.ToStringTest /mnt/c/Users/atlas1323/CLionProjects/SymReg
 set_tests_properties( ContenderTest.ToStringTest PROPERTIES WORKING_DIRECTORY /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests)
 add_test( ContenderTest.MutateTest /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/ContenderTest [==[--gtest_filter=ContenderTest.MutateTest]==] --gtest_also_run_disabled_tests)
 set_tests_properties( ContenderTest.MutateTest PROPERTIES WORKING_DIRECTORY /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests)
-set( ContenderTest_TESTS ContenderTest.ValidConstructorTest ContenderTest.EqParseTest ContenderTest.ErrorTest ContenderTest.ToStringTest ContenderTest.MutateTest)
+add_test( ContenderTest.CrossTest /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/ContenderTest [==[--gtest_filter=ContenderTest.CrossTest]==] --gtest_also_run_disabled_tests)
+set_tests_properties( ContenderTest.CrossTest PROPERTIES WORKING_DIRECTORY /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests)
+set( ContenderTest_TESTS ContenderTest.ValidConstructorTest ContenderTest.EqParseTest ContenderTest.ErrorTest ContenderTest.ToStringTest ContenderTest.MutateTest ContenderTest.CrossTest)

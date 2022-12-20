@@ -21,8 +21,10 @@
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/install.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/list_install_components.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/SelTest.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/edit_cache.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/test.dir
+/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/FitTest.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/HeapTest.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/CMakeFiles/ContenderTest.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/lib/CMakeFiles/install/strip.dir
@@ -50,10 +52,11 @@
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/lib/googletest/CMakeFiles/test.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/lib/googletest/CMakeFiles/gtest_main.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/gtests/lib/googletest/CMakeFiles/gtest.dir
-/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/install/local.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/install.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/list_install_components.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/install/local.dir
+/mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/multVect.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/edit_cache.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/test.dir
 /mnt/c/Users/atlas1323/CLionProjects/SymReg/cmake-build-debug/sandbox/CMakeFiles/tree.dir

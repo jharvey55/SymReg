@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <vector>
 
 double bob()
 {
@@ -26,15 +26,27 @@ void sandbox2()
 
 }
 
-int main()
-{
+void sandbox3() {
     // double epsilon = 4.94065645841247e-324;
     double epsilon = 1.0e-323;
 
     double a = 0.0f;
     double b = 1.0f / (a ? a : epsilon);
-    
+
     std::cout << b << std::endl;
+}
+
+void print_container(const std::vector<int> &c) {
+    for (int i: c)
+        std::cout << i << " ";
+    std::cout << '\n';
+}
+
+int main() {
+    std::vector<int> c{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    print_container(c);
+    c.erase(c.end() - 3, c.end());
+    print_container(c);
 
     return 0;
 }

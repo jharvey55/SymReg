@@ -33,7 +33,7 @@ public:
 
     void graftBranch(const int &index, const Heap &branch);
 
-    Heap getBranch(const int &index);
+    Heap getBranch(const int &index) const;
 
     void growHeap(const int &growFactor);
 
@@ -51,7 +51,7 @@ public:
 
     Node getNode(const int &index);
 
-    oprtr getKey(const int &index);
+    oprtr getKey(const int &index) const;
 
     void setVal(const int &index, double value);
 

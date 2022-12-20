@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 #include <Node.h>
-#include <Contender.h>
+#include "../src/Optimizers/Contender.h"
 #include <cmath>
 #include <iostream>
 
@@ -286,7 +286,6 @@ TEST_F(ContenderTest, ToStringTest) {
 
 TEST_F(ContenderTest, MutateTest) {
     int blank_count = 0;
-    std::cout << "Counting" << std::endl;
     for (int i = 0; i < bigEq.getSize(); i++) {
         if (bigEq.getNode(i).key == BLANK)
             blank_count++;
@@ -294,17 +293,68 @@ TEST_F(ContenderTest, MutateTest) {
 
     ASSERT_EQ(20, blank_count);
     bigEq.treePrint();
-    std::cout << "MUtating" << std::endl;
-    bigEq.Mutate(4, ADD);
-    std::cout << "Mutation complete\n\n";
+    bigEq.Mutate(6, ADD);
     bigEq.treePrint();
 //    FAIL();
-    std::cout << "Countng again\n";
+
+    EXPECT_EQ(32, bigEq.getSize());
     blank_count = 0;
     for (int i = 0; i < bigEq.getSize(); i++) {
         if (bigEq.getNode(i).key == BLANK)
             blank_count++;
     }
     ASSERT_EQ(18, blank_count);
+
+}
+
+TEST_F(ContenderTest, CrossTest) {
+    Contender copy1 = bigEq;
+    Contender copy2 = bigEq;
+    Contender temp3 = Contender();
+    Contender temp4 = Contender();
+
+    Contender::Crossover(copy1, copy2, 6, temp3, 3, temp4);
+
+    for (int i = 0; i < temp3.getSize(); i++) {
+        std::cout << i << " " << temp3.getNode(i).key << std::endl;
+    }
+
+    std::cout << "\n\n" << std::endl;
+
+    for (int i = 0; i < temp4.getSize(); i++) {
+        std::cout << i << " " << temp4.getNode(i).key << std::endl;
+    }
+
+    temp4.treePrint();
+
+    Contender::RandCrossover(copy1, copy2, temp3, temp4);
+
+    for (int i = 0; i < temp3.getSize(); i++) {
+        std::cout << i << " " << temp3.getNode(i).key << std::endl;
+    }
+
+    std::cout << "\n\n" << std::endl;
+
+    for (int i = 0; i < temp4.getSize(); i++) {
+        std::cout << i << " " << temp4.getNode(i).key << std::endl;
+    }
+
+    temp4.treePrint();
+
+    Contender::Crossover(copy1, copy2, 1, temp3, 1, temp4);
+
+    for (int i = 0; i < temp3.getSize(); i++) {
+        std::cout << i << " " << temp3.getNode(i).key << std::endl;
+    }
+
+    std::cout << "\n\n" << std::endl;
+
+    for (int i = 0; i < temp4.getSize(); i++) {
+        std::cout << i << " " << temp4.getNode(i).key << std::endl;
+    }
+
+    temp4.treePrint();
+    std::cout << temp4.getSize() << std::endl;
+
 
 }

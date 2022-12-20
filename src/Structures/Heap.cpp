@@ -93,13 +93,12 @@ Heap::~Heap() {
  */
 void Heap::clipBranch(const int &index) {
     int base_level = (int) (floor(log2(index)));
-    int max_depth = (int) (log2(size_));
-    int d = max_depth - base_level;
+    int max_depth = getDepth();
 
-    for (int l = 0; l < d; l++) {
-        int left_node = (int) (pow(2, l)) * index;
-        for (int n = 0; n <= (int) (pow(2, l) - 1); n++)
-            nodes_[left_node + n] = Node(BLANK);
+    for (int level = 1; level < pow(2, max_depth - base_level); level *= 2) {
+        for (int step = 0; step < level; step++) {
+            nodes_[index * level + step] = Node(BLANK);
+        }
     }
 }
 
@@ -138,7 +137,7 @@ void Heap::graftBranch(const int &index, const Heap &branch) {
  * @param index
  * @return
  */
-Heap Heap::getBranch(const int &index) {
+Heap Heap::getBranch(const int &index) const {
 
     Heap branch = Heap();
 
@@ -244,7 +243,7 @@ Node Heap::getNode(const int &index) {
     return nodes_[index];
 }
 
-oprtr Heap::getKey(const int &index) {
+oprtr Heap::getKey(const int &index) const {
     return nodes_[index].key;
 }
 

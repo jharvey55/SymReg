@@ -1,5 +1,5 @@
 #include <DataLog.h>
-#include <Contender.h>
+//#include <Contender.h>
 #include <Point.h>
 
 #include <vector>
@@ -7,10 +7,10 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <filesystem>
 
 
-std::string DataLog::DataName()
-{
+std::string DataLog::DataName() {
     // retrieve substring of file name
     std::string filename = m_dataPath.substr(m_dataPath.find_last_of("/\\") + 1);
 
@@ -21,8 +21,21 @@ std::string DataLog::DataName()
     return base_name;
 }
 
-DataLog::DataLog(const std::string& dataPath, const std::string& outDir, const std::string& method, const std::string& params)
-{
+DataLog::DataLog() {
+    m_dataPath = "UNDEFINED";;
+    m_dataName = "UNDEFINED";;
+
+    m_method = "UNDEFINED";;
+    m_params = "UNDEFINED";;
+    m_runTime = time(0);
+    m_name = "UNDEFINED";;
+    m_outDir = "UNDEFINED";;
+    m_learnPath = "UNDEFINED";;
+    m_dotPath = "UNDEFINED";;
+}
+
+DataLog::DataLog(const std::string &dataPath, const std::string &outDir, const std::string &method,
+                 const std::string &params) {
 
     // set up member variables
     m_dataPath = dataPath;
@@ -32,18 +45,22 @@ DataLog::DataLog(const std::string& dataPath, const std::string& outDir, const s
     m_params = params;
     m_runTime = time(0);
     m_name = NameGenerator();
-    m_logPath = outDir + m_name;
-    std::cout << m_logPath << std::endl;
+    m_outDir = outDir;
+    MakeExpDir();
+
+    m_learnPath = m_outDir + "/" + m_name + "_learn.txt";
+    m_dotPath = m_outDir + "/" + m_name + "_dot.txt";
 
     // set up files
-    std::fstream file(m_logPath, std::fstream::out);
-    file.close();
+    std::fstream file1(m_learnPath, std::fstream::out);
+    file1.close();
+    WriteHeader(LEARN);
 
-    // add header
-    WriteHeader();
+    std::fstream file2(m_dotPath, std::fstream::out);
+    file2.close();
+    WriteHeader(DOT);
 
     std::cout << m_name << std::endl;
-
 }
 
 std::string DataLog::NameGenerator()
@@ -83,16 +100,26 @@ std::string DataLog::NameGenerator()
     return name;
 }
 
-void DataLog::WriteHeader()
-{
+/// @brief Writes Header for files
+void DataLog::WriteHeader(const logtype &type) {
     // Open file for writing
-    std::fstream file(m_logPath, std::fstream::out | std::fstream::app);
+    std::string file_path;
+    switch (type) {
+        case DOT :
+            file_path = m_dotPath;
+
+            break;
+        case LEARN:
+            file_path = m_learnPath;
+            break;
+    }
+    std::fstream file(file_path, std::fstream::out | std::fstream::app);
+
     struct tm newtime;
     std::time_t now = time(0);
     localtime_r(&now, &newtime);
 
-    if (file.is_open())
-    {
+    if (file.is_open()) {
         file << "DataSet:\t" << m_dataName << "\n";
         file << "RunTime:\t" << 1900 + newtime.tm_year << "-" << 1 + newtime.tm_mon << "-" << newtime.tm_mday << " ";
         file << newtime.tm_hour << ":" << newtime.tm_min << ":" << newtime.tm_sec << "\n";
@@ -106,12 +133,35 @@ void DataLog::WriteHeader()
     file.close();
 }
 
-void DataLog::LogEntry(const std::string& entry)
-{
-    std::fstream file(m_logPath, std::fstream::out | std::fstream::app);
+//void DataLog::LogEntry(const std::string& entry)
+//{
+//    std::fstream file(m_logPath, std::fstream::out | std::fstream::app);
+//
+//    if (file.is_open())
+//    {
+//        file << entry << "\n";
+//    }
+//
+//    file.close();
+//}
 
-    if (file.is_open())
-    {
+void DataLog::LogEntry(const logtype &type, const std::string &entry) {
+    std::string file_path;
+    switch (type) {
+        case DOT :
+            file_path = m_dotPath;
+
+            break;
+        case LEARN:
+            file_path = m_learnPath;
+            break;
+        default:
+            break;
+    }
+
+    std::fstream file(file_path, std::fstream::out | std::fstream::app);
+
+    if (file.is_open()) {
         file << entry << "\n";
     }
 
@@ -138,9 +188,9 @@ std::vector<Point> ReadDataFile(std::string& fPath)
     while (getline(MyReadFile, line))
     {
         double lNum, rNum;
-        std::string delimeter = ", ";
+        std::string delimeter = "\t";
         lNum = stod(line.substr(0, line.find(delimeter)));
-        rNum = stod(line.substr(1, line.find(delimeter)));
+        rNum = stod(line.substr(line.find(delimeter), line.find("\r")));
 
         points.push_back(Point(lNum, rNum));
     }
@@ -150,8 +200,18 @@ std::vector<Point> ReadDataFile(std::string& fPath)
     return points;
 }
 
-std::vector<Point> DataLog::GetPoints()
-{
+std::vector<Point> DataLog::GetPoints() {
     std::vector<Point> points = ReadDataFile(m_dataPath);
     return points;
+}
+
+void DataLog::MakeExpDir() {
+    auto hold = std::filesystem::current_path();
+    std::filesystem::current_path(m_outDir);
+    std::filesystem::create_directory(m_name);
+    m_outDir = m_outDir + "/" + m_name;
+    if (!std::filesystem::is_directory(m_outDir))
+        std::cout << "Failed to create directory: " << m_outDir << std::endl;
+
+    std::filesystem::current_path(hold);
 }
