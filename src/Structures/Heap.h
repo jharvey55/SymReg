@@ -55,7 +55,7 @@ public:
 
     void setVal(const int &index, double value);
 
-    double getVal(const int &index);
+    double getVal(const int &index) const;
 
 //  █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 //  Overloaded Operators -------------------------------------------------------------------------------------------

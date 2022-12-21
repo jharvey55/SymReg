@@ -252,7 +252,7 @@ void Heap::setVal(const int &index, double value) {
 }
 
 
-double Heap::getVal(const int &index) {
+double Heap::getVal(const int &index) const {
     return nodes_[index].value;
 }
 

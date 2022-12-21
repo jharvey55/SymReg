@@ -20,6 +20,7 @@ private:
     std::string m_outDir;
     std::string m_learnPath;
     std::string m_dotPath;
+    std::string m_divPath;
     std::string m_dataName;
     std::string m_method;
     std::string m_params;
@@ -43,6 +44,10 @@ public:
     std::vector<Point> GetPoints();
 
     void MakeExpDir();
+
+    static bool dot;
+    static bool diversity;
+    static int num_gens;
 };
 
 std::vector<Point> ReadDataFile(std::string& fPath);

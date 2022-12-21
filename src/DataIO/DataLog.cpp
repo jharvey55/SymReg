@@ -10,6 +10,11 @@
 #include <filesystem>
 
 
+bool DataLog::dot = false;
+bool DataLog::diversity = false;
+int DataLog::num_gens = 100;
+
+
 std::string DataLog::DataName() {
     // retrieve substring of file name
     std::string filename = m_dataPath.substr(m_dataPath.find_last_of("/\\") + 1);
@@ -50,17 +55,29 @@ DataLog::DataLog(const std::string &dataPath, const std::string &outDir, const s
 
     m_learnPath = m_outDir + "/" + m_name + "_learn.txt";
     m_dotPath = m_outDir + "/" + m_name + "_dot.txt";
+    m_divPath = m_outDir + "/" + m_name + "_div.txt";
+
 
     // set up files
     std::fstream file1(m_learnPath, std::fstream::out);
     file1.close();
     WriteHeader(LEARN);
 
-    std::fstream file2(m_dotPath, std::fstream::out);
-    file2.close();
-    WriteHeader(DOT);
+    if (dot) {
+        std::fstream file2(m_dotPath, std::fstream::out);
+        file2.close();
+        WriteHeader(DOT);
 
-    std::cout << m_name << std::endl;
+        std::cout << m_name << std::endl;
+    }
+
+    if (div) {
+        std::fstream file3(m_divPath, std::fstream::out);
+        file3.close();
+        WriteHeader(DIVERSITY);
+
+        std::cout << m_name << std::endl;
+    }
 }
 
 std::string DataLog::NameGenerator()
@@ -95,7 +112,7 @@ std::string DataLog::NameGenerator()
     name += "`";
     name += std::to_string(newtime.tm_sec);
 
-    name += ".txt";
+//    name += ".txt";
 
     return name;
 }
@@ -107,10 +124,12 @@ void DataLog::WriteHeader(const logtype &type) {
     switch (type) {
         case DOT :
             file_path = m_dotPath;
-
             break;
         case LEARN:
             file_path = m_learnPath;
+            break;
+        case DIVERSITY:
+            file_path = m_divPath;
             break;
     }
     std::fstream file(file_path, std::fstream::out | std::fstream::app);
@@ -154,6 +173,9 @@ void DataLog::LogEntry(const logtype &type, const std::string &entry) {
             break;
         case LEARN:
             file_path = m_learnPath;
+            break;
+        case DIVERSITY:
+            file_path = m_divPath;
             break;
         default:
             break;
@@ -209,7 +231,7 @@ void DataLog::MakeExpDir() {
     auto hold = std::filesystem::current_path();
     std::filesystem::current_path(m_outDir);
     std::filesystem::create_directory(m_name);
-    m_outDir = m_outDir + "/" + m_name;
+    m_outDir = m_outDir + m_name;
     if (!std::filesystem::is_directory(m_outDir))
         std::cout << "Failed to create directory: " << m_outDir << std::endl;
 

@@ -283,6 +283,18 @@ void hfcTest() {
     std::string dPath = rPath + "datasets/data.txt";
     std::string oPath = rPath + "out/";
 
+    DataLog::dot = true;
+    DataLog::diversity = true;
+
+    std::function<void(std::vector<Contender> &)> randGen2 = [](
+            std::vector<Contender> &population) {
+        for (int i = 0; i < population.size(); i++) {
+            population[i] = Contender();
+            population[i].calcFitness();
+        }
+    };
+
+
     std::function<void(std::vector<Contender> &)> crossover = [&](
             std::vector<Contender> &population) {
         std::random_device rdev;
@@ -318,7 +330,7 @@ void hfcTest() {
 
 //    Optimizers::OptLoop(dPath, oPath, "Cross", "params", 3'000'000, 500, crossover);
 
-    Optimizers::HFC(dPath, oPath, "HFC-Cross", "params", 500'000, 500, 4, 0.5, 50, crossover);
+    Optimizers::HFC(dPath, oPath, "HFC-Rand", "params", 25'000, 500, 4, 0.5, 50, randGen2);
 }
 
 void mutation() {
@@ -352,6 +364,10 @@ void mutation() {
 //    }
 
     bigEq.treePrint();
+}
+
+void BeginExperiment() {
+
 }
 
 int main() {

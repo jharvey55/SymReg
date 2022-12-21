@@ -279,7 +279,7 @@ end
 function main()
    data_set = "../resources/datasets/data.txt"
 #    exp_path = "../resources/out/data_HFC-Cross_2022`12`2-22`59`1.txt"
-  exp_path = "../resources/out/data_HFC-Cross_2022`12`19-2`20`29.txt"
+  exp_path = "../resources/out/data_HFC-Rand_2022`12`19-20`45`10/data_HFC-Rand_2022`12`19-20`45`10_learn.txt"
 
 
 
@@ -287,7 +287,7 @@ function main()
    exp = read_in_experiment(exp_path)
 
 #    plot_func(exp.contenders[end], points)
-    animate_func2(exp, points, "../resources/Images/testAnim-HFC--RMHC-postFix2.mp4")
+    animate_func2(exp, points, "../resources/Images/testAnim-RandHFC.mp4")
 end
 
 main()

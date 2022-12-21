@@ -19,7 +19,6 @@ class Contender {
 public:
     static std::vector<Point> Points;
     static DataLog logger;
-    static bool do_dot;
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Constructors/Destructors ----------------------------------------------------------------------------------------
@@ -64,13 +63,20 @@ public:
 
     static void ResetEvaluationCount();
 
+    static double DiversityComp(const Contender &A, const Contender &B, const std::vector<Point> &points);
+
+    static void PopDivserity(const std::vector<Contender> &pop, const std::vector<Point> &points);
+
+    static void PopDivserity(const std::vector<std::vector<Contender>> &pop, const std::vector<Point> &points);
+
+
 
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Member functions ------------------------------------------------------------------------------------------------
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
-    double EqParser(int index, const double &x);
+    double EqParser(const int &index, const double &x) const;
 
     // std::function<double (double)> parseFun(int index);
 

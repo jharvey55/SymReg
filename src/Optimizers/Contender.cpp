@@ -22,7 +22,7 @@
 
 int Contender::evaluations_ = 0;
 std::vector<Point> Contender::Points;
-bool Contender::do_dot = false;
+DataLog Contender::logger;
 
 std::random_device Contender::rand_dev_;
 std::mt19937 Contender::rng_(Contender::rand_dev_());
@@ -191,6 +191,89 @@ int Contender::getEvalCount() {
 void Contender::ResetEvaluationCount() {
     evaluations_ = 0;
 }
+
+double Contender::DiversityComp(const Contender &A, const Contender &B, const std::vector<Point> &points) {
+    double sum = 0.0f;
+    double diff;
+    double num_points = (double) points.size();
+
+    for (auto &point: Points) {
+        double val1 = A.EqParser(1, point.x);
+        double val2 = A.EqParser(1, point.x);
+
+        diff = val1 - val2;
+        sum += std::pow(diff, 2);
+    }
+    // Update rms_
+    double rmse = std::sqrt(sum / num_points);
+
+    return rmse;
+}
+
+void Contender::PopDivserity(const std::vector<Contender> &pop, const std::vector<Point> &points) {
+    int pop_size = (int) pop.size();
+
+    double stdev;
+    double mean = 0.0f;
+    double sum1 = 0.0f;
+    double sum2;
+    double count = 0.0f;
+
+    for (int a = 0; a < pop_size - 1; a++) {
+        for (int b = a + 1; b < pop_size; b++) {
+            double diversity = DiversityComp(pop[a], pop[b], points);
+            mean += diversity;
+            sum1 += std::pow(diversity, 2);
+            count += 1.0;
+        }
+    }
+
+    sum2 = mean * -2.0f;
+    mean /= count;
+    sum2 *= mean;
+
+    stdev = sum1 + sum2 + std::pow(mean, 2) * count;
+
+    stdev = std::sqrt(stdev / count);
+
+    std::string entry = std::to_string(evaluations_) + " | " + std::to_string(mean) + " | " + std::to_string(stdev);
+    logger.LogEntry(DIVERSITY, entry);
+
+}
+
+void Contender::PopDivserity(const std::vector<std::vector<Contender>> &pop, const std::vector<Point> &points) {
+
+    double stdev;
+    double mean = 0.0f;
+    double sum1 = 0.0f;
+    double sum2;
+    double count = 0.0f;
+
+    for (const auto &gen: pop) {
+        int pop_size = (int) gen.size();
+        for (int a = 0; a < pop_size - 1; a++) {
+            for (int b = a + 1; b < pop_size; b++) {
+                double diversity = DiversityComp(gen[a], gen[b], points);
+                mean += diversity;
+                sum1 += std::pow(diversity, 2);
+                count += 1.0;
+            }
+        }
+    }
+
+    sum2 = mean * -2.0f;
+    mean /= count;
+    sum2 *= mean;
+
+    stdev = sum1 + sum2 + std::pow(mean, 2) * count;
+
+    stdev = std::sqrt(stdev / count);
+
+    std::string entry = std::to_string(evaluations_) + " | " + std::to_string(mean) + " | " + std::to_string(stdev);
+    logger.LogEntry(DIVERSITY, entry);
+
+}
+
 
 //void Contender::treePrint() {
 //    std::cout << "Making tree!!!" << std::endl;
@@ -430,7 +513,7 @@ static double min = std::numeric_limits<double>::lowest();
  * @param x
  * @return
  */
-double Contender::EqParser(int index, const double &x) {
+double Contender::EqParser(const int &index, const double &x) const {
     int left_node = 2 * index;
     int right_node = 2 * index + 1;
     switch (tree_.getKey(index)) {
@@ -924,7 +1007,7 @@ void Contender::calcFitness() {
     // Update rms_
     double rmse = std::sqrt(sum / num_points);
     fitness_ = rmse;
-    if (do_dot) {
+    if (DataLog::dot) {
         std::string entry = std::to_string(evaluations_) + ", " + std::to_string(this->fitness_);
         logger.LogEntry(DOT, entry);
     }

@@ -92,11 +92,11 @@ namespace Optimizers {
 
         // Generate Logging Tool
         std::cout << "Generating logging tool...\n";
-        DataLog logger = DataLog(dPath, oPath, method, params);
+        Contender::logger = DataLog(dPath, oPath, method, params);
 
         // Read in test Data
         std::cout << "Reading in data points...\n";
-        Contender::Points = logger.GetPoints();
+        Contender::Points = Contender::logger.GetPoints();
 
         // Initialize tracking variables TODO: Add remaining tracking variables
         std::cout << "Initializing tracking variables...\n";
@@ -113,7 +113,7 @@ namespace Optimizers {
         std::cout << "Sorting...\n";
         std::sort(population.begin(), population.end());
 
-        logger.LogEntry(LEARN, population[0].LogString());
+        Contender::logger.LogEntry(LEARN, population[0].LogString());
         best = population[0];
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
@@ -130,7 +130,7 @@ namespace Optimizers {
 
             if (population[0] < best) {
                 best = population[0];
-                logger.LogEntry(LEARN, population[0].LogString());
+                Contender::logger.LogEntry(LEARN, population[0].LogString());
                 // TODO: Console output
                 std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString()
                           << std::endl;
@@ -178,11 +178,11 @@ namespace Optimizers {
 
         // Generate Logging Tool
         std::cout << "Generating logging tool...\n";
-        DataLog logger = DataLog(dPath, oPath, method, params);
+        Contender::logger = DataLog(dPath, oPath, method, params);
 
         // Read in test Data
         std::cout << "Reading in data points...\n";
-        Contender::Points = logger.GetPoints();
+        Contender::Points = Contender::logger.GetPoints();
 
         // Initialize tracking variables TODO: Add remaining tracking variables
         std::cout << "Initializing tracking variables...\n";
@@ -199,7 +199,7 @@ namespace Optimizers {
         std::cout << "Sorting...\n";
         std::sort(population.begin(), population.end());
 
-        logger.LogEntry(LEARN, population[0].LogString());
+        Contender::logger.LogEntry(LEARN, population[0].LogString());
         best = population[0];
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
@@ -216,7 +216,7 @@ namespace Optimizers {
 
             if (population[0] < best) {
                 best = population[0];
-                logger.LogEntry(LEARN, population[0].LogString());
+                Contender::logger.LogEntry(LEARN, population[0].LogString());
                 // TODO: Console output
                 std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString()
                           << std::endl;
@@ -251,11 +251,11 @@ namespace Optimizers {
 
         // Generate Logging Tool
 //        std::cout << "Generating logging tool...\n";
-        DataLog logger = DataLog(dPath, oPath, method, params);
+        Contender::logger = DataLog(dPath, oPath, method, params);
 
         // Read in test Data
 //        std::cout << "Reading in data points...\n";
-        Contender::Points = logger.GetPoints();
+        Contender::Points = Contender::logger.GetPoints();
 
         Contender best;
 
@@ -268,11 +268,12 @@ namespace Optimizers {
 
         std::sort(population.begin(), population.end());
 
-        logger.LogEntry(LEARN, population[0].LogString());
+        Contender::logger.LogEntry(LEARN, population[0].LogString());
         best = population[0];
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
 
+        int gen_counter = 0;
         while (Contender::getEvalCount() < max_evals) {
 
             // Generate new solutions
@@ -283,7 +284,7 @@ namespace Optimizers {
 
             if (population[0] < best) {
                 best = population[0];
-                logger.LogEntry(LEARN, population[0].LogString());
+                Contender::logger.LogEntry(LEARN, population[0].LogString());
 
             }
         }
@@ -314,12 +315,9 @@ namespace Optimizers {
              const float &grad_percent, const int &num_gens,
              const std::function<void(std::vector<Contender> &)> &generator) {
 
-        // TODO: Pass filled in logger, turn generation into variable
-
-
         // Set up tracking variables
-        DataLog logger = DataLog(dPath, oPath, method, params);
-        Contender::Points = logger.GetPoints();
+        Contender::logger = DataLog(dPath, oPath, method, params);
+        Contender::Points = Contender::logger.GetPoints();
         const std::vector<Point> safe_state = Contender::Points;
 
         std::vector<std::vector<Contender>> population;
@@ -336,7 +334,7 @@ namespace Optimizers {
         std::sort(population[0].begin(), population[0].end());
         Contender best = population[0][0];
 
-        logger.LogEntry(LEARN, best.LogString());
+        Contender::logger.LogEntry(LEARN, best.LogString());
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
 
@@ -425,7 +423,7 @@ namespace Optimizers {
                         double con_fit = population[tier][0].testFitness(safe_state);
                         if (con_fit < best_fit) {
                             best = population[tier][0];
-                            logger.LogEntry(LEARN, best.LogString());
+                            Contender::logger.LogEntry(LEARN, best.LogString());
                             std::cout << Contender::getEvalCount() << "::" << tier << "::" << generation << ":: "
                                       << best_fit << " : " << best.getEqString()
                                       << std::endl;
@@ -445,4 +443,6 @@ namespace Optimizers {
         Contender::ResetEvaluationCount();
 
     }
+
+
 }
