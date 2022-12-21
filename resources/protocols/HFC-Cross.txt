@@ -1,0 +1,9 @@
+./resources/datasets/data.txt
+./resources/out/
+y
+y
+1
+2000
+100
+Cross
+BGA

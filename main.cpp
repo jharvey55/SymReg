@@ -375,66 +375,87 @@ void mutation() {
     bigEq.treePrint();
 }
 
+
+std::string GetString(const std::string &prompt) {
+    std::string str;
+    std::cout << prompt << std::endl;
+    std::getline(std::cin, str);
+    std::cout << "String: " << str << std::endl;
+    if (str[str.length() - 1] == '\r')
+        str.resize(str.length() - 1);
+
+    return str;
+}
+
+int GetInt(const std::string &prompt) {
+    int var;
+    std::cout << prompt << std::endl;
+    std::cin >> var;
+    std::cin.ignore(1, '\n');
+
+    return var;
+}
+
+char GetChar(const std::string &prompt) {
+    char var;
+    std::cout << prompt << std::endl;
+    std::cin >> var;
+    std::cin.ignore(1, '\n');
+
+    return var;
+}
+
+double GetDouble(const std::string &prompt) {
+    double var;
+    std::cout << prompt << std::endl;
+    std::cin >> var;
+    std::cin.ignore(1, '\n');
+
+    return var;
+}
+
 void Experiment() {
 
     std::string params = "";
     std::function<void(std::vector<Contender> &)> generator;
 
-    std::string dPath;
-    std::cout << "Dataset Path:\n";
-    std::getline(std::cin, dPath);
+    std::string dPath = GetString("Dataset Path:");
+    std::cout << dPath << std::endl;
+    std::cout << (int) dPath[dPath.length() - 1] << std::endl;
 
-    char do_dot;
-    std::cout << "Create dot log(y/n)?\n";
-    std::cin >> do_dot;
-    std::cin.ignore(1, '\n');
+    // Read in oPath
+    std::string oPath = GetString("Datalog Path:");
+    std::cout << oPath << std::endl;
+    std::cout << (int) oPath[oPath.length() - 1] << std::endl;
 
+    char do_dot = GetChar("Create dot log(y/n)?");
     DataLog::dot = do_dot == 'y';
+    std::cout << do_dot << std::endl;
     params += "DotLog:" + std::to_string(do_dot);
 
 
-    char do_div;
-    std::cout << "Create diversity log(y/n)?\n";
-    std::cin >> do_div;
-    std::cin.ignore(1, '\n');
-
+    char do_div = GetChar("Create diversity log(y/n)?");
     DataLog::diversity = do_div == 'y';
+    std::cout << do_div << std::endl;
     params += " DivLog:" + std::to_string(do_div);
 
     if (DataLog::diversity) {
         // Get number of evaluations to runa
-        int div_gens;
-        std::cout << "Diversity log frequency:\n";
-        std::cin >> div_gens;
-        std::cin.ignore(1, '\n');
+        int div_gens = GetInt("Diversity log frequency");
         DataLog::num_gens = div_gens;
-
         params += " DivFreq:" + std::to_string(div_gens);
     }
 
-    // Read in oPath
-    std::string oPath;
-    std::cout << "Datalog Path:\n";
-    std::getline(std::cin, oPath);
-
     // Get number of evaluations to runa
-    int max_evals;
-    std::cout << "Num Evals:\n";
-    std::cin >> max_evals;
-    std::cin.ignore(1, '\n');
+    int max_evals = GetInt("Num Evals:");
     params += " Evals:" + std::to_string(max_evals);
 
     // Get population size
-    int pop_size;
-    std::cout << "Population size:\n";
-    std::cin >> pop_size;
-    std::cin.ignore(1, '\n');
+    int pop_size = GetInt("Population size:");
     params += " Pop:" + std::to_string(pop_size);
 
     // Method selection
-    std::string method;
-    std::cout << "Method Selection:\n";
-    std::getline(std::cin, method);
+    std::string method = GetString("Method Selection:");
 
     if (method == "Cross") {
 
@@ -493,9 +514,7 @@ void Experiment() {
     }
 
     // Method selection
-    std::string loop;
-    std::cout << "Loop Selection:\n";
-    std::getline(std::cin, loop);
+    std::string loop = GetString("Loop Selection:");
 
     method = loop + "-" + method;
 
@@ -520,8 +539,11 @@ void Experiment() {
 
         Optimizers::HFC(dPath, oPath, method, params, max_evals, pop_size, num_tiers, grad_percent, num_gens,
                         generator);
-    } else {
+    } else if (loop == "BGA") {
         Optimizers::OptLoop(dPath, oPath, method, params, max_evals, pop_size, generator);
+    } else {
+        std::cout << "Invalid loop chosen" << std::endl;
+        return;
     }
 
 
