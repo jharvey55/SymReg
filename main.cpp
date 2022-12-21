@@ -283,8 +283,9 @@ void hfcTest() {
     std::string dPath = rPath + "datasets/data.txt";
     std::string oPath = rPath + "out/";
 
-    DataLog::dot = true;
-    DataLog::diversity = true;
+//    DataLog::dot = true;
+//    DataLog::diversity = true;
+//    DataLog::num_gens = 10;
 
     std::function<void(std::vector<Contender> &)> randGen2 = [](
             std::vector<Contender> &population) {
@@ -302,14 +303,15 @@ void hfcTest() {
 
         std::uniform_real_distribution<double> rdist(0.0f, 100.0f);
 
-        double muteRate = 15.0f;
+        double low = 5.0f;
+        double high = 75.0f;
+        int cap = 48;
         int cutoff = (int) (0.5 * (double) population.size());
         int restPoint = (int) (0.95 * (double) population.size());
         double sum_fitness = 0.0f;
         for (int i = 0; i < cutoff; i++) {
 //            sum_fitness += 1.0f/((double)(population[i].getSize())*0.01 + population[i].getFitness());
             sum_fitness += 1.0f / population[i].getFitness();
-
         }
 
         for (int i = cutoff; i < restPoint; i += 2) {
@@ -318,19 +320,26 @@ void hfcTest() {
             int index2 = index1;
             while (index2 == index1) { index2 = Contender::ProportionalSelection(population, sum_fitness); }
             Contender::RandCrossover(population[index1], population[index2], population[i], population[i + 1]);
-            if (rdist(rng) < muteRate) {
+
+
+            double muteRate1 = Optimizers::interpolateMuteRate(low, high, population[i].getSize(), cap);
+            if (rdist(rng) < muteRate1) {
                 population[i].randMutate();
                 population[i].calcFitness();
+            }
+
+            double muteRate2 = Optimizers::interpolateMuteRate(low, high, population[i].getSize(), cap);
+            if (rdist(rng) < muteRate2) {
                 population[i + 1].randMutate();
                 population[i + 1].calcFitness();
             }
-
         }
     };
 
-//    Optimizers::OptLoop(dPath, oPath, "Cross", "params", 3'000'000, 500, crossover);
+    Optimizers::OptLoop(dPath, oPath, "Cross", "params", 50'000, 100, crossover);
 
-    Optimizers::HFC(dPath, oPath, "HFC-Rand", "params", 25'000, 500, 4, 0.5, 50, randGen2);
+//    Optimizers::HFC(dPath, oPath, "HFC-Rand", "params", 50'000, 200, 4, 0.5, 50, crossover);
+
 }
 
 void mutation() {
@@ -366,7 +375,155 @@ void mutation() {
     bigEq.treePrint();
 }
 
-void BeginExperiment() {
+void Experiment() {
+
+    std::string params = "";
+    std::function<void(std::vector<Contender> &)> generator;
+
+    std::string dPath;
+    std::cout << "Dataset Path:\n";
+    std::getline(std::cin, dPath);
+
+    char do_dot;
+    std::cout << "Create dot log(y/n)?\n";
+    std::cin >> do_dot;
+    std::cin.ignore(1, '\n');
+
+    DataLog::dot = do_dot == 'y';
+    params += "DotLog:" + std::to_string(do_dot);
+
+
+    char do_div;
+    std::cout << "Create diversity log(y/n)?\n";
+    std::cin >> do_div;
+    std::cin.ignore(1, '\n');
+
+    DataLog::diversity = do_div == 'y';
+    params += " DivLog:" + std::to_string(do_div);
+
+    if (DataLog::diversity) {
+        // Get number of evaluations to runa
+        int div_gens;
+        std::cout << "Diversity log frequency:\n";
+        std::cin >> div_gens;
+        std::cin.ignore(1, '\n');
+        DataLog::num_gens = div_gens;
+
+        params += " DivFreq:" + std::to_string(div_gens);
+    }
+
+    // Read in oPath
+    std::string oPath;
+    std::cout << "Datalog Path:\n";
+    std::getline(std::cin, oPath);
+
+    // Get number of evaluations to runa
+    int max_evals;
+    std::cout << "Num Evals:\n";
+    std::cin >> max_evals;
+    std::cin.ignore(1, '\n');
+    params += " Evals:" + std::to_string(max_evals);
+
+    // Get population size
+    int pop_size;
+    std::cout << "Population size:\n";
+    std::cin >> pop_size;
+    std::cin.ignore(1, '\n');
+    params += " Pop:" + std::to_string(pop_size);
+
+    // Method selection
+    std::string method;
+    std::cout << "Method Selection:\n";
+    std::getline(std::cin, method);
+
+    if (method == "Cross") {
+
+
+        double low = 5.0f;
+        double high = 75.0f;
+        int cap = 48;
+
+        generator = [&](std::vector<Contender> &population) {
+            std::random_device rdev;
+            std::mt19937 rng(rdev());
+
+            std::uniform_real_distribution<double> rdist(0.0f, 100.0f);
+
+
+            int cutoff = (int) (0.5 * (double) population.size());
+            int restPoint = (int) (0.95 * (double) population.size());
+            double sum_fitness = 0.0f;
+            for (int i = 0; i < cutoff; i++) {
+//            sum_fitness += 1.0f/((double)(population[i].getSize())*0.01 + population[i].getFitness());
+                sum_fitness += 1.0f / population[i].getFitness();
+            }
+
+            for (int i = cutoff; i < restPoint; i += 2) {
+//            std::cout << i << std::endl;
+                int index1 = Contender::ProportionalSelection(population, sum_fitness);
+                int index2 = index1;
+                while (index2 == index1) { index2 = Contender::ProportionalSelection(population, sum_fitness); }
+                Contender::RandCrossover(population[index1], population[index2], population[i], population[i + 1]);
+
+                double muteRate1 = Optimizers::interpolateMuteRate(low, high, population[i].getSize(), cap);
+                if (rdist(rng) < muteRate1) {
+                    population[i].randMutate();
+                    population[i].calcFitness();
+                }
+
+                double muteRate2 = Optimizers::interpolateMuteRate(low, high, population[i].getSize(), cap);
+                if (rdist(rng) < muteRate2) {
+                    population[i + 1].randMutate();
+                    population[i + 1].calcFitness();
+                }
+            }
+        };
+    } else if (method == "RMHC") {
+
+    } else if (method == "Random") {
+        generator = [](std::vector<Contender> &population) {
+            for (int i = 0; i < population.size(); i++) {
+                population[i] = Contender();
+                population[i].calcFitness();
+            }
+        };
+    } else {
+        std::cout << "Invalid method" << std::endl;
+        return;
+    }
+
+    // Method selection
+    std::string loop;
+    std::cout << "Loop Selection:\n";
+    std::getline(std::cin, loop);
+
+    method = loop + "-" + method;
+
+    if (loop == "HFC") {
+        double grad_percent;
+        std::cout << "Graduation Percent:\n";
+        std::cin >> grad_percent;
+        std::cin.ignore(1, '\n');
+        params += " GradPercent:" + std::to_string(grad_percent);
+
+        int num_tiers;
+        std::cout << "Number of num_tiers:\n";
+        std::cin >> num_tiers;
+        std::cin.ignore(1, '\n');
+        params += " Tier:" + std::to_string(num_tiers);
+
+        int num_gens;
+        std::cout << "Generations between graduations:\n";
+        std::cin >> num_gens;
+        std::cin.ignore(1, '\n');
+        params += " GradGen:" + std::to_string(num_gens);
+
+        Optimizers::HFC(dPath, oPath, method, params, max_evals, pop_size, num_tiers, grad_percent, num_gens,
+                        generator);
+    } else {
+        Optimizers::OptLoop(dPath, oPath, method, params, max_evals, pop_size, generator);
+    }
+
 
 }
 
@@ -382,7 +539,12 @@ int main() {
 //    loopTest2();
 //    loopTest3();
 //    CrossTest()
-    hfcTest();
+//    hfcTest();
+    Experiment();
+//    std::cout << Optimizers::interpolateMuteRate(0.0f, 10.0f, 32, 64) << std::endl;
+//    std::cout << Optimizers::interpolateMuteRate(0.0f, 10.0f, 48, 64) << std::endl;
+//    std::cout << Optimizers::interpolateMuteRate(0.0f, 10.0f, 16, 64) << std::endl;
+
 
 
 //std::vector<std::vector<Point>> test;

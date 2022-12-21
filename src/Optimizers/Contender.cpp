@@ -197,13 +197,14 @@ double Contender::DiversityComp(const Contender &A, const Contender &B, const st
     double diff;
     double num_points = (double) points.size();
 
-    for (auto &point: Points) {
-        double val1 = A.EqParser(1, point.x);
-        double val2 = A.EqParser(1, point.x);
+    for (int i = 0; i < num_points; i += 100) {
+        double val1 = A.EqParser(1, points[i].x);
+        double val2 = B.EqParser(1, points[i].x);
 
         diff = val1 - val2;
         sum += std::pow(diff, 2);
     }
+
     // Update rms_
     double rmse = std::sqrt(sum / num_points);
 
@@ -214,25 +215,23 @@ void Contender::PopDivserity(const std::vector<Contender> &pop, const std::vecto
     int pop_size = (int) pop.size();
 
     double stdev;
-    double mean = 0.0f;
+    double mean;
     double sum1 = 0.0f;
-    double sum2;
+    double sum2 = 0.0f;
     double count = 0.0f;
 
     for (int a = 0; a < pop_size - 1; a++) {
         for (int b = a + 1; b < pop_size; b++) {
             double diversity = DiversityComp(pop[a], pop[b], points);
-            mean += diversity;
+            sum2 += diversity;
             sum1 += std::pow(diversity, 2);
-            count += 1.0;
+            count += 1.0f;
         }
     }
 
-    sum2 = mean * -2.0f;
-    mean /= count;
-    sum2 *= mean;
+    mean = sum2 / count;
 
-    stdev = sum1 + sum2 + std::pow(mean, 2) * count;
+    stdev = sum1 - 2.0f * sum2 * mean + std::pow(mean, 2) * count;
 
     stdev = std::sqrt(stdev / count);
 
@@ -244,9 +243,9 @@ void Contender::PopDivserity(const std::vector<Contender> &pop, const std::vecto
 void Contender::PopDivserity(const std::vector<std::vector<Contender>> &pop, const std::vector<Point> &points) {
 
     double stdev;
-    double mean = 0.0f;
+    double mean;
     double sum1 = 0.0f;
-    double sum2;
+    double sum2 = 0.0f;
     double count = 0.0f;
 
     for (const auto &gen: pop) {
@@ -254,18 +253,16 @@ void Contender::PopDivserity(const std::vector<std::vector<Contender>> &pop, con
         for (int a = 0; a < pop_size - 1; a++) {
             for (int b = a + 1; b < pop_size; b++) {
                 double diversity = DiversityComp(gen[a], gen[b], points);
-                mean += diversity;
+                sum2 += diversity;
                 sum1 += std::pow(diversity, 2);
-                count += 1.0;
+                count += 1.0f;
             }
         }
     }
 
-    sum2 = mean * -2.0f;
-    mean /= count;
-    sum2 *= mean;
+    mean = sum2 / count;
 
-    stdev = sum1 + sum2 + std::pow(mean, 2) * count;
+    stdev = sum1 - 2.0f * sum2 * mean + std::pow(mean, 2) * count;
 
     stdev = std::sqrt(stdev / count);
 

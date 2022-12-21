@@ -205,7 +205,13 @@ namespace Optimizers {
                   << best.getEqString() << std::endl;
 
         std::cout << "Beginning loop...\n";
+        int generation = 0;
         while (Contender::getEvalCount() < max_evals) {
+
+            if (DataLog::diversity) {
+                if (generation % DataLog::num_gens == 0)
+                    Contender::PopDivserity(population, Contender::Points);
+            }
 
             // Generate new solutions
             generator(population);
@@ -221,6 +227,8 @@ namespace Optimizers {
                 std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString()
                           << std::endl;
             }
+
+            generation++;
         }
 
         std::cout << "\n\n\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
@@ -273,8 +281,13 @@ namespace Optimizers {
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
 
-        int gen_counter = 0;
+        int generation = 0;
         while (Contender::getEvalCount() < max_evals) {
+
+            if (DataLog::diversity) {
+                if (generation % DataLog::num_gens == 0)
+                    Contender::PopDivserity(population, Contender::Points);
+            }
 
             // Generate new solutions
             population = generator(population);
@@ -287,6 +300,7 @@ namespace Optimizers {
                 Contender::logger.LogEntry(LEARN, population[0].LogString());
 
             }
+            generation++;
         }
 
         std::cout << "\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
@@ -312,7 +326,7 @@ namespace Optimizers {
      */
     void HFC(const std::string &dPath, const std::string &oPath, const std::string &method,
              const std::string &params, const int &max_evals, const int &pop_size, const int &num_tiers,
-             const float &grad_percent, const int &num_gens,
+             const double &grad_percent, const int &num_gens,
              const std::function<void(std::vector<Contender> &)> &generator) {
 
         // Set up tracking variables
@@ -345,11 +359,16 @@ namespace Optimizers {
 
         // Main Optimization Loop
         while (Contender::getEvalCount() < max_evals) {
+            if (DataLog::diversity) {
+                if (generation % DataLog::num_gens == 0)
+                    Contender::PopDivserity(population, safe_state);
+            }
+
             // Logic tree for tiers
             if (generation % num_gens == 0) {
                 std::cout << "Generation: " << generation << ", " << Contender::getEvalCount() << std::endl;
                 // Promote from tier below to current tier when appropriate
-                bool runOnce = true;
+                bool runOnce = false;
                 for (int tier = num_tiers - 1; tier > 0; tier--) {
 
                     // see if it is appropriate to promote (i.e. don't promote to second tier if first number of generations not met)
@@ -442,6 +461,16 @@ namespace Optimizers {
         // Cleanup
         Contender::ResetEvaluationCount();
 
+    }
+
+    double interpolateMuteRate(double low, double high, int size, int cap) {
+        if (size > cap)
+            return high;
+        else {
+            double range = high - low;
+            double step = range * ((double) size / (double) cap);
+            return step + low;
+        }
     }
 
 

@@ -71,7 +71,7 @@ DataLog::DataLog(const std::string &dataPath, const std::string &outDir, const s
         std::cout << m_name << std::endl;
     }
 
-    if (div) {
+    if (diversity) {
         std::fstream file3(m_divPath, std::fstream::out);
         file3.close();
         WriteHeader(DIVERSITY);
@@ -169,7 +169,6 @@ void DataLog::LogEntry(const logtype &type, const std::string &entry) {
     switch (type) {
         case DOT :
             file_path = m_dotPath;
-
             break;
         case LEARN:
             file_path = m_learnPath;
@@ -232,8 +231,10 @@ void DataLog::MakeExpDir() {
     std::filesystem::current_path(m_outDir);
     std::filesystem::create_directory(m_name);
     m_outDir = m_outDir + m_name;
-    if (!std::filesystem::is_directory(m_outDir))
+    if (!std::filesystem::is_directory(m_name))
         std::cout << "Failed to create directory: " << m_outDir << std::endl;
+    else
+        std::cout << "Successfully created directory: " << m_outDir << std::endl;
 
     std::filesystem::current_path(hold);
 }
