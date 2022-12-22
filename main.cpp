@@ -135,8 +135,8 @@ void loopTest2() {
     int max_evals = 500'000;
     int pop_size = 500;
 
-    std::function<std::vector<Contender>(std::vector<Contender>)> mutGen = [](
-            const std::vector<Contender> &population) {
+    std::function<std::vector<Contender>(std::vector<Contender> &)> mutGen = [&](
+            std::vector<Contender> &population) {
 //        std::cout << Contender::getEvalCount() << std::endl;
         std::vector<Contender> output;
         int max = (int) population.size();
@@ -287,7 +287,7 @@ void hfcTest() {
 //    DataLog::diversity = true;
 //    DataLog::num_gens = 10;
 
-    std::function<void(std::vector<Contender> &)> randGen2 = [](
+    std::function<void(std::vector<Contender> &)> randGen2 = [&](
             std::vector<Contender> &population) {
         for (int i = 0; i < population.size(); i++) {
             population[i] = Contender();
@@ -295,6 +295,23 @@ void hfcTest() {
         }
     };
 
+
+    std::function<void(std::vector<Contender> &)> RMHC = [&](std::vector<Contender> &population) {
+        int max = (int) population.size();
+        int cutoff = (int) (0.95 * population.size());
+        for (int i = 0; i < max; ++i) {
+            if (i < cutoff) {
+                Contender temp = population[i];
+                temp.randMutate();
+                temp.calcFitness();
+                if (temp < population[i])
+                    population[i] = temp;
+            } else {
+                population[i] = Contender();
+                population[i].calcFitness();
+            }
+        }
+    };
 
     std::function<void(std::vector<Contender> &)> crossover = [&](
             std::vector<Contender> &population) {
@@ -380,7 +397,8 @@ std::string GetString(const std::string &prompt) {
     std::string str;
     std::cout << prompt << std::endl;
     std::getline(std::cin, str);
-    std::cout << "String: " << str << std::endl;
+    if (str.empty())
+        std::getline(std::cin, str);
     if (str[str.length() - 1] == '\r')
         str.resize(str.length() - 1);
 
@@ -392,7 +410,6 @@ int GetInt(const std::string &prompt) {
     std::cout << prompt << std::endl;
     std::cin >> var;
     std::cin.ignore(1, '\n');
-
     return var;
 }
 
@@ -448,21 +465,26 @@ void Experiment() {
 
     // Get number of evaluations to runa
     int max_evals = GetInt("Num Evals:");
+    std::cout << max_evals << std::endl;
     params += " Evals:" + std::to_string(max_evals);
 
     // Get population size
     int pop_size = GetInt("Population size:");
+    std::cout << pop_size << std::endl;
     params += " Pop:" + std::to_string(pop_size);
+
+
 
     // Method selection
     std::string method = GetString("Method Selection:");
+    std::cout << method << std::endl;
 
     if (method == "Cross") {
 
 
         double low = 5.0f;
-        double high = 75.0f;
-        int cap = 48;
+        double high = 100.0f;
+        int cap = 32;
 
         generator = [&](std::vector<Contender> &population) {
             std::random_device rdev;
@@ -497,15 +519,37 @@ void Experiment() {
                     population[i + 1].randMutate();
                     population[i + 1].calcFitness();
                 }
+
+//                if (rdist(rng) < 5.0f) {
+//                    population[i].randMutate();
+//                    population[i].calcFitness();
+//                    population[i + 1].randMutate();
+//                    population[i + 1].calcFitness();
+//                }
             }
         };
     } else if (method == "RMHC") {
-
+        generator = [&](std::vector<Contender> &population) {
+            int max = (int) population.size();
+            int cutoff = (int) (0.95 * population.size());
+            for (int i = 0; i < max; ++i) {
+                if (i < cutoff) {
+                    Contender temp = population[i];
+                    temp.randMutate();
+                    temp.calcFitness();
+                    if (temp < population[i])
+                        population[i] = temp;
+                } else {
+                    population[i] = Contender();
+                    population[i].calcFitness();
+                }
+            }
+        };
     } else if (method == "Random") {
-        generator = [](std::vector<Contender> &population) {
-            for (int i = 0; i < population.size(); i++) {
-                population[i] = Contender();
-                population[i].calcFitness();
+        generator = [&](std::vector<Contender> &population) {
+            for (auto &member: population) {
+                member = Contender();
+                member.calcFitness();
             }
         };
     } else {
@@ -519,22 +563,16 @@ void Experiment() {
     method = loop + "-" + method;
 
     if (loop == "HFC") {
-        double grad_percent;
-        std::cout << "Graduation Percent:\n";
-        std::cin >> grad_percent;
-        std::cin.ignore(1, '\n');
+        double grad_percent = GetDouble("Graduation Percent:");
+        std::cout << grad_percent << std::endl;
         params += " GradPercent:" + std::to_string(grad_percent);
 
-        int num_tiers;
-        std::cout << "Number of num_tiers:\n";
-        std::cin >> num_tiers;
-        std::cin.ignore(1, '\n');
+        int num_tiers = GetInt("Number of num_tiers:");
+        std::cout << num_tiers << std::endl;
         params += " Tier:" + std::to_string(num_tiers);
 
-        int num_gens;
-        std::cout << "Generations between graduations:\n";
-        std::cin >> num_gens;
-        std::cin.ignore(1, '\n');
+        int num_gens = GetInt("Generations between graduations:");
+        std::cout << num_gens << std::endl;
         params += " GradGen:" + std::to_string(num_gens);
 
         Optimizers::HFC(dPath, oPath, method, params, max_evals, pop_size, num_tiers, grad_percent, num_gens,

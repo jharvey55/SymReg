@@ -1,9 +1,11 @@
 ./resources/datasets/data.txt
 ./resources/out/
-y
-y
-1
-2000
-100
+n
+n
+200000
+500
 Cross
-BGA
+HFC
+0.5
+4
+15

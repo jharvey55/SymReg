@@ -980,9 +980,9 @@ double Contender::testFitness(const std::vector<Point> &sub_series) {
     }
 
     double rmse = std::sqrt(sum / num_points);
-    fitness_ = rmse;
+//    fitness_ = rmse;
 
-    evaluations_++;
+//    evaluations_++;
 
     return rmse;
 }

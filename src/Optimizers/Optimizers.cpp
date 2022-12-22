@@ -14,6 +14,10 @@
 
 namespace Optimizers {
 
+    // Operational flags
+
+
+
 
     /***
      * Deterimnes the variance of a population using the subset of of subSeries
@@ -22,30 +26,21 @@ namespace Optimizers {
      * @return
      */
     double ErrorSpread(const std::vector<Point> &subSeries, const std::vector<Contender> &pop) {
-        double spread = 0;
-        double mean = 0;
+        double spread;
+        double mean;
         double sum1 = 0;
         double sum2 = 0;
+        double size = (double) pop.size();
 //        std::vector<double> errors;
         for (Contender member: pop) {
             double fit = member.testFitness(subSeries);
-            mean += fit;
+            sum2 += fit;
             sum1 += std::pow(fit, 2);
 //            errors.push_back(fit);
         }
 
-        sum2 = mean * -2.0f;
-
-        mean /= (double) pop.size();
-
-        sum2 *= mean;
-
-//        for(double e : errors) {
-//            spread += std::pow((e-mean), 2);
-//        }
-
-        spread = sum1 + sum2 + std::pow(mean, 2) * (double) pop.size();
-
+        mean = sum2 / size;
+        spread = sum1 - 2.0f * sum2 * mean + std::pow(mean, 2) * size;
         spread /= (double) pop.size() - 1;
 
 //        spread = std::sqrt(spread);
@@ -59,7 +54,7 @@ namespace Optimizers {
 
 //        std::vector<std::vector<Point>> series;
 
-        double best_spread = 0;
+        double best_spread = ErrorSpread(Contender::Points, pop);
         double spread;
 
         for (int trial = 0; trial < trials; trial++) {
@@ -78,11 +73,81 @@ namespace Optimizers {
                 best_spread = spread;
                 Contender::Points = series;
             }
-
         }
+
+        for (Contender member: pop)
+            member.calcFitness();
     }
 
-    // Operational flags
+    void update(const std::string &message) {
+        std::cout << "...." << message << std::endl;
+    }
+
+
+    void ProgTracker(const int &barWidth, const int &max_evals, Contender &best) {
+
+        double progress = (double) Contender::getEvalCount() / (double) max_evals;
+
+
+        std::string e = "E:" + std::to_string(Contender::getEvalCount());
+        std::cout << e;
+        int digits = (int) std::log10(max_evals) + 3;
+        for (int i = 0; i < (digits - e.length()); i++)
+            std::cout << " ";
+
+        std::string fit = " F:" + std::to_string(best.getFitness());
+        std::cout << fit;
+        for (int i = 0; i < (12 - fit.length()); i++)
+            std::cout << " ";
+        std::cout << "[";
+        int pos = barWidth * progress;
+        for (int i = 0; i < barWidth; ++i) {
+            if (i <= pos) std::cout << "■";
+//            else if (i == pos) std::cout << "■";
+            else std::cout << " ";
+        }
+        std::cout << "] " << int(progress * 100.0) << " %          \r";
+        std::cout.flush();
+    }
+
+    void HFCProgTracker(const int &barWidth, const int &max_evals, const int &generation,
+                        std::vector<std::vector<Contender>> &population) {
+
+
+        std::cout << "Generation: " << generation << ", " << Contender::getEvalCount() << std::endl;
+        int num_tiers = (int) population.size();
+
+        int full_pop = 0;
+
+        for (int tier = num_tiers - 1; tier >= 0; tier--) {
+            std::cout << "\t" << tier << "::" << population[tier].size();
+            full_pop += (int) population[tier].size();
+            if (!population[tier].empty())
+                std::cout << ":: " << population[tier][0].getFitness() << " : " << population[tier][0].getSize();
+            std::cout << std::endl;
+        }
+
+        double progress = (double) Contender::getEvalCount() / (double) max_evals;
+
+        std::cout << "\n[";
+        int pos = barWidth * progress;
+        for (int i = 0; i < barWidth; ++i) {
+            if (i <= pos) std::cout << "■";
+//            else if (i == pos) std::cout << "■";
+            else std::cout << " ";
+        }
+        std::cout << "] " << int(progress * 100.0) << " %";
+
+
+        if (max_evals > Contender::getEvalCount()) {
+            for (int i = 0; i < num_tiers + 2; i++) {
+                std::cout << "\r";
+                std::cout << "\x1b[A";
+            }
+            std::cout.flush();
+        }
+
+    }
 
     void
     OptLoop(const std::string &dPath, const std::string &oPath, const std::string &method, const std::string &params,
@@ -137,6 +202,7 @@ namespace Optimizers {
             }
         }
 
+
         std::cout << "\n\n\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
         best.treePrint();
@@ -174,21 +240,21 @@ namespace Optimizers {
     void
     OptLoop(const std::string &dPath, const std::string &oPath, const std::string &method, const std::string &params,
             const int &max_evals, const int &pop_size, const std::function<void(std::vector<Contender> &)> &generator) {
-        std::cout << "Beginning " << method << " optimization loop...\n";
+        std::cout << "\n\nBGA: Beginning " << method << " optimization loop" << std::endl;
 
         // Generate Logging Tool
-        std::cout << "Generating logging tool...\n";
+        update("Generating logging tool");
         Contender::logger = DataLog(dPath, oPath, method, params);
 
         // Read in test Data
-        std::cout << "Reading in data points...\n";
+        update("Reading in data points");
         Contender::Points = Contender::logger.GetPoints();
 
         // Initialize tracking variables TODO: Add remaining tracking variables
-        std::cout << "Initializing tracking variables...\n";
+        update("Initializing tracking variables");
         Contender best;
 
-        std::cout << "Generating starting population...\n";
+        update("Generating starting population");
         // Generate starting population
         std::vector<Contender> population;
         for (int i = 0; i < pop_size; i++) {
@@ -196,7 +262,7 @@ namespace Optimizers {
             population[i].calcFitness();
         }
         // Sort and log the best contender
-        std::cout << "Sorting...\n";
+        update("Sorting");
         std::sort(population.begin(), population.end());
 
         Contender::logger.LogEntry(LEARN, population[0].LogString());
@@ -204,9 +270,10 @@ namespace Optimizers {
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
 
-        std::cout << "Beginning loop...\n";
+        update("Beginning loop");
         int generation = 0;
         while (Contender::getEvalCount() < max_evals) {
+            ProgTracker(80, max_evals, best);
 
             if (DataLog::diversity) {
                 if (generation % DataLog::num_gens == 0)
@@ -223,17 +290,17 @@ namespace Optimizers {
             if (population[0] < best) {
                 best = population[0];
                 Contender::logger.LogEntry(LEARN, population[0].LogString());
-                // TODO: Console output
-                std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString()
-                          << std::endl;
+
+//                std::cout << Contender::getEvalCount() << " : " << best.getFitness() << " : " << best.getEqString()
+//                          << std::endl;
             }
 
             generation++;
         }
-
+        ProgTracker(80, max_evals, best);
         std::cout << "\n\n\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
-        best.treePrint();
+//        best.treePrint();
         // Cleanup
         Contender::ResetEvaluationCount();
 
@@ -312,6 +379,7 @@ namespace Optimizers {
 
     }
 
+
     /**
      * HFC: Hierarchical Fair Competition Loop
      *
@@ -329,18 +397,26 @@ namespace Optimizers {
              const double &grad_percent, const int &num_gens,
              const std::function<void(std::vector<Contender> &)> &generator) {
 
+        std::cout << "\n\n################################################################################"
+                  << std::endl;
+        std::cout << "HFC experiment: " << method << std::endl;
+
         // Set up tracking variables
+        update("setting up tracking variables");
         Contender::logger = DataLog(dPath, oPath, method, params);
         Contender::Points = Contender::logger.GetPoints();
         const std::vector<Point> safe_state = Contender::Points;
 
         std::vector<std::vector<Contender>> population;
 
+
+        update("creating population tiers");
         // Create the population layers
         for (int i = 0; i < num_tiers; i++)
             population.emplace_back();
 
         // INitial population and starting best contender
+        update("Initial population and starting best contender");
         for (int i = 0; i < pop_size; i++) {
             population[0].emplace_back();
             population[0][i].calcFitness();
@@ -351,14 +427,19 @@ namespace Optimizers {
         Contender::logger.LogEntry(LEARN, best.LogString());
         std::cout << "INITIAL: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
+        bool dp = false;
 
-        DataPicker(25, safe_state, population[0]);
-        best.calcFitness();
+        if (dp) {
+            DataPicker(25, safe_state, population[0]);
+            best.calcFitness();
+        }
 
         int generation = 0;
 
         // Main Optimization Loop
         while (Contender::getEvalCount() < max_evals) {
+//            ProgTracker(70, max_evals);
+            HFCProgTracker(80, max_evals, generation, population);
             if (DataLog::diversity) {
                 if (generation % DataLog::num_gens == 0)
                     Contender::PopDivserity(population, safe_state);
@@ -366,9 +447,9 @@ namespace Optimizers {
 
             // Logic tree for tiers
             if (generation % num_gens == 0) {
-                std::cout << "Generation: " << generation << ", " << Contender::getEvalCount() << std::endl;
+//                std::cout << "Generation: " << generation << ", " << Contender::getEvalCount() << std::endl;
                 // Promote from tier below to current tier when appropriate
-                bool runOnce = false;
+                bool runOnce = dp;
                 for (int tier = num_tiers - 1; tier > 0; tier--) {
 
                     // see if it is appropriate to promote (i.e. don't promote to second tier if first number of generations not met)
@@ -401,9 +482,9 @@ namespace Optimizers {
                         // Sort parent tier
                         std::sort(population[tier].begin(), population[tier].end());
 
-                        std::cout << "\t" << tier << "::" << population[tier].size() << ":: "
-                                  << population[tier][0].getFitness() << " : " << population[tier][0].getEqString()
-                                  << std::endl;
+//                        std::cout << "\t" << tier << "::" << population[tier].size() << ":: "
+//                                  << population[tier][0].getFitness() << " : " << population[tier][0].getEqString()
+//                                  << std::endl;
                     }
                 }
 
@@ -424,8 +505,8 @@ namespace Optimizers {
 //                }
 
                 std::sort(population[0].begin(), population[0].end());
-                std::cout << "\t" << 0 << ": " << population[0][0].getFitness() << " : "
-                          << population[0][0].getEqString() << std::endl;
+//                std::cout << "\t" << 0 << ": " << population[0][0].getFitness() << " : "
+//                          << population[0][0].getEqString() << "\n\n" << std::endl;
             }
 
             for (int tier = 0; tier < num_tiers; tier++) {
@@ -443,9 +524,9 @@ namespace Optimizers {
                         if (con_fit < best_fit) {
                             best = population[tier][0];
                             Contender::logger.LogEntry(LEARN, best.LogString());
-                            std::cout << Contender::getEvalCount() << "::" << tier << "::" << generation << ":: "
-                                      << best_fit << " : " << best.getEqString()
-                                      << std::endl;
+//                            std::cout << Contender::getEvalCount() << "::" << tier << "::" << generation << ":: "
+//                                      << best_fit << " : " << best.getEqString()
+//                                      << std::endl;
                         }
                     }
                 }
@@ -455,9 +536,11 @@ namespace Optimizers {
             generation++;
 
         }
+        HFCProgTracker(80, max_evals, generation, population);
+
         std::cout << "\n\n\nCONCLUSION: " << Contender::getEvalCount() << " : " << best.getFitness() << " : "
                   << best.getEqString() << std::endl;
-        best.treePrint();
+//        best.treePrint();
         // Cleanup
         Contender::ResetEvaluationCount();
 
