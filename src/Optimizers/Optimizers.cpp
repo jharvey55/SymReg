@@ -277,7 +277,7 @@ namespace Optimizers {
 
             if (DataLog::diversity) {
                 if (generation % DataLog::num_gens == 0)
-                    Contender::PopDivserity(population, Contender::Points);
+                    Contender::PopDiversity(population, Contender::Points);
             }
 
             // Generate new solutions
@@ -353,7 +353,7 @@ namespace Optimizers {
 
             if (DataLog::diversity) {
                 if (generation % DataLog::num_gens == 0)
-                    Contender::PopDivserity(population, Contender::Points);
+                    Contender::PopDiversity(population, Contender::Points);
             }
 
             // Generate new solutions
@@ -442,7 +442,7 @@ namespace Optimizers {
             HFCProgTracker(80, max_evals, generation, population);
             if (DataLog::diversity) {
                 if (generation % DataLog::num_gens == 0)
-                    Contender::PopDivserity(population, safe_state);
+                    Contender::PopDiversity(population);
             }
 
             // Logic tree for tiers
@@ -554,6 +554,22 @@ namespace Optimizers {
             double step = range * ((double) size / (double) cap);
             return step + low;
         }
+    }
+
+    double interpolateMuteRate(const double &low, const double &high, const int &size) {
+//        std::cout << "Interpolating" << std::endl;
+        double step = 1.0f - 8.0f / (double) size;
+        double rate = low + step * (high - low);
+//        if(size > 500) {
+//            std::cout << "\n\n\n\n\n\n##############" << std::endl;
+//            std::cout << "STEP: " << step << std::endl;
+//            std::cout << "HIGH: " << high << std::endl;
+//            std::cout << "LOW: " << high << std::endl;
+//            std::cout << "SIZE: " << size << std::endl;
+//            std::cout << "RANGE: " << high - low << std::endl;
+//            std::cout << "Rate: " << rate << std::endl;
+//        }
+        return rate;
     }
 
 

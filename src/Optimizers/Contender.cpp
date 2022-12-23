@@ -27,7 +27,7 @@ DataLog Contender::logger;
 std::random_device Contender::rand_dev_;
 std::mt19937 Contender::rng_(Contender::rand_dev_());
 std::uniform_int_distribution<int> Contender::coin_flip_(0, 1);
-std::uniform_int_distribution<int> Contender::key_range_(VAR, BLANK);
+std::uniform_int_distribution<int> Contender::key_range_(VAR, SIN);
 
 // ################################################################################
 // Constructors and Destructor
@@ -41,7 +41,7 @@ Contender::Contender() {
 //    size_ = 2;
 //    nodes_ = new Node[size_];
     tree_ = Heap();
-    randy(1);
+    randomTree(1);
     fitness_ = 0;
 
     // TODO: Make eq string
@@ -211,7 +211,26 @@ double Contender::DiversityComp(const Contender &A, const Contender &B, const st
     return rmse;
 }
 
-void Contender::PopDivserity(const std::vector<Contender> &pop, const std::vector<Point> &points) {
+double Contender::DiversityComp(const Contender &A, const Contender &B) {
+    double sum = 0.0f;
+    double diff;
+    double num_points = (double) Points.size();
+
+    for (int i = 0; i < num_points; i += 100) {
+        double val1 = A.EqParser(1, Points[i].x);
+        double val2 = B.EqParser(1, Points[i].x);
+
+        diff = val1 - val2;
+        sum += std::pow(diff, 2);
+    }
+
+    // Update rms_
+    double rmse = std::sqrt(sum / num_points);
+
+    return rmse;
+}
+
+void Contender::PopDiversity(const std::vector<Contender> &pop, const std::vector<Point> &points) {
     int pop_size = (int) pop.size();
 
     double stdev;
@@ -240,7 +259,7 @@ void Contender::PopDivserity(const std::vector<Contender> &pop, const std::vecto
 
 }
 
-void Contender::PopDivserity(const std::vector<std::vector<Contender>> &pop, const std::vector<Point> &points) {
+void Contender::PopDiversity(const std::vector<std::vector<Contender>> &pop) {
 
     double stdev;
     double mean;
@@ -252,7 +271,7 @@ void Contender::PopDivserity(const std::vector<std::vector<Contender>> &pop, con
         int pop_size = (int) gen.size();
         for (int a = 0; a < pop_size - 1; a++) {
             for (int b = a + 1; b < pop_size; b++) {
-                double diversity = DiversityComp(gen[a], gen[b], points);
+                double diversity = DiversityComp(gen[a], gen[b]);
                 sum2 += diversity;
                 sum1 += std::pow(diversity, 2);
                 count += 1.0f;
@@ -579,7 +598,7 @@ double Contender::EqParser(const int &index, const double &x) const {
 //}
 
 
-//void Contender::randy(const int &index) {
+//void Contender::randomTree(const int &index) {
 //    // Guard rail to keep variable from growing too large
 //    if (size_ >= 64 && index > 31) {
 //        if (coin_flip_(rng_))
@@ -597,18 +616,18 @@ double Contender::EqParser(const int &index, const double &x) const {
 //                growHeap_(2); // If not big enough, add next layer of depth
 //
 //            }
-//            randy(l_child); // Recursively call for left child
+//            randomTree(l_child); // Recursively call for left child
 //
 //            // CHeck if node has 2 children, continue if true
 //            if (nodes_[index].key != COS && nodes_[index].key != SIN) {
 //                // Guard for dividing by zero
-//                randy(l_child + 1); // Recursively call for right child
+//                randomTree(l_child + 1); // Recursively call for right child
 //            }
 //        }
 //    }
 //}
 
-void Contender::randy(const int &index) {
+void Contender::randomTree(const int &index) {
     // Guard rail to keep variable from growing too large
     if (tree_.getSize() >= 64 && index > 31) {
         if (coin_flip_(rng_))
@@ -624,12 +643,12 @@ void Contender::randy(const int &index) {
 
             if (l_child >= tree_.getSize())
                 tree_.growHeap(2); // If not big enough, add next layer of depth
-            randy(l_child); // Recursively call for left child
+            randomTree(l_child); // Recursively call for left child
 
             // CHeck if node has 2 children, continue if true
             if (tree_.getKey(index) != COS && tree_.getKey(index) != SIN) {
                 // Guard for dividing by zero
-                randy(l_child + 1); // Recursively call for right child
+                randomTree(l_child + 1); // Recursively call for right child
             }
         }
     }

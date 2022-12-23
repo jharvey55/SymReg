@@ -7,6 +7,10 @@ progGraph:
 
 using GLMakie, Makie, Random, Printf
 
+function progupdate()
+
+end
+
 struct GraphPoints
     x::Vector{Float64}
     y::Vector{Float64}
@@ -110,6 +114,8 @@ function safe_product(a::Float64, b::Float64)::Float64
     end
 
 end
+
+
 """
 Creates function for data
 """
@@ -273,6 +279,17 @@ function animate_func2(exp::Experiment, points::GraphPoints, savePath::String)
     record(fig, savePath, steps; framerate = 7) do step
         time[] = step
     end
+end
+
+
+
+function convergence_plot(plotTitle::String, dataPaths::String, criterion::Float64, step::Int64, eval_count::Int64)
+    println("Building convergence plot: ", plotTitle)
+    file_names = readdir(dataPaths);
+    tracker = fill(eval_count + 5, size(file_names))
+
+    println("....")
+
 end
 
 

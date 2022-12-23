@@ -355,7 +355,6 @@ void hfcTest() {
 
     Optimizers::OptLoop(dPath, oPath, "Cross", "params", 50'000, 100, crossover);
 
-//    Optimizers::HFC(dPath, oPath, "HFC-Rand", "params", 50'000, 200, 4, 0.5, 50, crossover);
 
 }
 
@@ -385,9 +384,6 @@ void mutation() {
     bigEq.Mutate(16, ADD);
     std::cout << "DONE" << std::endl;
     std::cout << bigEq.getSize() << std::endl;
-//    for(int i = 0; i < bigEq.getSize(); i++) {
-//        std::cout << i << ": " << bigEq.getNode(i).nodeString(i) << std::endl;
-//    }
 
     bigEq.treePrint();
 }
@@ -482,11 +478,11 @@ void Experiment() {
     if (method == "Cross") {
 
 
-        double low = 5.0f;
-        double high = 100.0f;
-        int cap = 32;
+
 
         generator = [&](std::vector<Contender> &population) {
+            double low = 5.0f;
+            double high = 99.9f;
             std::random_device rdev;
             std::mt19937 rng(rdev());
 
@@ -497,35 +493,26 @@ void Experiment() {
             int restPoint = (int) (0.95 * (double) population.size());
             double sum_fitness = 0.0f;
             for (int i = 0; i < cutoff; i++) {
-//            sum_fitness += 1.0f/((double)(population[i].getSize())*0.01 + population[i].getFitness());
                 sum_fitness += 1.0f / population[i].getFitness();
             }
 
             for (int i = cutoff; i < restPoint; i += 2) {
-//            std::cout << i << std::endl;
                 int index1 = Contender::ProportionalSelection(population, sum_fitness);
                 int index2 = index1;
                 while (index2 == index1) { index2 = Contender::ProportionalSelection(population, sum_fitness); }
                 Contender::RandCrossover(population[index1], population[index2], population[i], population[i + 1]);
 
-                double muteRate1 = Optimizers::interpolateMuteRate(low, high, population[i].getSize(), cap);
+                double muteRate1 = Optimizers::interpolateMuteRate(low, high, population[i].getSize());
                 if (rdist(rng) < muteRate1) {
                     population[i].randMutate();
                     population[i].calcFitness();
                 }
 
-                double muteRate2 = Optimizers::interpolateMuteRate(low, high, population[i].getSize(), cap);
+                double muteRate2 = Optimizers::interpolateMuteRate(low, high, population[i].getSize());
                 if (rdist(rng) < muteRate2) {
                     population[i + 1].randMutate();
                     population[i + 1].calcFitness();
                 }
-
-//                if (rdist(rng) < 5.0f) {
-//                    population[i].randMutate();
-//                    population[i].calcFitness();
-//                    population[i + 1].randMutate();
-//                    population[i + 1].calcFitness();
-//                }
             }
         };
     } else if (method == "RMHC") {

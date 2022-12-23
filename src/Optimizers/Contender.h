@@ -65,9 +65,12 @@ public:
 
     static double DiversityComp(const Contender &A, const Contender &B, const std::vector<Point> &points);
 
-    static void PopDivserity(const std::vector<Contender> &pop, const std::vector<Point> &points);
+    static double DiversityComp(const Contender &A, const Contender &B);
 
-    static void PopDivserity(const std::vector<std::vector<Contender>> &pop, const std::vector<Point> &points);
+
+    static void PopDiversity(const std::vector<Contender> &pop, const std::vector<Point> &points);
+
+    static void PopDiversity(const std::vector<std::vector<Contender>> &pop);
 
 
 
@@ -87,7 +90,7 @@ public:
 
     void calcFitness();
 
-    void randy(const int &index);
+    void randomTree(const int &index);
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // Optomization tools ----------------------------------------------------------------------------------------------
