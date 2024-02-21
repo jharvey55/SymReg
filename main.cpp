@@ -575,32 +575,8 @@ void Experiment() {
 }
 
 int main() {
-//        sinTest();
-//        stringTest();
-//        std::cout << "\n\n";
-//        stringTest2();
 
-//    loopTest1();
-//    mutation();
-//    loopTest1();
-//    loopTest2();
-//    loopTest3();
-//    CrossTest()
-//    hfcTest();
     Experiment();
-//    std::cout << Optimizers::interpolateMuteRate(0.0f, 10.0f, 32, 64) << std::endl;
-//    std::cout << Optimizers::interpolateMuteRate(0.0f, 10.0f, 48, 64) << std::endl;
-//    std::cout << Optimizers::interpolateMuteRate(0.0f, 10.0f, 16, 64) << std::endl;
-
-
-
-//std::vector<std::vector<Point>> test;
-//
-//test.emplace_back();
-////std::cout << test[0][0].x << std::endl;
-//std::cout << test.size() << std::endl;
-//test[0].push_back(Point(4.0, 2.0));
-//std::cout << test[0][0].x << std::endl;
 
     return 0;
 }
