@@ -41,10 +41,15 @@ The program takes in data
 ## Features
 
 ### Optimizers
-SymReg
-* `Cross` - 
-* `RMHC` - 
-* `
+SymReg prompts the user to select an optimizer for generating new solutions. The valid options and their descriptions are listed below.
+
+| Method   | Name                       | Description                                                  |
+| -------- | -------------------------- | ------------------------------------------------------------ |
+| `Cross`  | Crossover                  | 1. Selects 2 members from the population<br />2. Selects a random node in each parent member<br />3. Creates 2 new contenders by swapping "branches" in each heap <br /> |
+| `RMHC`   | Rand Mutation Hill Climber | 1. Loops through each member of the population<br />2. Picks random node in member to mutate<br />3. Produces new member by mutating node, keeps parent or child <br /> |
+| `Random` | Random Solutions           | 1. Create an entirely new random population each generation  |
+
+
 
 ## Examples
 
