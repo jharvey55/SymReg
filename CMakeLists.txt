@@ -15,6 +15,13 @@ target_link_libraries(SymReg PRIVATE data_io)
 target_link_libraries(SymReg PRIVATE opts)
 target_link_libraries(SymReg ${CONAN_LIBS})
 
+add_executable(rfg randFuncGen.cpp)
+set_target_properties(rfg PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
+target_link_libraries(rfg PRIVATE structs)
+target_link_libraries(rfg PRIVATE data_io)
+target_link_libraries(rfg PRIVATE opts)
+target_link_libraries(rfg ${CONAN_LIBS})
+
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

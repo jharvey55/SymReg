@@ -211,7 +211,7 @@ std::vector<Point> ReadDataFile(std::string& fPath)
         double lNum, rNum;
         std::string delimeter = "\t";
         lNum = stod(line.substr(0, line.find(delimeter)));
-        rNum = stod(line.substr(line.find(delimeter), line.find("\r")));
+        rNum = stod(line.substr(line.find(delimeter), line.find("\n")));
 
         points.push_back(Point(lNum, rNum));
     }
