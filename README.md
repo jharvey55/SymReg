@@ -12,6 +12,7 @@ A **Sym**bolic **Reg**ression tool built in C++ that employs genetic algorithms 
 * [Features](#features)
   * [Optimizers](#optimizers)
   * [Selection](#selection)
+   * [HFC Options](#hfc-options)
 * [Examples](#examples)
 * [Sources](#sources)
 
@@ -59,7 +60,14 @@ The user also selects the optimization loop. Unlike the optimizer, the loop chos
 | `HFC`  | Hierarchical fair competition | 1. User defines a base population size ($S$), number of tiers ($N$), graduation rate ($R$), and number of generations ($G$) between graduations <br />2. Performs optimization on base population, for $G$ generations. using the selected optimizer<br />3.  Sorts base tier members by fitness<br />4. $R\%$ of base population with the highest fitness graduate to next tier, base population is reseeded with random population<br />5. Every $G$ generations, graduate each tier that has members to next tier (except tier $N$). Cull each tier to appropriate population size. Reseed base population with random members.<br />6. Repeats until evaluation budget runs out<br /> |
 | `BGA`  | Basic Genetic Algorithm       | Uses *truncation* selection with random mutation:<br />1.  Generates random starting population<br />2. Performs chosen optimizer to get new members<br />3. Sorts by members fitness<br />4. Now that population has doubled in size, culls the population by $50\%$, keeping the members with the best finesses<br />5. Repeats until evaluation budget runs out<br /> |
 
+#### HFC Options:
 
+If the user selects the `HFC ` loop, then the following parameters will need to be defined:
+
+* *Grad-Rate* - $R$: `double` representing the percentage of members to graduate to the next tier as represented between $0.0 < G < 1.00$. 
+* *Num-Tiers* - $N$: `int` representing the number of tiers in the hierarchy
+* *Generations* - $G$: `int` representing the number of generations between each graduation
+  
 ## Examples
 
 ### Equation 1
