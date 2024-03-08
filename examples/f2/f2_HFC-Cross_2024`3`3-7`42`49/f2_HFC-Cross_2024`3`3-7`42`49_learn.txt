@@ -1,0 +1,9 @@
+DataSet:	f2
+RunTime:	2024-3-3 7:42:49
+Method:	HFC-Cross
+Params:	DotLog:110 DivLog:110 Evals:200000 Pop:500 GradPercent:0.500000 Tier:4 GradGen:10
+DataPath:	./datasets/f2.txt
+
+################################################################################
+
+500 | nan | ROOT VAR 

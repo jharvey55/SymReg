@@ -1,0 +1,8 @@
+DataSet:	f2
+RunTime:	2024-3-3 5:32:17
+Method:	BGA-Cross
+Params:	DotLog:110 DivLog:110 Evals:100000 Pop:100
+DataPath:	./datasets/f2.txt
+
+################################################################################
+
