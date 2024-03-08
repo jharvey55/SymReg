@@ -292,19 +292,113 @@ function convergence_plot(plotTitle::String, dataPaths::String, criterion::Float
 
 end
 
+function eq_parse(index::Int64, eq::Vector{String})::String
+    if (tryparse(Float64, eq[index]) == nothing)
+        if (eq[index] == "VAR")
+            return "x"
+        elseif (eq[index] == "ADD")
+            child1 = eq_parse(index * 2, eq)
+            child2 = eq_parse(index * 2 + 1, eq)
+            v_child1 = tryparse(Float64, child1)
+            v_child2 = tryparse(Float64, child2)
+            if v_child1 == nothing || v_child2 == nothing
+                return "$child1 + $child2"
+            else
+                return "$(v_child1 + v_child2)"
+            end
+        elseif (eq[index] == "SUB")
+            child1 = eq_parse(index * 2, eq)
+            child2 = eq_parse(index * 2 + 1, eq)
+            v_child1 = tryparse(Float64, child1)
+            v_child2 = tryparse(Float64, child2)
+            if v_child1 == nothing || v_child2 == nothing
+                println("\t", child1)
+                println("\t", child2)
+                println()
+
+                if v_child2 != nothing && v_child2 < 0.0
+                    return "$child1 + $(-1.0 * v_child2)"
+                else
+                    return "$child1 - $child2"
+                end
+            else
+                return "$(v_child1 - v_child2)"
+            end
+        elseif (eq[index] == "MLT")
+            child1 = eq_parse(index * 2, eq)
+            child2 = eq_parse(index * 2 + 1, eq)
+            v_child1 = tryparse(Float64, child1)
+            v_child2 = tryparse(Float64, child2)
+            if v_child1 == nothing || v_child2 == nothing
+                if eq[index * 2] == "ADD" || eq[index * 2] == "SUB"
+                    child1 = "($child1)"
+                end
+                if eq[index * 2 + 1] == "ADD" || eq[index * 2 + 1] == "SUB"
+                    child2 = "($child2)"
+                end
+                return "$child1 \\cdot $child2"
+            else
+                return "$(v_child1 * v_child2)"
+            end
+        elseif (eq[index] == "DIV")
+            child1 = eq_parse(index * 2, eq)
+            child2 = eq_parse(index * 2 + 1, eq)
+            v_child1 = tryparse(Float64, child1)
+            v_child2 = tryparse(Float64, child2)
+            if v_child1 == nothing || v_child2 == nothing
+                return "\\frac{$child1}{$child2}"
+            else
+                val = v_child1 / v_child2
+                if val == Inf
+                    return "\\infty"
+                elseif val == -Inf
+                    return "-\\infty"
+                else
+                    return "$val"
+                end
+            end
+        elseif (eq[index] == "SIN")
+            child = eq_parse(index * 2, eq)
+            v_child = tryparse(Float64, child)
+            if v_child == nothing
+                return "\\sin($child)"
+            else
+                return "$(sin(v_child))"
+            end
+        elseif (eq[index] == "COS")
+            child = eq_parse(index * 2, eq)
+            v_child = tryparse(Float64, child)
+            if v_child == nothing
+                return "\\cos($child)"
+            else
+                return "$(cos(v_child))"
+            end
+        end
+    else
+        return eq[index]
+    end
+end
+
 
 function main()
-   data_set = "../resources/datasets/data.txt"
-#    exp_path = "../resources/out/data_HFC-Cross_2022`12`2-22`59`1.txt"
-  exp_path = "../resources/out/data_HFC-Rand_2022`12`19-20`45`10/data_HFC-Rand_2022`12`19-20`45`10_learn.txt"
+#    data_set = "../resources/datasets/data.txt"
+# #    exp_path = "../resources/out/data_HFC-Cross_2022`12`2-22`59`1.txt"
+#   exp_path = "../resources/out/data_HFC-Rand_2022`12`19-20`45`10/data_HFC-Rand_2022`12`19-20`45`10_learn.txt"
+#
+#
+#
+#    points = read_in_points(data_set)
+#    exp = read_in_experiment(exp_path)
+#
+# #    plot_func(exp.contenders[end], points)
+#     animate_func2(exp, points, "../resources/Images/testAnim-RandHFC.mp4")
+    exp_path = "../resources/out/data_HFC-Cross_2022`12`21-16`0`20/data_HFC-Cross_2022`12`21-16`0`20_learn.txt"
+    exp = read_in_experiment(exp_path)
+    for (index, contender) in enumerate(exp.contenders)
+        eq1 = eq_parse(1, contender.eq)
+        println("$index $eq1")
+    end
 
-
-
-   points = read_in_points(data_set)
-   exp = read_in_experiment(exp_path)
-
-#    plot_func(exp.contenders[end], points)
-    animate_func2(exp, points, "../resources/Images/testAnim-RandHFC.mp4")
 end
 
 main()
