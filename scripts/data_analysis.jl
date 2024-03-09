@@ -26,12 +26,7 @@ mutable struct Contender
 end
 
 mutable struct Experiment
-    data_set::String
-    run_time::String
-    params::Dict{String, Any}
-    method::String
-    data_path::String
-    contenders::Vector{Contender}
+    z
 
     Experiment() = new()
 end
