@@ -6,6 +6,7 @@ progGraph:
 =#
 
 using GLMakie, Makie, Random, Printf
+using LaTeXStrings
 
 function progupdate()
 
@@ -267,13 +268,16 @@ function animate_func(exp::Experiment, points::GraphPoints, savePath::String)
 end
 
 function animate_func2(exp::Experiment, points::GraphPoints, savePath::String)
-    fig = Figure()
+    fig = Figure(size = (1200, 800))
     ax = Axis(fig[1, 1],
     title = "Animation....")
     time = Observable(1)
     y_vals = @lift(get_y_vals(exp, $time, points))
     scatter!(ax, points.x, points.y, color = :coral2, markersize = 2, linewidth = 1)
     scatter!(ax, points.x, y_vals, color = :orchid, markersize = 2, linewidth = 1)
+    eqns = @lift(latexstring(eq_parse(1, exp.contenders[$time].eq)))
+#     l_eqns = @lift(L"$($eqns)")
+    Label(fig[2, 1], eqns, tellwidth = false, word_wrap = true, fontsize = 12)
 
     steps = collect(1:size(exp.contenders, 1))
     record(fig, savePath, steps; framerate = 7) do step
@@ -302,7 +306,12 @@ function eq_parse(index::Int64, eq::Vector{String})::String
             v_child1 = tryparse(Float64, child1)
             v_child2 = tryparse(Float64, child2)
             if v_child1 == nothing || v_child2 == nothing
-                return "$child1 + $child2"
+#                 return "$child1 + $child2"
+                if v_child2 != nothing && v_child2 < 0.0
+                    return "$child1 - $(-1.0 * v_child2)"
+                else
+                    return "$child1 + $child2"
+                end
             else
                 return "$(v_child1 + v_child2)"
             end
@@ -312,9 +321,9 @@ function eq_parse(index::Int64, eq::Vector{String})::String
             v_child1 = tryparse(Float64, child1)
             v_child2 = tryparse(Float64, child2)
             if v_child1 == nothing || v_child2 == nothing
-                println("\t", child1)
-                println("\t", child2)
-                println()
+#                 println("\t", child1)
+#                 println("\t", child2)
+#                 println()
 
                 if v_child2 != nothing && v_child2 < 0.0
                     return "$child1 + $(-1.0 * v_child2)"
@@ -381,23 +390,25 @@ end
 
 
 function main()
-#    data_set = "../resources/datasets/data.txt"
+   data_set = "../examples/f2/f2.txt"
 # #    exp_path = "../resources/out/data_HFC-Cross_2022`12`2-22`59`1.txt"
 #   exp_path = "../resources/out/data_HFC-Rand_2022`12`19-20`45`10/data_HFC-Rand_2022`12`19-20`45`10_learn.txt"
 #
 #
 #
-#    points = read_in_points(data_set)
+   points = read_in_points(data_set)
 #    exp = read_in_experiment(exp_path)
 #
 # #    plot_func(exp.contenders[end], points)
 #     animate_func2(exp, points, "../resources/Images/testAnim-RandHFC.mp4")
-    exp_path = "../resources/out/data_HFC-Cross_2022`12`21-16`0`20/data_HFC-Cross_2022`12`21-16`0`20_learn.txt"
+    exp_path = "../examples/f2/results/f2_HFC-Cross_2024`3`3-7`43`38/f2_HFC-Cross_2024`3`3-7`43`38_learn.txt"
     exp = read_in_experiment(exp_path)
-    for (index, contender) in enumerate(exp.contenders)
-        eq1 = eq_parse(1, contender.eq)
-        println("$index $eq1")
-    end
+    animate_func2(exp, points, "../examples/f2/images/test1.gif")
+
+#     for (index, contender) in enumerate(exp.contenders)
+#         eq1 = eq_parse(1, contender.eq)
+#         println("$index $eq1")
+#     end
 
 end
 
