@@ -11,8 +11,9 @@ class Contender:
     @classmethod
     def read_in_contender(cls, line):
         """
-
-        :return:
+        parses contender from line in experiment files
+        :param line: data entry from experiment learn file
+        :return: contender (instance of Contender extracted from line)
         """
         [evals_string, fitness_string, eq_string] = line.split(" | ")
 
