@@ -1,4 +1,6 @@
 import sys
+import pandas as pd
+
 
 class Contender:
     def __init__(self, evals, fitness, eq):
@@ -15,6 +17,7 @@ class Experiment:
         self.method = method
         self.data_path = data_path
         self.contenders = contenders
+        self.points = pd.read_csv(data_path, sep="\t", header=None, names=['x', 'y'])
 
 
 class Cohort:
