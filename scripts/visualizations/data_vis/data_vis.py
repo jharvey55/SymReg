@@ -25,6 +25,17 @@ class Contender:
         contender = cls(evals, fitness, eq)
         return contender
 
+    @classmethod
+    def safe_div(cls, a, b):
+        """Performs a safe division of a by b, to return a number if b = 0, but not crash"""
+        if b == 0:
+            if a > 0:
+                return sys.float_info.max
+            else:
+                return -1 * sys.float_info.max
+        else:
+            return a / b
+
 
 class Experiment:
     def __init__(self, data_set, run_time, params, method, data_path, contenders):
