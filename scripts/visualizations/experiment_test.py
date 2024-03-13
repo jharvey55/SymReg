@@ -12,7 +12,7 @@ class TestExperiment(unittest.TestCase):
         params = Experiment.parse_params(sample.split('\t')[1])
         self.assertEqual(params['DotLog'], "110")
         self.assertEqual(params['DivLog'], "110")
-        self.assertEqual(params['Evals'], "1s00000")
+        self.assertEqual(params['Evals'], "100000")
         self.assertEqual(params['Pop'], "250")
         self.assertEqual(params['GradPercent'], "0.250000")
         self.assertEqual(params['Tier'], "3")
