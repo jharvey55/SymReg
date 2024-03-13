@@ -1,5 +1,6 @@
 import unittest
 from data_vis.data_vis import Contender
+from data_vis.data_vis import Experiment
 
 
 class TestContender(unittest.TestCase):
