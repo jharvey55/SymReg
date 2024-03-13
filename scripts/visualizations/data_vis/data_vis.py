@@ -47,6 +47,9 @@ class Experiment:
         self.contenders = contenders
         self.points = pd.read_csv(data_path, sep="\t", header=None, names=['x', 'y'])
 
+    @classmethod
+    def blank_experiment(cls):
+        return cls("", "", "", {}, "", "", [])
 
 class Cohort:
     def __init__(self, experiments, data_set, data_path, parameters, method, step_size, data, n):
