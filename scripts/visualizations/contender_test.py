@@ -22,10 +22,7 @@ class TestContender(unittest.TestCase):
         self.assertEqual(contender.eq[0], "ROOT")
         self.assertEqual(contender.eq[1], "SIN")
         self.assertEqual(contender.eq[25], "BLANK")
-        self.assertEqual(contender.eq[-1], "BsLANK")
-
-
-
+        self.assertEqual(contender.eq[-1], "BLANK")
 
 
 if __name__ == '__main__':
