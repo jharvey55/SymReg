@@ -51,6 +51,22 @@ class Experiment:
     def blank_experiment(cls):
         return cls("", "", "", {}, "", "", [])
 
+    @classmethod
+    def parse_params(cls, line):
+        """
+        splits the params line and returns a dictionary containing the parameters
+        :param line: parameter line to parse
+        :return: dictionary describing params
+        """
+        params = {}
+        pairs = line.split(" ")
+        for pair in pairs:
+            parts = pair.split(":")
+            params[parts[0]] = parts[1]
+
+        return params
+
+
 class Cohort:
     def __init__(self, experiments, data_set, data_path, parameters, method, step_size, data, n):
         self.experiments = experiments
