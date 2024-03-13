@@ -8,6 +8,22 @@ class Contender:
         self.fitness = fitness
         self.eq = eq
 
+    @classmethod
+    def read_in_contender(cls, line):
+        """
+
+        :return:
+        """
+        [evals_string, fitness_string, eq_string] = line.split(" | ")
+
+        evals = int(evals_string)
+        fitness = float(fitness_string)
+        eq_string = eq_string.rstrip("\n")
+        eq = eq_string.split(" ")
+
+        contender = cls(evals, fitness, eq)
+        return contender
+
 
 class Experiment:
     def __init__(self, data_set, run_time, params, method, data_path, contenders):
@@ -43,4 +59,6 @@ class Cohort:
 
 
 if __name__ == '__main__':
-    print('what\n')
+    a = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK"
+    b = Contender.read_in_contender(a)
+    print(b.eq[1])
