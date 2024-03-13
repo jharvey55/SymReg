@@ -1,6 +1,5 @@
 import unittest
 from data_vis.data_vis import Contender
-from data_vis.data_vis import Experiment
 
 
 class TestContender(unittest.TestCase):
@@ -23,7 +22,10 @@ class TestContender(unittest.TestCase):
         self.assertEqual(contender.eq[0], "ROOT")
         self.assertEqual(contender.eq[1], "SIN")
         self.assertEqual(contender.eq[25], "BLANK")
-        self.assertEqual(contender.eq[-1], "BLANK")
+        self.assertEqual(contender.eq[-1], "BsLANK")
+
+
+
 
 
 if __name__ == '__main__':

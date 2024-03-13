@@ -30,7 +30,7 @@
 //
 // Tests for Google Test itself. Tests in this file throw C++ or SEH
 // exceptions, and the output is verified by
-// googletest-catch-exceptions-test.py.
+// googletest-catch-exceptions-contender_test.py.
 
 #include <stdio.h>   // NOLINT
 #include <stdlib.h>  // For exit().
