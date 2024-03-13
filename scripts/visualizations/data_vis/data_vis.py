@@ -66,6 +66,36 @@ class Experiment:
 
         return params
 
+    @classmethod
+    def read_in_experiment(cls, path):
+        """
+
+        :param path:
+        :return: Experiment object containing data parsed from <path>
+        """
+
+        exp = Experiment.blank_experiment()
+        exp.path = path
+
+        with open(path, 'r') as f:
+            index = 0
+            line = f.readline()
+
+            while line != '':
+                if index == 0:
+                    exp.data_set = line.split('\t')[1]
+                elif index == 1:
+                    exp.run_time = line.split('\t')[1]
+                elif index == 2:
+                    exp.method = line.split('\t')[1]
+                elif index == 3:
+                    exp.params = cls.parse_params(line.split('\t')[1])
+                elif index > 7:
+                    exp.contenders.append(Contender.read_in_contender(line))
+                index += 1
+
+        return exp
+
 
 class Cohort:
     def __init__(self, experiments, data_set, data_path, parameters, method, step_size, data, n):
