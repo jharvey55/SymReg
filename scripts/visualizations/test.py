@@ -77,6 +77,5 @@ class TestContender(unittest.TestCase):
         self.assertEqual(contender.eq[-1], "BLANK")
 
 
-
 if __name__ == '__main__':
     unittest.main()
