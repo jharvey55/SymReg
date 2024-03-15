@@ -20,6 +20,8 @@ class Contender:
         evals = int(evals_string)
         fitness = float(fitness_string)
         eq_string = eq_string.rstrip("\n")
+        eq_string = eq_string.rstrip(" ")
+        eq_string = eq_string.lstrip(" ")
         eq = eq_string.split(" ")
 
         contender = cls(evals, fitness, eq)
@@ -38,18 +40,18 @@ class Contender:
 
 
 class Experiment:
-    def __init__(self, data_set, run_time, params, method, data_path, contenders):
+    def __init__(self, exp_path, data_set, run_time, params, method, contenders):
+        self.exp_path = exp_path
         self.data_set = data_set
         self.run_time = run_time
         self.params = params
         self.method = method
-        self.data_path = data_path
         self.contenders = contenders
-        self.points = pd.read_csv(data_path, sep="\t", header=None, names=['x', 'y'])
 
     @classmethod
     def blank_experiment(cls):
-        return cls("", "", "", {}, "", "", [])
+        blank = cls("", "", "", {}, "", [])
+        return blank
 
     @classmethod
     def parse_params(cls, line):
@@ -82,19 +84,31 @@ class Experiment:
             line = f.readline()
 
             while line != '':
+                line = line.rstrip('\n')
                 if index == 0:
                     exp.data_set = line.split('\t')[1]
                 elif index == 1:
                     exp.run_time = line.split('\t')[1]
                 elif index == 2:
+
                     exp.method = line.split('\t')[1]
                 elif index == 3:
                     exp.params = cls.parse_params(line.split('\t')[1])
                 elif index > 7:
                     exp.contenders.append(Contender.read_in_contender(line))
+                line = f.readline()
                 index += 1
-
         return exp
+
+
+def read_in_points(data_path):
+    """
+    Returns data frame containing points from data set
+    :param data_path:
+    :return: points - pandas data frame representing the datasets points
+    """
+    points = pd.read_csv(data_path, sep="\t", header=None, names=['x', 'y'])
+    return points
 
 
 class Cohort:
@@ -108,18 +122,14 @@ class Cohort:
         self.data = data
         self.n = n
 
-        def safe_div(a, b):
-            """Performs a safe division of a by b, to return a number if b = 0, but not crash"""
-            if b == 0:
-                if a > 0:
-                    return sys.float_info.max
-                else:
-                    return -1 * sys.float_info.max
-            else:
-                return a / b
-
 
 if __name__ == '__main__':
-    a = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK"
-    b = Contender.read_in_contender(a)
-    print(b.eq[1])
+    # a = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB
+    # BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK
+    # -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+    # BLANK" b = Contender.read_in_contender(a) print(b.eq[1])
+    pass
