@@ -1,3 +1,4 @@
+import sys
 import unittest
 from data_vis.data_vis import Experiment
 from data_vis.data_vis import Contender
@@ -45,13 +46,74 @@ class TestExperiment(unittest.TestCase):
 
     def test_parse_values(self):
         x = 3.0
-        eq1 = ["ROOT", "VAR"]
+        pos_big_str = str(sys.float_info.max)
+        neg_big_str = str(-1 * sys.float_info.max)
 
-        eq2 = ["ROOT", "ADD", "VAR", "2.0"]
-        eq3 = ["ROOT", "SUB", "VAR", "2.0"]
-        eq4 = ["ROOT", "MLT", "VAR", "2.0"]
-        eq5 = ["ROOT", "DIV", "VAR", "2.0"]
-        eq6 = ["ROOT", "ADD", "VAR", "2.0"]
+        # y = x
+        eq_var = ["ROOT", "VAR"]
+        r_x = Contender.parse_values(1, x, eq_var)
+        self.assertEqual(x, r_x, "Did not parse basic VAR correctly")
+
+        # Addition tests
+        eq_add = ["ROOT", "ADD", "VAR", "2.0"]
+        r_add = Contender.parse_values(1, x, eq_add)
+        self.assertEqual(5.0, r_add, "Did not parse basic ADD correctly")
+
+        eq_add_2 = ["ROOT", "ADD", pos_big_str, pos_big_str]
+        r_add_2 = Contender.parse_values(1, x, eq_add_2)
+        self.assertEqual(Contender.big, r_add_2, "Did not parse pos inf ADD correctly")
+
+        eq_add_3 = ["ROOT", "ADD", neg_big_str, neg_big_str]
+        r_add_3 = Contender.parse_values(1, x, eq_add_3)
+        self.assertEqual(-1.0 * Contender.big, r_add_3, "Did not parse neg inf ADD correctly")
+
+        # Subtraction tests
+        eq_sub = ["ROOT", "SUB", "VAR", "2.0"]
+        r_sub = Contender.parse_values(1, x, eq_sub)
+        self.assertEqual(1.0, r_sub, "Did not parse basic SUB correctly")
+
+        eq_sub_2 = ["ROOT", "SUB", neg_big_str, pos_big_str]
+        r_sub_2 = Contender.parse_values(1, x, eq_sub_2)
+        self.assertEqual(-1.0 * Contender.big, r_sub_2, "Did not parse neg inf SUB correctly")
+
+        eq_sub_3 = ["ROOT", "SUB", pos_big_str, neg_big_str]
+        r_sub_3 = Contender.parse_values(1, x, eq_sub_3)
+        self.assertEqual(Contender.big, r_sub_3, "Did not parse pos inf SUB correctly")
+
+        # Multiplication tests
+        eq_mlt = ["ROOT", "MLT", "VAR", "2.0"]
+        r_mlt = Contender.parse_values(1, x, eq_mlt)
+        self.assertEqual(6.0, r_mlt, "Did not parse basic MLT correctly")
+
+        eq_mlt_2 = ["ROOT", "MLT", pos_big_str, pos_big_str]
+        r_mlt_2 = Contender.parse_values(1, x, eq_mlt_2)
+        self.assertEqual(Contender.big, r_mlt_2, "Did not parse pos inf MLT correctly")
+
+        eq_mlt_3 = ["ROOT", "MLT", pos_big_str, neg_big_str]
+        r_mlt_3 = Contender.parse_values(1, x, eq_mlt_3)
+        self.assertEqual(-1.0 * Contender.big, r_mlt_3, "Did not parse neg inf MLT correctly")
+        # Division tests
+        eq_div = ["ROOT", "DIV", "VAR", "2.0"]
+        r_div = Contender.parse_values(1, x, eq_div)
+        self.assertEqual(1.5, r_div, "Did not parse basic DIV correctly")
+
+        eq_div_2 = ["ROOT", "DIV", -1.0, 0.0]
+        r_div_2 = Contender.parse_values(1, x, eq_div_2)
+        self.assertEqual(-1.0 * Contender.big, r_div_2, "Did not parse neg inf DIV correctly")
+
+        eq_div_3 = ["ROOT", "DIV", 1.0, 0.0]
+        r_div_3 = Contender.parse_values(1, x, eq_div_3)
+        self.assertEqual(Contender.big, r_div_3, "Did not parse pos inf DIV correctly")
+
+        # Sine tests
+        eq_sin = ["ROOT", "SIN", "VAR", "BLANK"]
+        r_sin = Contender.parse_values(1, x, eq_sin)
+        self.assertEqual(0.1411200080598672, r_sin)
+
+        # Cosine tests
+        eq_cos = ["ROOT", "COS", "VAR", "BLANK"]
+        r_cos = Contender.parse_values(1, x, eq_cos)
+        self.assertEqual(-0.9899924966004454, r_cos)
 
 
 class TestContender(unittest.TestCase):
