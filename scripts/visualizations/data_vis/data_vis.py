@@ -35,9 +35,9 @@ class Contender:
         """Performs a safe division of a by b, to return a number if b = 0, but not crash"""
         if b == 0:
             if a > 0:
-                return sys.float_info.max
+                return cls.big
             else:
-                return -1 * sys.float_info.max
+                return -1 * cls.big
         else:
             return a / b
 
