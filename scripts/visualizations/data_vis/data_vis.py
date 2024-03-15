@@ -6,6 +6,7 @@ import math
 
 class Contender:
     big = sys.float_info.max
+
     def __init__(self, evals, fitness, eq):
         self.evals = evals
         self.fitness = fitness
