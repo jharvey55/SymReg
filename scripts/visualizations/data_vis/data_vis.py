@@ -41,6 +41,14 @@ class Contender:
         else:
             return a / b
 
+    @classmethod
+    def test_float(cls, string):
+        try:
+            out = float(string)
+            return out
+        except ValueError:
+            return None
+
 
 class Experiment:
     def __init__(self, exp_path, data_set, run_time, params, method, contenders):
