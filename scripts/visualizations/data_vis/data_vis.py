@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 
 class Contender:
@@ -180,6 +181,15 @@ class Cohort:
         self.step_size = step_size
         self.data = data
         self.n = n
+
+
+def plot_frame(contender, points):
+    """
+    Plots a single image of a contender against the points
+    :param contender:
+    :param points:
+    :return:
+    """
 
 
 if __name__ == '__main__':
