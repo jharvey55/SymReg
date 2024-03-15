@@ -44,6 +44,29 @@ class TestExperiment(unittest.TestCase):
         self.assertEqual(result.contenders[0].eq[25], "BLANK")
         self.assertEqual(result.contenders[0].eq[-1], "BLANK")
 
+
+class TestContender(unittest.TestCase):
+    def test_read_in_contender(self):
+        """
+        Test if read_in_contender(line) creates a stable
+        :return:
+        """
+        a = ("250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK "
+             "SUB BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR "
+             "BLANK BLANK -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
+             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
+             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
+             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
+             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
+             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK\n")
+        contender = Contender.read_in_contender(a)
+        self.assertEqual(contender.evals, 250)
+        self.assertEqual(contender.fitness, 0.507485)
+        self.assertEqual(contender.eq[0], "ROOT")
+        self.assertEqual(contender.eq[1], "SIN")
+        self.assertEqual(contender.eq[25], "BLANK")
+        self.assertEqual(contender.eq[-1], "BLANK")
+
     def test_parse_values(self):
         x = 3.0
         pos_big_str = str(sys.float_info.max)
@@ -114,29 +137,6 @@ class TestExperiment(unittest.TestCase):
         eq_cos = ["ROOT", "COS", "VAR", "BLANK"]
         r_cos = Contender.parse_values(1, x, eq_cos)
         self.assertEqual(-0.9899924966004454, r_cos)
-
-
-class TestContender(unittest.TestCase):
-    def test_read_in_contender(self):
-        """
-        Test if read_in_contender(line) creates a stable
-        :return:
-        """
-        a = ("250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK "
-             "SUB BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR "
-             "BLANK BLANK -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
-             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
-             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
-             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
-             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK "
-             "BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK\n")
-        contender = Contender.read_in_contender(a)
-        self.assertEqual(contender.evals, 250)
-        self.assertEqual(contender.fitness, 0.507485)
-        self.assertEqual(contender.eq[0], "ROOT")
-        self.assertEqual(contender.eq[1], "SIN")
-        self.assertEqual(contender.eq[25], "BLANK")
-        self.assertEqual(contender.eq[-1], "BLANK")
 
 
 if __name__ == '__main__':
