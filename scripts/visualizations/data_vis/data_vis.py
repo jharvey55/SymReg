@@ -49,6 +49,53 @@ class Contender:
         except ValueError:
             return None
 
+    @classmethod
+    def parse_values(cls, index, x, eq):
+        test = cls.test_float(eq[index])
+        if test is None:
+            if eq[index] == "VAR":
+                return x
+            elif eq[index] == "ADD":
+                temp = cls.parse_values(index * 2, x, eq) + cls.parse_values(index * 2 + 1, x, eq)
+                if temp == math.inf:
+                    return cls.big
+                elif temp == -1 * math.inf:
+                    return -1 * cls.big
+                else:
+                    return temp
+            elif eq[index] == "SUB":
+                temp = cls.parse_values(index * 2, x, eq) - cls.parse_values(index * 2 + 1, x, eq)
+                if temp == math.inf:
+                    return cls.big
+                elif temp == -1 * math.inf:
+                    return -1 * cls.big
+                else:
+                    return temp
+            elif eq[index] == "MLT":
+                temp = cls.parse_values(index * 2, x, eq) * cls.parse_values(index * 2 + 1, x, eq)
+                if temp == math.inf:
+                    return cls.big
+                elif temp == -1 * math.inf:
+                    return -1 * cls.big
+                else:
+                    return temp
+            elif eq[index] == "DIV":
+                return cls.safe_div(cls.parse_values(index * 2, x, eq), cls.parse_values(index * 2 + 1, x, eq))
+            elif eq[index] == "SIN":
+                return math.sin(cls.parse_values(index * 2, x, eq))
+            elif eq[index] == "COS":
+                return math.cos(cls.parse_values(index * 2, x, eq))
+        else:
+            return test
+
+    def get_prediction(self, points):
+        x_vals = points['x'].tolist()
+        y_vals = []
+        for x in x_vals:
+            y_vals.append(self.parse_values(1, x, self.eq))
+        prediction = {'x': x_vals, 'y': y_vals}
+        return pd.DataFrame(prediction)
+
 
 class Experiment:
     def __init__(self, exp_path, data_set, run_time, params, method, contenders):
