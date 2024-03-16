@@ -259,6 +259,52 @@ def vis_title_string(dataset, method, timestamp, evals, rmse, budget):
     return vis_title
 
 
+def animated_plot(experiment, points, save=False, save_path="./proof.gif"):
+    """
+
+    :return:
+    """
+
+    # prediction = experiment.contenders[0].get_prediction(points)
+    vt = experiment.get_vis_title_string(0)
+
+    fig, ax = plt.subplots()
+    ax.scatter(x='x', y='y', data=points, label="Y", s=6)
+    ax.set_title(vt, fontsize=14)
+    # poly = ax.scatter(x='x', y='ŷ', data=prediction, label="Ŷ")
+
+    graphs = [None]
+
+    def animate(i):
+        """
+
+        :param experiment:
+        :param i:
+        :return:
+        """
+        vt = experiment.get_vis_title_string(i)
+        ax.set_title(vt, fontsize=14)
+
+        nd = experiment.contenders[i].get_prediction(points)
+
+        if graphs[0]:
+            graphs[0].remove()
+        # poly = ax.scatter(x='x', y='ŷ', data=nd, label="Ŷ", c="orange", s=6)
+        graphs[0] = ax.scatter(x='x', y='ŷ', data=nd, label="Ŷ", c="orange", s=6)
+
+        # return poly,
+
+    # animator = functools.partial(animate, poly, ax=ax, experiment=experiment, points=points)
+    ani = anim.FuncAnimation(fig, animate, frames=len(experiment.contenders), interval=125, repeat=True, blit=False)
+
+    if save:
+        writer = anim.PillowWriter(fps=8,
+                                   metadata=dict(artist='Me'),
+                                   bitrate=1800)
+        ani.save(save_path, writer=writer)
+    plt.show()
+
+
 if __name__ == '__main__':
     path = "../../examples/f21/f21.txt"
     exp_path = "../../examples/f21/results/f21_HFC-Cross_2024`3`16-14`55`28/f21_HFC-Cross_2024`3`16-14`55`28_learn.txt"
