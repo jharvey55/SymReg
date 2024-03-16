@@ -96,7 +96,7 @@ class Contender:
         y_vals = []
         for x in x_vals:
             y_vals.append(self.parse_values(1, x, self.eq))
-        prediction = {'x': x_vals, 'y': y_vals}
+        prediction = {'x': x_vals, 'ŷ': y_vals}
         return pd.DataFrame(prediction)
 
 
@@ -161,6 +161,19 @@ class Experiment:
                 index += 1
         return exp
 
+    def get_vis_title_string(self, index):
+        """
+
+        :param index: index from list contenders to make string for
+        :return:
+        """
+        budget = self.params['Evals']
+        w = len(budget)
+        vis_title = "{0} | {1} | {2} | E: {3:>{width}} | R: {4:.6f}".format(self.data_set, self.method,
+                                                                            self.run_time, self.contenders[index].evals,
+                                                                            self.contenders[index].fitness, width=w)
+        return vis_title
+
 
 def read_in_points(data_path):
     """
@@ -184,22 +197,61 @@ class Cohort:
         self.n = n
 
 
-def plot_frame(contender, points):
+def plot_frame(TITLE, points, prediction):
     """
     Plots a single image of a contender against the points
-    :param contender:
-    :param points:
+    :param TITLE: Title of plot
+    :param points: pandas df containing training dataset
+    :param prediction: pandas df representing x and y data for contender
     :return:
     """
 
+    sns.scatterplot(data=points, x='x', y='y', label="Y")
+    (
+        # sns.scatterplot(data=pd.melt(prediction, ['x']))
+        sns.scatterplot(data=prediction, x="x", y='ŷ', label="Ŷ")
+
+    ).set(
+        title=TITLE,
+        xlabel="X Values",
+        ylabel="Y Values"
+    )
+
+    plt.show()
+
+
+# if __name__ == '__main__':
+#     # a = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB
+#     # BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK
+#     # -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+#     # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+#     # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+#     # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+#     # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
+#     # BLANK" b = Contender.read_in_contender(a) print(b.eq[1])
+#     pass
+
+
+def vis_title_string(dataset, method, timestamp, evals, rmse, budget):
+    w = len(budget)
+    vis_title = "{0} | {1} | {2} | E: {3:>{width}} | R: {4:.6f}".format(dataset, method, timestamp,
+                                                                        evals, rmse, width=w)
+    return vis_title
+
 
 if __name__ == '__main__':
-    # a = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB
-    # BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK
-    # -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
-    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
-    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
-    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
-    # BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK
-    # BLANK" b = Contender.read_in_contender(a) print(b.eq[1])
-    pass
+    path = "../../examples/f1/f1.txt"
+    exp_path = "../../examples/f1/results/f1_HFC-Cross_2024`3`8-0`13`43/f1_HFC-Cross_2024`3`8-0`13`43_learn.txt"
+    # con_string = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK"
+    exp = Experiment.read_in_experiment(exp_path)
+
+    points = read_in_points(path)
+    # contender = Contender.read_in_contender(con_string)
+
+    pred = exp.contenders[-1].get_prediction(points)
+
+    # title_template = .format(6)
+    # title = "f1 | HFC-Cross | 2024-3-8 0:13:43 | E: {0:>{width}} | R: {1:.6f}".format(250, 0.507485, width=6)
+    # vt = vis_title_string("f1", "HFC-Cross", "2024-3-8 0:13:43", 250, 0.507485, "100000")
+    vt = exp.get_vis_title_string(-1)
+    plot_frame(vt, points, pred)
