@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import matplotlib.animation as anim
 import seaborn as sns
 
 
@@ -240,8 +241,9 @@ def vis_title_string(dataset, method, timestamp, evals, rmse, budget):
 
 
 if __name__ == '__main__':
-    path = "../../examples/f1/f1.txt"
-    exp_path = "../../examples/f1/results/f1_HFC-Cross_2024`3`8-0`13`43/f1_HFC-Cross_2024`3`8-0`13`43_learn.txt"
+    path = "../../examples/f21/f21.txt"
+    exp_path = "../../examples/f21/results/f21_HFC-Cross_2024`3`16-14`55`28/f21_HFC-Cross_2024`3`16-14`55`28_learn.txt"
+    save_path = "../../examples/f21/images/f21_HFC-Cross_accurate.gif"
     # con_string = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK -5.630509 VAR VAR VAR BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK"
     exp = Experiment.read_in_experiment(exp_path)
 
@@ -253,5 +255,8 @@ if __name__ == '__main__':
     # title_template = .format(6)
     # title = "f1 | HFC-Cross | 2024-3-8 0:13:43 | E: {0:>{width}} | R: {1:.6f}".format(250, 0.507485, width=6)
     # vt = vis_title_string("f1", "HFC-Cross", "2024-3-8 0:13:43", 250, 0.507485, "100000")
-    vt = exp.get_vis_title_string(-1)
-    plot_frame(vt, points, pred)
+    # vt = exp.get_vis_title_string(-1)
+    # plot_frame(vt, points, pred)
+    animated_plot(exp, points, save=True, save_path=save_path)
+
+    # plot_contender("TITLE", points, pred)
