@@ -221,6 +221,25 @@ def plot_frame(TITLE, points, prediction):
     plt.show()
 
 
+def plot_contender(plt_title, points, prediction):
+    """
+
+    :param plt_title:
+    :param points:
+    :param prediction:
+    :return:
+    """
+
+    # y_pred = prediction['ŷ']
+    # fig = plt.figure()
+    fig, ax = plt.subplots()
+    ax.scatter(x='x', y='y', data=points, label="Y")
+    ax.scatter(x='x', y='ŷ', data=prediction, label="Ŷ")
+    ax.set_title(plt_title)
+    ax.legend()
+    plt.show()
+
+
 # if __name__ == '__main__':
 #     # a = "250 | 0.507485 | ROOT SIN SIN BLANK SUB BLANK BLANK BLANK COS DIV BLANK BLANK BLANK BLANK BLANK BLANK SUB
 #     # BLANK ADD MLT BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 8.583254 VAR BLANK BLANK
