@@ -254,8 +254,8 @@ def plot_contender(plt_title, points, prediction):
 
 def vis_title_string(dataset, method, timestamp, evals, rmse, budget):
     w = len(budget)
-    vis_title = "{0} | {1} | {2} | E: {3:>{width}} | R: {4:.6f}".format(dataset, method, timestamp,
-                                                                        evals, rmse, width=w)
+    vis_title = r"{0} | {1} | {2} | E: {3:>{width}} | R: {4:.6f}".format(dataset, method, timestamp,
+                                                                         evals, rmse, width=w)
     return vis_title
 
 
