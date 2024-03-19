@@ -97,6 +97,20 @@ class Experiment:
         return exp
 
 
+class DataPoint:
+
+    def __init__(self, average=None, stdev=None, evals=None):
+        """
+        Object for storing aggregated data point in learning curve
+        :param average: Average fitness for best Contender at evals
+        :param stdev: Standard deviation for best Contender at evals
+        :param evals: Number of evals for all points in theis datapoint
+        """
+        self.average = average
+        self.stdev = stdev
+        self.evals = evals
+
+
 class Cohort:
 
     def __init__(self, experiments=None, data_set=None, data_path=None, parameters=None,
