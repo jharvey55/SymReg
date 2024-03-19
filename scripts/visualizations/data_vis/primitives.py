@@ -18,8 +18,8 @@ class Contender:
     def read_in_contender(cls, line):
         """
         Creates a contender from a line in a file with components split by " | "
-        :param line:
-        :return: contender built form line components
+        :param line: Log String
+        :return: Contender built form line components
         """
 
         [evals_string, fitness_string, solution_string] = line.split(' | ')
