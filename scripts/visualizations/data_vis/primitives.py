@@ -2,6 +2,19 @@ import os
 import data_vis
 
 
+class Contender:
+    def __init__(self, evals=None, fitness=None, solution=None):
+        """
+
+        :param evals:
+        :param fitness:
+        :param solution_string:
+        """
+        self.evals = evals
+        self.fitness = fitness
+        self.solution = solution
+
+
 class Cohort:
 
     def __init__(self, experiments=None, data_set=None, data_path=None, parameters=None,
