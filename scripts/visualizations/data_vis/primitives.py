@@ -32,7 +32,7 @@ class Contender:
 
 
 class Experiment:
-    def __init__(self, exp_path, data_set, run_time, params, method, contenders):
+    def __init__(self, exp_path=None, data_set=None, run_time=None, params=None, method=None, contenders=None):
         """
 
         :param exp_path:  Path to experiment directory
@@ -47,7 +47,7 @@ class Experiment:
         self.run_time = run_time
         self.params = params
         self.method = method
-        self.contenders = contenders
+        self.contendes = [] if contenders is None else contenders
 
 
 class Cohort:
