@@ -49,6 +49,20 @@ class Experiment:
         self.method = method
         self.contenders = [] if contenders is None else contenders
 
+    @classmethod
+    def parse_params(cls, line):
+        """
+        Turns line into dictionary containing parameters of the experiment
+        :param line: string of parameters in format <key>:value> seperated by a space
+        :return: dictionary containing parameters for the experiment
+        """
+        params = {}
+        pairs = line.split(" ")
+        for pair in pairs:
+            parts = pair.split(":")
+            params[parts[0]] = parts[1]
+
+        return params
 
 class Cohort:
 
