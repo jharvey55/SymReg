@@ -6,9 +6,9 @@ class Contender:
     def __init__(self, evals=None, fitness=None, solution=None):
         """
 
-        :param evals:
-        :param fitness:
-        :param solution_string:
+        :param evals: int representing the evaluation for contenders.
+        :param fitness: float representing fitness of solution
+        :param solution: representation of solution
         """
         self.evals = evals
         self.fitness = fitness
