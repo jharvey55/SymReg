@@ -47,7 +47,7 @@ class Experiment:
         self.run_time = run_time
         self.params = params
         self.method = method
-        self.contendes = [] if contenders is None else contenders
+        self.contenders = [] if contenders is None else contenders
 
 
 class Cohort:
