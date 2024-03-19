@@ -64,6 +64,39 @@ class Experiment:
 
         return params
 
+    @classmethod
+    def read_in_experiment(cls, path):
+        """
+        reads in experiment at the provided path
+        :param path: location of experiment log file to be read in
+        :return: experiment object containing data from  log file
+        """
+
+        exp = Experiment()
+        exp.path = path
+
+        with open(path, 'r') as f:
+            index = 0
+            line = f.readline()
+
+            while line != '':
+                line = line.rstrip('\n')
+                if index == 0:
+                    exp.data_set = line.split('\t')[1]
+                elif index == 1:
+                    exp.run_time = line.split('\t')[1]
+                elif index == 2:
+
+                    exp.method = line.split('\t')[1]
+                elif index == 3:
+                    exp.params = cls.parse_params(line.split('\t')[1])
+                elif index > 7:
+                    exp.contenders.append(Contender.read_in_contender(line))
+                line = f.readline()
+                index += 1
+        return exp
+
+
 
 class Cohort:
 
