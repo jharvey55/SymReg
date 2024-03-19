@@ -30,6 +30,17 @@ class Contender:
         contender = cls(evals, fitness, solution)
         return contender
 
+
+class Experiment:
+    def __init__(self, exp_path, data_set, run_time, params, method, contenders):
+        self.exp_path = exp_path
+        self.data_set = data_set
+        self.run_time = run_time
+        self.params = params
+        self.method = method
+        self.contenders = contenders
+
+
 class Cohort:
 
     def __init__(self, experiments=None, data_set=None, data_path=None, parameters=None,
