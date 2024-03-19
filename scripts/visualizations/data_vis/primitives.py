@@ -14,6 +14,21 @@ class Contender:
         self.fitness = fitness
         self.solution = solution
 
+    @classmethod
+    def read_in_contender(cls, line):
+        """
+        Creates a contender from a line in a file with components split by " | "
+        :param line:
+        :return: contender built form line components
+        """
+
+        [evals_string, fitness_string, solution_string] = line.split(' | ')
+        evals = int(evals_string)
+        fitness = float(fitness_string)
+        solution = solution_string.rstrip("\n").rstrip(" ").lstrip(" ")
+
+        contender = cls(evals, fitness, solution)
+        return contender
 
 class Cohort:
 
