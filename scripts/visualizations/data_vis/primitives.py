@@ -33,6 +33,15 @@ class Contender:
 
 class Experiment:
     def __init__(self, exp_path, data_set, run_time, params, method, contenders):
+        """
+
+        :param exp_path:  Path to experiment directory
+        :param data_set: Name of Dataset
+        :param run_time: Timestamp for experiment run
+        :param params: Experiment parameters
+        :param method: Optimization Method
+        :param contenders: List of contenders
+        """
         self.exp_path = exp_path
         self.data_set = data_set
         self.run_time = run_time
