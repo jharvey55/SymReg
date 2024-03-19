@@ -97,7 +97,6 @@ class Experiment:
         return exp
 
 
-
 class Cohort:
 
     def __init__(self, experiments=None, data_set=None, data_path=None, parameters=None,
