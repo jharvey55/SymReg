@@ -115,7 +115,7 @@ class Experiment:
 
 class DataPoint:
 
-    def __init__(self, average=None, stdev=None, evals=None):
+    def __init__(self, average=0, stdev=0, evals=0):
         """
         Object for storing aggregated data point in learning curve
         :param average: Average fitness for best Contender at evals
