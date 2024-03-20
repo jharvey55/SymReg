@@ -12,8 +12,12 @@ A **Sym**bolic **Reg**ression tool built in C++ that employs genetic algorithms 
 * [Features](#features)
   * [Optimizers](#optimizers)
   * [Selection](#selection)
-   * [HFC Options](#hfc-options)
+  * [HFC Options](#hfc-options)
 * [Examples](#examples)
+  * [Equation](#equation)
+  * [Learning Videos](#learning-videos)
+  * [Learning Curve](#learning-curve)
+  * [Dot Graph](#dot-graph)
 * [Sources](#sources)
 
 ## About
@@ -64,43 +68,30 @@ The user also selects the optimization loop. Unlike the optimizer, the loop chos
 
 If the user selects the `HFC ` loop, then the following parameters will need to be defined:
 
-* *Grad-Rate* - $R$: `double` representing the percentage of members to graduate to the next tier as represented between $0.0 < G < 1.00$. 
+* *Grad-Rate* - $R$: `double` representing the percentage of members to graduate to the next tier as represented between
+  $0.0 < G < 1.00$.
 * *Num-Tiers* - $N$: `int` representing the number of tiers in the hierarchy
 * *Generations* - $G$: `int` representing the number of generations between each graduation
-  
-## Examples
 
-### Equation 1
+## Example
 
-$f(x) = \cos(((((x+x)\cdot(1.022598--0.923627))+(x+(x\cdot5.691799)))+((x-\cos(x))\cdot(x+(x/x)))))$
-
-with data over $x \in [-9.5, -3.5]$
-
-#### Learning Video
-
-#### Learning Curve
-
-#### Dot Graph
-
-
-
-### Equation 2
+### Equation
 
 $f(x) = \cos((\sin(x)/(\sin((x+7.348103))+((x/x)/(-4.911469-8.001613)))))$
 
 with data over $x \in [-0.8, 1.8]$
 
+### Learning Videos
 
+![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21_BGA-Cross_long.gif)
+<br>*Visualization of Equation 2 using BGA loop and Crossover*
 
-### Equation 3-
+![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21_HFC-Cross_accurate.gif)
+<br>*Visualization of Equation 2 using HFC loop and Crossover*
 
-$f(x) = (\cos(((\sin(0.947494)-(6.047123-\left(x-5\right)))-(\left(x-5\right)/(5.246456+\left(x-5\right)))))+8.964315)$
+### Learning Curve
 
-with data over $x \in [0, 5]$
-
-#### Learning Video
-
-#### Learning Curve
+### Dot Graph
 
 
 
