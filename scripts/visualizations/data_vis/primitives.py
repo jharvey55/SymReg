@@ -144,7 +144,6 @@ class Cohort:
         """
         self.experiments = [] if experiments is None else experiments
         self.data_set = data_set
-        self.data_path = data_path
         self.parameters = {} if parameters is None else parameters
         self.method = method
         self.step_size = step_size
