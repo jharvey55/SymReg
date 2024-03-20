@@ -150,7 +150,30 @@ class Cohort:
         self.data = data
         self.n = n
 
-        pass
+    def tabulate(self):
+        """
+        Creates the learning dataset at given intervals
+        """
+        indices = []
+        budget = int(self.parameters['E'])
+        points = []
+        point = np.array([])
+
+        # Set up structures and fill first data point
+        for exp in self.experiments:
+            indices.append(0)
+            point = np.append(point, exp.contenders[0].fitness ** 2)
+        points.append(DataPoint(np.mean(point), np.std(point), 1))
+
+        # Finish populating data points
+        for target in range(1, budget, self.step_size):
+            point = np.array([])
+            for i, exp in enumerate(self.experiments):
+                indices[i] = self.experiments[i].get_eval_index(target, indices[i])
+                point = np.append(point, exp.contenders[indices[i]].fitness ** 2)
+            points.append(DataPoint(np.mean(point), np.std(point), target))
+        self.data = points
+
     @classmethod
     def build_cohort(cls, root_dir, step_size=1000):
         """
