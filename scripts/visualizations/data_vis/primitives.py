@@ -150,5 +150,26 @@ class Cohort:
         self.data = data
         self.n = n
 
-    def load_cohort(self, root_dir):
         pass
+    @classmethod
+    def build_cohort(cls, root_dir, step_size=1000):
+        """
+        Builds cohort object out of experiments in root_dir
+        :param root_dir: directory of experiments to be aggregated
+        :param step_size: sampling frequency in evaluations
+        :return: Cohort object with aggregated data
+        """
+        cohort = Cohort()
+        exp_list = os.listdir()
+        cohort.n = len(exp_list)
+        for e in exp_list:
+            # Get experiment learn file and add experiment to cohort
+            file = "{}_learn.txt".format(e)
+            wd = os.path.join(root_dir, e, file)
+            cohort.experiments.append(Experiment.read_in_experiment(wd))
+        cohort.data_set = cohort.experiments[0].data_set
+        cohort.method = cohort.experiments[0].method
+        cohort.step_size = step_size
+
+        cohort.tabulate()
+        return cohort
