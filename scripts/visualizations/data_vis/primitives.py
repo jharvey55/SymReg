@@ -129,8 +129,18 @@ class DataPoint:
 
 class Cohort:
 
-    def __init__(self, experiments=None, data_set=None, data_path=None, parameters=None,
-                 method=None, step_size=1000, data=None, n=None):
+    def __init__(self, experiments=None, data_set=None, parameters=None,
+                 method=None, step_size=None, data=None, n=None):
+        """
+
+        :param experiments: list of experiments in Cohort
+        :param data_set: Name of dataset used in experiment
+        :param parameters: dictionary of parameters used across experiments
+        :param method: method used by all experiments in cohort
+        :param step_size: frequency of data aggregation points
+        :param data: aggregated points for the experiments
+        :param n: number of experiments in cohort
+        """
         self.experiments = [] if experiments is None else experiments
         self.data_set = data_set
         self.data_path = data_path
