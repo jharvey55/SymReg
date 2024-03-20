@@ -96,6 +96,22 @@ class Experiment:
                 index += 1
         return exp
 
+    def get_eval_index(self, target, start=0):
+        """
+
+        :param target: evaluations of contender to beat
+        :param start: guess to minimize loop length if possible
+        :return: index of contender with the greatest number of evals that do not exceed target
+        """
+        cap = len(self.contenders)
+        if start > cap:
+            raise IndexError(f"Start out of contenders range")
+
+        index = start
+        while index + 1 < cap and self.contenders[index + 1].evals <= target:
+            index += 1
+        return index
+
 
 class DataPoint:
 
