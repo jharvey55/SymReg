@@ -1,5 +1,6 @@
 import os
 import data_vis
+import numpy as np
 
 
 class Contender:
