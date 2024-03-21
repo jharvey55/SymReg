@@ -91,6 +91,8 @@ with data over $x \in [-0.8, 1.8]$
 
 ### Learning Curve
 
+![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21-LearningCurve.png)
+<br>*Learning Curve showing the speed each Method finds a solution at, averaged over 5 runs*
 ### Dot Graph
 
 
