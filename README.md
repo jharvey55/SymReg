@@ -83,6 +83,11 @@ with data over $x \in [-0.8, 1.8]$
 
 ### Learning Videos
 
+These help visualize the process of SymReg finding an approximate equation for the dataset. Each update represents
+a instance where the algorithm found an equation with a better fitness (smaller RMSE), and shows what that equation
+looks
+like plotted against the provided dataset.
+
 ![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21_BGA-Cross_long.gif)
 <br>*Visualization of Equation 2 using BGA loop and Crossover*
 
@@ -91,13 +96,18 @@ with data over $x \in [-0.8, 1.8]$
 
 ### Learning Curve
 
+The learning curve is used to show the relative efficiency of each optimization method. It is built by taking several
+trials for each method and grouping them into cohorts. At a regular interval (100 evaluations in this graph), the
+average
+fitness of the method is determined. The error bars on this graph represent the standard deviation at that point. By
+plotting
+the methods together like this we can verify that the algorithm is working correctly. RMHC should beat Random, and
+Crossover
+should beat RMHC. It also highlights the number of evaluations needed for the Crossover.
+
 ![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21-LearningCurve-v2.png)
 <br>*Learning Curve showing the speed each Method finds a solution at, averaged over 5 runs*
 
-* Built by running each method 5 times and getting the mean and standard deviation of the 5 at each sample point
-* Each sample point represents the best solution found prior that evaluation count
-* Demonstrates that crossover is faster than RMHC and RMHC is faster than random
-* Demonstrates HFC produces more accurate results than BGA
 ### Dot Graph
 
 
