@@ -26,6 +26,7 @@ std::uniform_real_distribution<double> Node::val_dist_(-10, 10);
 
 /**
  * @brief Construct a new random Node:: Node object
+ *
  * keys are limited to those defied enum oprtr
  * Values are kept within the domain [-10, 10]
  */
@@ -42,8 +43,8 @@ Node::Node() {
 /**
  * @brief Constructs a specified Node:: Node object
  * 
- * @param act 
- * @param val 
+ * @param act - oprtr of node
+ * @param val - value to assign the node if VAL node
  */
 Node::Node(oprtr act, double val) {
     key = act;
@@ -51,12 +52,17 @@ Node::Node(oprtr act, double val) {
         // Check for forced exit in random eq builder
         if (!std::isnan(val)) {
             value = val;
-//            std::cout << val << std::endl;
         } else
             value = val_dist_(rng_);
     }
 }
 
+/**
+ * @brief Returns the string representation of node i
+ *
+ * @param i - index of node with desired string
+ * @return string representation of node i
+ */
 std::string Node::nodeString(int i) {
     switch (key) {
         case VAR :
@@ -84,6 +90,3 @@ std::string Node::nodeString(int i) {
     }
 
 }
-
-
-// TODO: Mutate Node
