@@ -17,7 +17,6 @@ A Symbolic Regression tool built in C++ that employs genetic algorithms on a use
   * [Equation](#equation)
   * [Learning Videos](#learning-videos)
   * [Learning Curve](#learning-curve)
-  * [Dot Graph](#dot-graph)
 * [Sources](#sources)
 
 ## About
@@ -85,8 +84,8 @@ with data over $x \in [-0.8, 1.8]$
 
 These help visualize the process of SymReg finding an approximate equation for the dataset. Each update represents
 a instance where the algorithm found an equation with a better fitness (smaller RMSE), and shows what that equation
-looks
-like plotted against the provided dataset.
+looks like plotted against the provided dataset. In the title string, the E is the current number of evaluations and R
+is the current RMSE value. The blue dots are the test data and the orange thoughts are the current best solution.
 
 ![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21_BGA-Cross_long.gif)
 <br>*Visualization of Equation 2 using BGA loop and Crossover*
@@ -107,8 +106,6 @@ should beat RMHC. It also highlights the number of evaluations needed for the Cr
 
 ![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21-LearningCurve-v2.png)
 <br>*Learning Curve showing the speed each Method finds a solution at, averaged over 5 runs*
-
-### Dot Graph
 
 
 
