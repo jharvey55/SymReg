@@ -113,7 +113,6 @@ public:
 
     void randMutate();
 
-    // TODO: GP Tools {Selection, RandCrossover}
     // GP Tools - Selection
 
     // GP Tools - RandCrossover
@@ -123,8 +122,6 @@ public:
                           const int &index2, Contender &child2);
 
     static int ProportionalSelection(const std::vector<Contender> &population, const double &sum_fit);
-
-
 
     // GP Tools - Pruning
 
@@ -143,8 +140,6 @@ private:
     // Private Member Elements -----------------------------------------------------------------------------------------
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
-//    int size_;
-//    Node *nodes_;
     double fitness_;
     Heap tree_;
 
@@ -153,7 +148,6 @@ private:
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
     std::string buildEqString_(int index);
-
 
     std::string prettyString_(int index);
 
