@@ -1,5 +1,4 @@
 #include <DataLog.h>
-//#include <Contender.h>
 #include <Point.h>
 
 #include <vector>
@@ -15,6 +14,10 @@ bool DataLog::diversity = false;
 int DataLog::num_gens = 100;
 
 
+/**
+ * @brief gets the name for the data set
+ * @return
+ */
 std::string DataLog::DataName() {
     // retrieve substring of file name
     std::string filename = m_dataPath.substr(m_dataPath.find_last_of("/\\") + 1);
@@ -80,6 +83,11 @@ DataLog::DataLog(const std::string &dataPath, const std::string &outDir, const s
     }
 }
 
+/**
+ * @brief generates unique name for each file
+ *
+ * @return
+ */
 std::string DataLog::NameGenerator()
 {
     // Target format: DataSet_Method_YYYY`MM`DD_HH`MM`SS.txt
@@ -112,12 +120,14 @@ std::string DataLog::NameGenerator()
     name += "`";
     name += std::to_string(newtime.tm_sec);
 
-//    name += ".txt";
-
     return name;
 }
 
-/// @brief Writes Header for files
+/**
+ * @brief Writes Header for files
+ *
+ * @param type
+ */
 void DataLog::WriteHeader(const logtype &type) {
     // Open file for writing
     std::string file_path;
@@ -152,18 +162,11 @@ void DataLog::WriteHeader(const logtype &type) {
     file.close();
 }
 
-//void DataLog::LogEntry(const std::string& entry)
-//{
-//    std::fstream file(m_logPath, std::fstream::out | std::fstream::app);
-//
-//    if (file.is_open())
-//    {
-//        file << entry << "\n";
-//    }
-//
-//    file.close();
-//}
-
+/**
+ * @brief adds entry into desired log type
+ * @param type
+ * @param entry
+ */
 void DataLog::LogEntry(const logtype &type, const std::string &entry) {
     std::string file_path;
     switch (type) {
@@ -189,15 +192,13 @@ void DataLog::LogEntry(const logtype &type, const std::string &entry) {
     file.close();
 }
 
-/// <summary>
-/// Reads in data from fPath.
-///
-/// </summary>
-/// <param name="fPath">Path to the file to be read in</param>
-/// <returns>a 2d double array contaning all the points</returns>
+/**
+ * @brief Reads in data from fPath and returns 2d double array containing all the data points
+ * @param fPath
+ * @return
+ */
 std::vector<Point> ReadDataFile(std::string& fPath)
 {
-    //Timer t = Timer("ReadInPoints");
     std::string line;
 
     // use vector to simplify heap usage
@@ -221,11 +222,18 @@ std::vector<Point> ReadDataFile(std::string& fPath)
     return points;
 }
 
+/**
+ * @brief gets the poitns for a dataset
+ * @return
+ */
 std::vector<Point> DataLog::GetPoints() {
     std::vector<Point> points = ReadDataFile(m_dataPath);
     return points;
 }
 
+/**
+ * @brief generates the directory for the experiment logs
+ */
 void DataLog::MakeExpDir() {
     auto hold = std::filesystem::current_path();
     std::filesystem::current_path(m_outDir);
