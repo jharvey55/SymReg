@@ -1,6 +1,7 @@
 import os
-import data_vis
+# import data_vis
 import numpy as np
+import pandas as pd
 
 
 class Contender:
@@ -114,18 +115,31 @@ class Experiment:
         return index
 
 
+# class DataPoint:
+#
+#     def __init__(self, average=0, stdev=0, evals=0):
+#         """
+#         Object for storing aggregated data point in learning curve
+#         :param average: Average fitness for best Contender at evals
+#         :param stdev: Standard deviation for best Contender at evals
+#         :param evals: Number of evals for all points in theis datapoint
+#         """
+#         self.average = average
+#         self.stdev = stdev
+#         self.evals = evals
+
 class DataPoint:
 
-    def __init__(self, average=0, stdev=0, evals=0):
+    def __init__(self, mean=None, s_dev=None, evals=None):
         """
         Object for storing aggregated data point in learning curve
-        :param average: Average fitness for best Contender at evals
-        :param stdev: Standard deviation for best Contender at evals
-        :param evals: Number of evals for all points in theis datapoint
+        :param mean: Numpy array containing Average fitness for best Contender at evals
+        :param s_dev: Numpy array containing Standard deviation for best Contender at evals
+        :param evals: Numpy array containing Number of evals (x series)
         """
-        self.average = average
-        self.stdev = stdev
-        self.evals = evals
+        self.mean = np.array([]) if mean is None else mean
+        self.s_dev = np.array([]) if s_dev is None else s_dev
+        self.evals = np.array([]) if evals is None else evals
 
 
 class Cohort:
@@ -155,15 +169,22 @@ class Cohort:
         Creates the learning dataset at given intervals
         """
         indices = []
-        budget = int(self.parameters['E'])
-        points = []
-        point = np.array([])
+        print(self.parameters)
+        budget = int(self.parameters['Evals'])
+        # points = []
+        mean = np.array([])
+        s_dev = np.array([])
+        evals = np.array([])
 
         # Set up structures and fill first data point
+        point = np.array([])
         for exp in self.experiments:
             indices.append(0)
             point = np.append(point, exp.contenders[0].fitness ** 2)
-        points.append(DataPoint(np.mean(point), np.std(point), 1))
+        # points.append(DataPoint(np.mean(point), np.std(point), 1))
+        mean = np.append(mean, np.mean(point))
+        s_dev = np.append(s_dev, np.std(point))
+        evals = np.append(evals, 1)
 
         # Finish populating data points
         for target in range(1, budget, self.step_size):
@@ -171,8 +192,13 @@ class Cohort:
             for i, exp in enumerate(self.experiments):
                 indices[i] = self.experiments[i].get_eval_index(target, indices[i])
                 point = np.append(point, exp.contenders[indices[i]].fitness ** 2)
-            points.append(DataPoint(np.mean(point), np.std(point), target))
-        self.data = points
+
+            mean = np.append(mean, np.mean(point))
+            s_dev = np.append(s_dev, np.std(point))
+            evals = np.append(evals, target)
+
+        # points = {"means": mean, "s-dev": s_dev, "evals": eval_list}
+        self.data = DataPoint(mean, s_dev, evals)
 
     @classmethod
     def build_cohort(cls, root_dir, step_size=1000):
@@ -183,7 +209,7 @@ class Cohort:
         :return: Cohort object with aggregated data
         """
         cohort = Cohort()
-        exp_list = os.listdir()
+        exp_list = os.listdir(root_dir)
         cohort.n = len(exp_list)
         for e in exp_list:
             # Get experiment learn file and add experiment to cohort
@@ -193,6 +219,6 @@ class Cohort:
         cohort.data_set = cohort.experiments[0].data_set
         cohort.method = cohort.experiments[0].method
         cohort.step_size = step_size
-
+        cohort.parameters = cohort.experiments[0].params
         cohort.tabulate()
         return cohort
