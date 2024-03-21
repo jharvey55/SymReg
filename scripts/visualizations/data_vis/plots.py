@@ -63,7 +63,9 @@ def plot_learning_curve(cohorts: List[primitives.Cohort]):
                     ecolor=colors3[i], color=colors2[i][0])
 
     ax.set_title("{} - Learning Curve".format(cohorts[0].data_set), fontsize=48)
-    ax.legend()
+    ax.legend(fontsize=20)
     ax.set_xlabel("Evaluations", fontsize=24)
     ax.set_ylabel("Mean RMSE", fontsize=24)
+    plt.yticks(fontsize=18)
+    plt.xticks(fontsize=18)
     plt.show()

@@ -1,6 +1,6 @@
 # SymReg
 
-A **Sym**bolic **Reg**ression tool built in C++ that employs genetic algorithms on a user-provided dataset.
+A Symbolic Regression tool built in C++ that employs genetic algorithms on a user-provided dataset.
 
 ## Table of Contents
 
