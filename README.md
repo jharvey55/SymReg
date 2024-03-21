@@ -91,7 +91,7 @@ with data over $x \in [-0.8, 1.8]$
 
 ### Learning Curve
 
-![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21-LearningCurve.png)
+![](https://github.com/jharvey55/SymReg/blob/portfolio/examples/f21/images/f21-LearningCurve-v2.png)
 <br>*Learning Curve showing the speed each Method finds a solution at, averaged over 5 runs*
 
 * Built by running each method 5 times and getting the mean and standard deviation of the 5 at each sample point
