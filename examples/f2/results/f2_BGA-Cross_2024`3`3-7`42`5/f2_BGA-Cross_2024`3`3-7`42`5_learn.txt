@@ -1,9 +1,0 @@
-DataSet:	f2
-RunTime:	2024-3-3 7:42:5
-Method:	BGA-Cross
-Params:	DotLog:110 DivLog:110 Evals:100000 Pop:100
-DataPath:	./datasets/f2.txt
-
-################################################################################
-
-100 | nan | ROOT COS SIN BLANK SIN BLANK BLANK BLANK 4.277762 BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK BLANK 
