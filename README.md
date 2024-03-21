@@ -13,7 +13,7 @@ A **Sym**bolic **Reg**ression tool built in C++ that employs genetic algorithms 
   * [Optimizers](#optimizers)
   * [Selection](#selection)
   * [HFC Options](#hfc-options)
-* [Examples](#examples)
+* [Example](#example)
   * [Equation](#equation)
   * [Learning Videos](#learning-videos)
   * [Learning Curve](#learning-curve)
