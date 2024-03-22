@@ -167,17 +167,19 @@ Heap Heap::getBranch(const int &index) const {
     return branch;
 }
 
-
+/**
+ * @brief Function to grow heap before adding new nodes
+ *
+ * @param growFactor - number of layers to add to heap
+ */
 void Heap::growHeap(const int &growFactor) {
-    // int temp_size = growthSize_(depth);
     int temp_size = size_ * (int) pow(2, growFactor);
     // Create new array
     Node *temp_nodes = new Node[temp_size];
 
     // Copy old items to new array
     std::copy(nodes_, nodes_ + size_, temp_nodes);
-    // for(int i = 0; i < size_; i++)
-    //     temp_nodes[i] = nodes_[i];
+
     for (int i = size_; i < temp_size; i++)
         temp_nodes[i] = Node(BLANK);
     size_ = temp_size;
@@ -297,7 +299,3 @@ Heap &Heap::operator=(Heap &&that) noexcept {
 
     return *this;
 }
-
-// █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
-// Private Methods -------------------------------------------------------------------------------------------------
-// █████████████████████████████████████████████████████████████████████████████████████████████████████████████████
