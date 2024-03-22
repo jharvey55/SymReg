@@ -113,4 +113,21 @@ should beat RMHC. It also highlights the number of evaluations needed for the Cr
 
 This project has been deprecated in favor of creating [GDL](https://github.com/jharvey55/GDL) (a more general Evolutionary Algorithm framework built in Rust). The new library will be for more practical projects as well as testing out interesting experiments described in literature.
 
+## Installation
+
+### Compile from source
+
+### Download exe
+
+### Example Protocol
+
+```text
+./path/to/data_file.txt
+./path/to/experiment/dir/
+200000
+250
+Cross
+BGA
+```
+
 ## Sources
