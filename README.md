@@ -17,7 +17,7 @@ A Symbolic Regression tool built in C++ that employs genetic algorithms on a use
   * [Equation](#equation)
   * [Learning Videos](#learning-videos)
   * [Learning Curve](#learning-curve)
-* [Sources](#sources)
+* [Licence](#license)
 
 ## About
 
@@ -115,9 +115,18 @@ This project has been deprecated in favor of creating [GDL](https://github.com/j
 
 ## Installation
 
-### Compile from source
+### Run exe
 
-### Download exe
+Latest release can be found at [link]()
+<br><br>
+To run code, download latest release. Once running it will prompt user to supply:
+
+1. Path to data set
+2. Path to store results
+3. Evaluation budget
+4. Population
+5. Optimization method
+6. Optimization loop
 
 ### Example Protocol
 
@@ -130,4 +139,6 @@ Cross
 BGA
 ```
 
-## Sources
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
