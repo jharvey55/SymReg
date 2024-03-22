@@ -111,15 +111,15 @@ should beat RMHC. It also highlights the number of evaluations needed for the Cr
 
 ## Future Goals
 
-This project has been deprecated in favor of creating [GDL](https://github.com/jharvey55/GDL) (a more general Evolutionary Algorithm framework built in Rust). The new library will be for more practical projects as well as testing out interesting experiments described in literature.
+This project has been deprecated in favor of creating [GDL](https://github.com/jharvey55/GDL) (a more general Evolutionary Algorithm framework built in Rust). The new library will be for more practical projects as well as testing out interesting experiments described in the literature.
 
 ## Installation
 
 ### Run exe
 
-Latest release can be found at [link]()
+The latest release can be found at [link](https://github.com/jharvey55/SymReg/releases/tag/0.2)
 <br><br>
-To run code, download latest release. Once running it will prompt user to supply:
+To run the code, download the latest release. Once running, it will prompt the user to supply:
 
 1. Path to data set
 2. Path to store results
